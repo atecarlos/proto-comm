@@ -1,0 +1,7 @@
+input(type="text")#txtBoxMessage
+button#btnSubmit Submit
+p 
+	span= messages.length 
+	span  messages in chat
+ul#messages
+	!= partial('message', messages)
