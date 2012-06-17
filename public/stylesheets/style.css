@@ -1,11 +1,34 @@
+.page-wrapper{
+	margin:0 auto;
+	position: relative;
+	width: 700px;
+	padding:10px;
+}
+
+.login{
+	margin:20% auto 0;
+	position: relative;
+	width:400px;
+	border-radius:15px;
+	border:1px solid #000;
+	text-align:center;
+}
+
 #messages .template{
 	display:none;
 }
 
+#messages .message .user-icon{
+	margin-right: 10px;
+}
 #messages .message .name{
 	font-weight:bold;
 }
 
 #messages .message .text{
 	margin-left:4px;
+}
+
+#message-input{
+	text-align:center;
 }

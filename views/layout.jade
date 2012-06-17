@@ -3,7 +3,8 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
-  body!= body
+  body
+    div.page-wrapper!= body
 
 
 script(type="text/javascript", src="/socket.io/socket.io.js")

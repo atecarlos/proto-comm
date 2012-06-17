@@ -7,8 +7,9 @@ socket.on('new_message', function(data) {
 $(document).ready(function(){
 	$('#btnSubmit').click(function(){
 		var name = $('#hdnName').val();
-		var text = $('#txtBoxMessage').val();
-		$('#txtBoxMessage').val('');
+		var txtBox = $('#txtBoxMessage');
+		var text = txtBox.val();
+		txtBox.val('');
 		socket.emit('post', { msg: text });
 		addNewMessage({ text: text, name: name });
 	});
