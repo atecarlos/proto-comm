@@ -19,5 +19,5 @@ function addNewMessage(data){
 	var template = $('#messages > div.template > div.message');
 	template.children('span.name').html(data.name);
 	template.children('span.text').html(data.text);
-	template.clone().appendTo('#messages');
+	template.clone().appendTo('#messages').hide().show('medium');
 }
