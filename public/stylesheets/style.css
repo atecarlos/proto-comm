@@ -1,8 +1,11 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+#messages .template{
+	display:none;
 }
 
-a {
-  color: #00B7FF;
+#messages .message .name{
+	font-weight:bold;
+}
+
+#messages .message .text{
+	margin-left:4px;
 }

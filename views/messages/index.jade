@@ -1,7 +1,9 @@
-input(type="text")#txtBoxMessage
-button#btnSubmit Submit
-p 
-	span= messages.length 
-	span  messages in chat
-ul#messages
+div#messages
 	!= partial('message', messages)
+	div.template
+		!= partial('message', { message: {} })
+
+div#message-input
+	input(type="text")#txtBoxMessage
+	input(type="hidden")(value=name)#hdnName
+	button#btnSubmit Submit

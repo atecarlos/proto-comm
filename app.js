@@ -6,11 +6,9 @@
 var express = require('express')
   , routes = require('./routes')
   , sessionStore = new express.session.MemoryStore()
-  , ioController = require('./controller/io_controller');
-
-var app = module.exports = express.createServer();
-
-var io = require('socket.io').listen(app);
+  , ioController = require('./controller/io')
+  , app = express.createServer()
+  , io = require('socket.io').listen(app);
 
 // Configuration
 app.configure(function(){
@@ -41,8 +39,7 @@ app.post('/log-in', routes.log_in);
 
 app.get('/messages', routes.get_messages);
 
-// socket connections
-
+// Socket connections
 io.set('authorization', function (data, accept) {
     ioController.authorize(data, accept, sessionStore);
 });

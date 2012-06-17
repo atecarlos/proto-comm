@@ -12,6 +12,8 @@ exports.log_in = function(req, res){
 
 exports.get_messages = function(req, res){
 	model.find(function(err, messages){
-    	res.render('messages', { messages: messages, title: 'my chat app' });
+    	res.render('messages', { messages: messages, 
+    							 title: 'my chat app', 
+    							 name: req.session.name });
   	});
 }

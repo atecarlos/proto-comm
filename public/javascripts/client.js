@@ -1,17 +1,22 @@
 var socket = io.connect('http://localhost:3000');
 
 socket.on('new_message', function(data) {
-  	addNewMessage(data.msg);
+  	addNewMessage(data);
 });
-
-function addNewMessage(msg){
-	$('#messages').append($('<li>').append(msg));
-}
 
 $(document).ready(function(){
 	$('#btnSubmit').click(function(){
-		var msg = $('#txtBoxMessage').val();
-		socket.emit('post', { msg: msg });
-		addNewMessage(msg);
+		var name = $('#hdnName').val();
+		var text = $('#txtBoxMessage').val();
+		$('#txtBoxMessage').val('');
+		socket.emit('post', { msg: text });
+		addNewMessage({ text: text, name: name });
 	});
 });
+
+function addNewMessage(data){
+	var template = $('#messages > div.template > div.message');
+	template.children('span.name').html(data.name);
+	template.children('span.text').html(data.text);
+	template.clone().appendTo('#messages');
+}
