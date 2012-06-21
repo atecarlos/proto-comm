@@ -1,8 +1,14 @@
+body{
+	background-color:#DDD;
+}
+
 .page-wrapper{
 	margin:0 auto;
 	position: relative;
 	width: 700px;
 	padding:10px;
+	background-color:#FFF;
+	height:100%;
 }
 
 .login{
@@ -29,6 +35,6 @@
 	margin-left:4px;
 }
 
-#message-input{
-	text-align:center;
+#message-input #txtBoxMessage{
+	width:40%;
 }
