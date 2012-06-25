@@ -4,7 +4,7 @@ exports.authorize = function(data, accept, sessionStore){
 	if (data.headers.cookie) {
         var cookie = require('cookie');
         data.cookie = cookie.parse(data.headers.cookie);
-        data.sessionID = data.cookie['express.sid'];
+        data.sessionID = unescape(data.cookie['express.sid']);
         sessionStore.load(data.sessionID, function (err, session) {
             if (err || !session) {
                 console.log('error getting session');
@@ -26,5 +26,5 @@ exports.post = function(socket, data){
     msg.text = data.msg;
     msg.name = socket.handshake.session.name;
     msg.save();
-    socket.broadcast.emit('new_message', data);
+    socket.broadcast.emit('new_message', { text: msg.text, name: msg.name });
 }
