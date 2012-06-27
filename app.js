@@ -8,7 +8,8 @@ var express = require('express')
   , sessionStore = new express.session.MemoryStore()
   , ioController = require('./controller/io')
   , app = express.createServer()
-  , io = require('socket.io').listen(app);
+  , io = require('socket.io').listen(app)
+  , jade = require('jade');
 
 // Configuration
 app.configure(function(){
@@ -49,5 +50,8 @@ io.sockets.on('connection', function (socket) {
     ioController.post(socket, data);
   });
 });
+
+// Compile jade templates
+var fn = jade.compile('views/messages/_message.jade');
 
 
