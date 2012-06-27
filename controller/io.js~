@@ -7,8 +7,11 @@ exports.authorize = function(data, accept, sessionStore){
         data.sessionID = unescape(data.cookie['express.sid']);
         sessionStore.load(data.sessionID, function (err, session) {
             if (err || !session) {
+                console.log('error getting session');
+                // if we cannot grab a session, turn down the connection
                 return accept('Error', false);
             } else {
+                console.log('success getting session');
                 data.session = session;
                 return accept(null, true);
             }
