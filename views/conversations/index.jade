@@ -1,0 +1,15 @@
+p Open an existing conversation...
+
+ul
+	each conversation in conversations
+		li
+			a(href='/conversations/#{conversation.id}')= conversation.topic
+
+p Or create a new one
+
+form(method='post', action='/conversations')
+	div
+		label Topic
+		input(type='text', name='topic')
+	div
+		input(type="submit", value="submit")

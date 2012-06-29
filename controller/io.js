@@ -1,4 +1,4 @@
-var model = require('../models');
+var message = require('../models/message');
 
 exports.authorize = function(data, accept, sessionStore){
 	if (data.headers.cookie) {
@@ -19,7 +19,7 @@ exports.authorize = function(data, accept, sessionStore){
 }
 
 exports.post = function(socket, data){
-	var msg = new model();
+	var msg = new message();
     msg.text = data.msg;
     msg.name = socket.handshake.session.name;
     msg.save();

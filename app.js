@@ -8,7 +8,8 @@ var express = require('express')
   , sessionStore = new express.session.MemoryStore()
   , ioController = require('./controller/io')
   , app = express.createServer()
-  , io = require('socket.io').listen(app);
+  , io = require('socket.io').listen(app)
+  , mongo = require('mongoose');
 
 // Configuration
 app.configure(function(){
@@ -32,12 +33,18 @@ app.configure('production', function(){
 
 app.listen(3000);
 
+mongo.connect('mongodb://localhost/express_test');
+
 // Routes
 app.get('/', routes.index);
 
 app.post('/log-in', routes.log_in);
 
-app.get('/messages', routes.get_messages);
+app.get('/conversations/:id', routes.get_messages);
+
+app.get('/conversations', routes.get_conversations);
+
+app.post('/conversations', routes.post_conversations);
 
 // Socket connections
 io.set('authorization', function (data, accept) {
