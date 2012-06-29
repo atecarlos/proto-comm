@@ -22,18 +22,14 @@ exports.post_conversations = function(req, res){
 	conversation.topic = req.body.topic;
 	conversation.save();
 
-	res.redirect('/messages');
+	res.redirect('/conversations/' + conversation.id + '/messages');
 }
 
 exports.get_messages = function(req, res){
-	console.log('*****************');
-	console.log(req.params.id);
-	console.log('*****************');
-
 	var conversation = Conversation.findById(req.params.id, function(err, conversation){
-		res.render('messages', { messages: conversation.messages, 
-    							 title: 'messages', 
+		req.session.conversation_id = req.params.id;
+		res.render('messages', { title: 'messages', 
     							 name: req.session.name,
-    							 conversation: req.params.id });
+    							 conversation: conversation });
 	});
 }

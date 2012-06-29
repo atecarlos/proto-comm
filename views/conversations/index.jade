@@ -3,7 +3,7 @@ p Open an existing conversation...
 ul
 	each conversation in conversations
 		li
-			a(href='/conversations/#{conversation.id}')= conversation.topic
+			a(href='/conversations/#{conversation.id}/messages')= conversation.topic
 
 p Or create a new one
 

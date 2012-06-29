@@ -1,4 +1,4 @@
-
+ 
 /**
  * Module dependencies.
  */
@@ -40,7 +40,7 @@ app.get('/', routes.index);
 
 app.post('/log-in', routes.log_in);
 
-app.get('/conversations/:id', routes.get_messages);
+app.get('/conversations/:id/messages', routes.get_messages);
 
 app.get('/conversations', routes.get_conversations);
 
@@ -56,5 +56,3 @@ io.sockets.on('connection', function (socket) {
     ioController.post(socket, data);
   });
 });
-
-

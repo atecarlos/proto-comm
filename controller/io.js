@@ -1,4 +1,5 @@
-var message = require('../models/message');
+var Conversation = require('../models/conversation'),
+    Message = require('../models/message');
 
 exports.authorize = function(data, accept, sessionStore){
 	if (data.headers.cookie) {
@@ -19,9 +20,10 @@ exports.authorize = function(data, accept, sessionStore){
 }
 
 exports.post = function(socket, data){
-	var msg = new message();
-    msg.text = data.msg;
-    msg.name = socket.handshake.session.name;
-    msg.save();
-    socket.broadcast.emit('new_message', { text: msg.text, name: msg.name });
+	Conversation.findById(socket.handshake.session.conversation_id, function(err, conversation){
+        var msg = { text: data.msg, name: socket.handshake.session.name };
+        conversation.messages.push(msg);
+        conversation.save();
+        socket.broadcast.emit('new_message', { text: msg.text, name: msg.name });
+    });    
 }

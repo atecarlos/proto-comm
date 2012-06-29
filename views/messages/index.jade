@@ -1,5 +1,7 @@
+h2= conversation.topic
+
 div#messages
-	!= partial('message', messages)
+	!= partial('message', conversation.messages)
 	div.template
 		!= partial('message', { message: {} })
 
