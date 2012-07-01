@@ -35,8 +35,4 @@ define(["socket_io", "jquery"],function(socket_io, $){
   	template.clone().appendTo('#messages').hide().show('medium');
   }
 
-  $(window).unload(function() {
-    socket.emit('close_conversation', { conversationId: conversationId });
-  });
-
 });

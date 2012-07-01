@@ -61,11 +61,6 @@ io.sockets.on('connection', function (socket) {
     ioController.openConversation(socket, data.conversationId);
   });
 
-  socket.on('close_conversation', function(data){
-    console.log('close_conversation: ' + data.conversationId + " by : " + socket.id);
-    ioController.close_conversation(socket, data.conversationId);
-  });
-
   socket.on('disconnect', function(){
     ioController.disconnect(socket);
   });

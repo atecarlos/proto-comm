@@ -39,10 +39,6 @@ exports.openConversation = function(socket, conversationId){
     Tracker.addUserToConversation(socket.id, conversationId);
 }
 
-exports.closeConversation = function(socket, conversationId){
-    Tracker.removeUserFromConversation(socket.id, conversationId)
-}
-
 exports.disconnect = function(socket){
     Tracker.removeUserFromAllConversations(socket.id);
 }

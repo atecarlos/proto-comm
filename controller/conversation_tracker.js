@@ -8,13 +8,6 @@ exports.addUserToConversation = function(socketId, conversationId){
 	}
 }
 
-function removeUserFromConversation(socketId, conversationId){
-	var index = map[conversationId].indexOf(socketId);
-	map[conversationId].splice(index, 1);
-}
-
-exports.removeUserFromConversation = removeUserFromConversation;
-
 exports.getUsersIn = function(conversationId){
 	return map[conversationId];
 }
@@ -24,4 +17,9 @@ exports.removeUserFromAllConversations = function(socketId){
 	for(var conversationId in map){
 		removeUserFromConversation(socketId, conversationId);
 	}
+}
+
+function removeUserFromConversation(socketId, conversationId){
+	var index = map[conversationId].indexOf(socketId);
+	map[conversationId].splice(index, 1);
 }
