@@ -1,5 +1,6 @@
 var Conversation = require('../models/conversation'),
-    Message = require('../models/message');
+    Message = require('../models/message'),
+    Tracker = require('../controller/conversation_tracker');
 
 exports.authorize = function(data, accept, sessionStore){
 	if (data.headers.cookie) {
@@ -19,11 +20,29 @@ exports.authorize = function(data, accept, sessionStore){
     }
 }
 
-exports.post = function(socket, data){
-	Conversation.findById(socket.handshake.session.conversation_id, function(err, conversation){
+exports.post = function(socket, data, socketsCollection){
+	Conversation.findById(data.conversationId, function(err, conversation){
         var msg = { text: data.msg, name: socket.handshake.session.name };
         conversation.messages.push(msg);
         conversation.save();
-        socket.broadcast.emit('new_message', { text: msg.text, name: msg.name });
-    });    
+    });
+
+    var ids = Tracker.getUsersIn(data.conversationId);
+    console.log(ids);
+    for (var i = 0; i < ids.length; i++){
+        console.log(ids[i]);
+        socketsCollection.socket(ids[i]).emit('new_message', { text: data.msg, name: socket.handshake.session.name });
+    }
+}
+
+exports.openConversation = function(socket, conversationId){
+    Tracker.addUserToConversation(socket.id, conversationId);
+}
+
+exports.closeConversation = function(socket, conversationId){
+    Tracker.removeUserFromConversation(socket.id, conversationId)
+}
+
+exports.disconnect = function(socket){
+    Tracker.removeUserFromAllConversations(socket.id);
 }

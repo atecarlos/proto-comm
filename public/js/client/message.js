@@ -1,32 +1,32 @@
 define(["socket_io", "jquery"],function(socket_io, $){
 
-  var socket = io.connect('http://localhost:3000');
+  var socket = io.connect('http://localhost:3000'),
+      conversationId = $('#hdnConversationId').val();
 
   socket.on('new_message', function(data) {
     	addNewMessage(data);
   });
 
   $(document).ready(function(){
-  	$('#btnSubmit').click(function(){
-  		var name = $('#hdnName').val();
-  		var txtBox = $('#txtBoxMessage');
-  		var text = txtBox.val();
-  		txtBox.val('');
-  		socket.emit('post', { msg: text });
-  		addNewMessage({ text: text, name: name });
-  	});
+  	$('#btnSubmit').click(emitMessage);
 	
   	$('#txtBoxMessage').keyup(function(event) {
   	  if (event.which === 13) {
-  	    var name = $('#hdnName').val();
-      	var txtBox = $('#txtBoxMessage');
-      	var text = txtBox.val();
-      	txtBox.val('');
-      	socket.emit('post', { msg: text });
-      	addNewMessage({ text: text, name: name });
+  	    emitMessage();
   	  }
   	});
+
+    socket.emit('open_conversation', { conversationId: conversationId });
+
   });
+
+  function emitMessage(){
+    var name = $('#hdnName').val();
+    var txtBox = $('#txtBoxMessage');
+    var text = txtBox.val();
+    txtBox.val('');
+    socket.emit('post', { msg: text, conversationId: conversationId });
+  }
 
   function addNewMessage(data){
   	var template = $('#messages > div.template > div.message');
@@ -35,4 +35,8 @@ define(["socket_io", "jquery"],function(socket_io, $){
   	template.clone().appendTo('#messages').hide().show('medium');
   }
 
-})
+  $(window).unload(function() {
+    socket.emit('close_conversation', { conversationId: conversationId });
+  });
+
+});

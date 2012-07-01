@@ -10,14 +10,14 @@ exports.log_in = function(req, res){
   	res.redirect('/conversations');
 };
 
-exports.get_conversations = function(req, res){
+exports.getConversations = function(req, res){
 	Conversation.find(function(err, conversations){
 		res.render('conversations', { conversations: conversations,
 									  title: 'conversations'});
 	});
 }
 
-exports.post_conversations = function(req, res){
+exports.postConversations = function(req, res){
 	var conversation = new Conversation();
 	conversation.topic = req.body.topic;
 	conversation.save();
@@ -25,9 +25,8 @@ exports.post_conversations = function(req, res){
 	res.redirect('/conversations/' + conversation.id + '/messages');
 }
 
-exports.get_messages = function(req, res){
+exports.openConversation = function(req, res){
 	var conversation = Conversation.findById(req.params.id, function(err, conversation){
-		req.session.conversation_id = req.params.id;
 		res.render('messages', { title: 'messages', 
     							 name: req.session.name,
     							 conversation: conversation });

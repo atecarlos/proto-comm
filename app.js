@@ -40,11 +40,11 @@ app.get('/', routes.index);
 
 app.post('/log-in', routes.log_in);
 
-app.get('/conversations/:id/messages', routes.get_messages);
+app.get('/conversations/:id/messages', routes.openConversation);
 
-app.get('/conversations', routes.get_conversations);
+app.get('/conversations', routes.getConversations);
 
-app.post('/conversations', routes.post_conversations);
+app.post('/conversations', routes.postConversations);
 
 // Socket connections
 io.set('authorization', function (data, accept) {
@@ -52,7 +52,22 @@ io.set('authorization', function (data, accept) {
 });
 
 io.sockets.on('connection', function (socket) {
+  
   socket.on('post', function(data) {
-    ioController.post(socket, data);
+    ioController.post(socket, data, io.sockets);
   });
+
+  socket.on('open_conversation', function(data){
+    ioController.openConversation(socket, data.conversationId);
+  });
+
+  socket.on('close_conversation', function(data){
+    console.log('close_conversation: ' + data.conversationId + " by : " + socket.id);
+    ioController.close_conversation(socket, data.conversationId);
+  });
+
+  socket.on('disconnect', function(){
+    ioController.disconnect(socket);
+  });
+
 });

@@ -8,4 +8,7 @@ div#messages
 div#message-input
 	input(type="text")#txtBoxMessage
 	input(type="hidden")(value=name)#hdnName
+	input(type="hidden")(value=conversation.id)#hdnConversationId
 	button#btnSubmit Submit
+
+script(type="text/javascript", src="/js/require.js", data-main="/js/client.js")
