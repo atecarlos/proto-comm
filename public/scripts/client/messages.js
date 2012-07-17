@@ -1,4 +1,11 @@
-define(["socket_io", "jquery"],function(socket_io, $){
+requirejs.config({
+  baseUrl: '/scripts/lib',
+  paths: {
+    socket_io: '../../socket.io/socket.io'
+  }
+});
+
+require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
 
   var socket = io.connect('http://localhost:3000'),
       conversationId = $('#hdnConversationId').val();
