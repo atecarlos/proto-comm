@@ -61,11 +61,11 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.on('open_conversation', function(data){
-    ioController.openConversation(socket, data.conversationId);
+    ioController.openConversation(socket, data);
   });
 
   socket.on('new_thread', function(data){
-    ioController.addThread(socket, data.conversationId);
+    ioController.addThread(socket, data, io.sockets);
   });
 
   socket.on('disconnect', function(){

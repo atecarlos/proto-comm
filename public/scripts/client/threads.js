@@ -50,6 +50,10 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
     socket.emit('new_thread', { conversationId: conversationId });
   }
 
+  socket.on('thread_added', function(data){
+    alert('thread added with id: ' + data.id);
+  });
+
   function emitMessage(txtBox){
     var name = $('#hdnName').val();
     var threadId = txtBox.parent().siblings('input[type=hidden]').val();

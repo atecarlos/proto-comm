@@ -27,24 +27,30 @@ exports.post = function(socket, data, socketsCollection){
         var msg = { text: data.msg, name: socket.handshake.session.name };
         thread.messages.push(msg);
         conversation.save();
-    });
 
-    var ids = Tracker.getUsersIn(data.conversationId);
+        emit(data.conversationId, socketsCollection, 'new_message', 
+            { text: data.msg, name: socket.handshake.session.name, threadId: thread.id });
+    });
+}
+
+function emit(conversationId, socketsCollection, event, data){
+    var ids = Tracker.getUsersIn(conversationId);
     for (var i = 0; i < ids.length; i++){
-        console.log(ids[i]);
-        socketsCollection.socket(ids[i]).emit('new_message', { text: data.msg, name: socket.handshake.session.name, threadId: thread.id });
+        socketsCollection.socket(ids[i]).emit(event, data);
     }
 }
 
-exports.openConversation = function(socket, conversationId){
-    Tracker.addUserToConversation(socket.id, conversationId);
+exports.openConversation = function(socket, data){
+    Tracker.addUserToConversation(socket.id, data.conversationId);
 }
 
-exports.addThread = function(socket, conversationId){
-    Conversation.findById(conversationId, function(err, conversation){
+exports.addThread = function(socket, data, socketsCollection){
+    Conversation.findById(data.conversationId, function(err, conversation){
         var thread = new Thread();
         conversation.threads.push(thread);
         conversation.save();
+
+        emit(data.conversationId, socketsCollection, 'thread_added', { id: thread.id });
     });
 }
 
