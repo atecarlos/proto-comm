@@ -1,4 +1,5 @@
 var Conversation = require('../models/conversation'),
+    Thread = require('../models/thread'),
     Message = require('../models/message'),
     Tracker = require('../controller/conversation_tracker');
 
@@ -37,6 +38,14 @@ exports.post = function(socket, data, socketsCollection){
 
 exports.openConversation = function(socket, conversationId){
     Tracker.addUserToConversation(socket.id, conversationId);
+}
+
+exports.addThread = function(socket, conversationId){
+    Conversation.findById(conversationId, function(err, conversation){
+        var thread = new Thread();
+        conversation.threads.push(thread);
+        conversation.save();
+    });
 }
 
 exports.disconnect = function(socket){

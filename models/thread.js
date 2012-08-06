@@ -2,7 +2,6 @@ var mongo = require('mongoose'),
 	message = require('./message');
 
 var threadSchema = new mongo.Schema({
-	text: String,
 	messages: [message.schema]
 });
 

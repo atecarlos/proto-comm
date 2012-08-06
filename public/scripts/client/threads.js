@@ -12,8 +12,7 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
 
 
   $(document).ready(function(){
-
-    $('.thread button.btnGetMessages').click(getMessages);
+    $('#btnAddThread').click(addThread);
 
     $('.thread .message-input input').keyup(function(event) {
       if (event.which === 13) {
@@ -25,6 +24,8 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
     });
 
     socket.emit('open_conversation', { conversationId: conversationId });
+
+    $('.thread button.btnGetMessages').click(getMessages);
   });
 
   function getMessages(){
@@ -43,6 +44,10 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
                   container.append(inner_list);
               }
     });
+  }
+
+  function addThread(){
+    socket.emit('new_thread', { conversationId: conversationId });
   }
 
   function emitMessage(txtBox){

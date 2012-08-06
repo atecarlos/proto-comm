@@ -2,6 +2,9 @@ h2= conversation.topic
 input(type="hidden")(value=conversation.id)#hdnConversationId
 input(type="hidden")(value=name)#hdnName
 
+div
+	button#btnAddThread Add thread
+
 div#threads
 	each thread in conversation.threads
 		div.thread
@@ -20,4 +23,4 @@ div#threads
 				div.json
 
 
-script(type="text/javascript", src="/scripts/require.js", data-main="/scripts/client/messages.js")
+script(type="text/javascript", src="/scripts/require.js", data-main="/scripts/client/threads.js")

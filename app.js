@@ -64,6 +64,10 @@ io.sockets.on('connection', function (socket) {
     ioController.openConversation(socket, data.conversationId);
   });
 
+  socket.on('new_thread', function(data){
+    ioController.addThread(socket, data.conversationId);
+  });
+
   socket.on('disconnect', function(){
     ioController.disconnect(socket);
   });

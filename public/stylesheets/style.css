@@ -20,6 +20,12 @@ body{
 	text-align:center;
 }
 
+div.thread{
+	padding: 10px;
+	border: 1px solid black;
+	margin-bottom: 5px;
+}
+
 .messages .template{
 	display:none;
 }
