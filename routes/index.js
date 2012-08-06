@@ -17,18 +17,31 @@ exports.getConversations = function(req, res){
 	});
 }
 
-exports.postConversations = function(req, res){
+exports.postConversation = function(req, res){
 	var conversation = new Conversation();
 	conversation.topic = req.body.topic;
 	conversation.save();
 
-	res.redirect('/conversations/' + conversation.id + '/messages');
+	res.redirect('/conversations/' + conversation.id + '/threads');
 }
 
 exports.openConversation = function(req, res){
 	var conversation = Conversation.findById(req.params.id, function(err, conversation){
-		res.render('messages', { title: 'messages', 
+		if(req.params.format == 'json'){
+			console.log(req);
+			var thread = conversation.threads.id(req.params.id);
+			res.json(thread.messages);
+		}else{
+			res.render('threads', { title: 'threads', 
     							 name: req.session.name,
     							 conversation: conversation });
+		}
+	});
+}
+
+exports.getMessages = function(req, res){
+	var conversation = Conversation.findById(req.params.id, function(err, conversation){
+		thread = conversation.threads.id(req.params.threadId);
+		res.json(thread.messages);
 	});
 }

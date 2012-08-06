@@ -22,16 +22,16 @@ exports.authorize = function(data, accept, sessionStore){
 
 exports.post = function(socket, data, socketsCollection){
 	Conversation.findById(data.conversationId, function(err, conversation){
+        var thread = conversation.threads.id(data.threadId);
         var msg = { text: data.msg, name: socket.handshake.session.name };
-        conversation.messages.push(msg);
+        thread.messages.push(msg);
         conversation.save();
     });
 
     var ids = Tracker.getUsersIn(data.conversationId);
-    console.log(ids);
     for (var i = 0; i < ids.length; i++){
         console.log(ids[i]);
-        socketsCollection.socket(ids[i]).emit('new_message', { text: data.msg, name: socket.handshake.session.name });
+        socketsCollection.socket(ids[i]).emit('new_message', { text: data.msg, name: socket.handshake.session.name, threadId: thread.id });
     }
 }
 

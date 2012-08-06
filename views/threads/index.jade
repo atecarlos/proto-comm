@@ -1,0 +1,23 @@
+h2= conversation.topic
+input(type="hidden")(value=conversation.id)#hdnConversationId
+input(type="hidden")(value=name)#hdnName
+
+div#threads
+	each thread in conversation.threads
+		div.thread
+			input(type="hidden")(id=thread.id)(value=thread.id)
+
+			div.messages
+				!= partial('message', thread.messages)
+				div.template
+					!= partial('message', { message: {} })
+
+			div.message-input
+				input(type="text")
+
+			div
+				button.btnGetMessages Get messages JSON
+				div.json
+
+
+script(type="text/javascript", src="/scripts/require.js", data-main="/scripts/client/messages.js")

@@ -20,21 +20,21 @@ body{
 	text-align:center;
 }
 
-#messages .template{
+.messages .template{
 	display:none;
 }
 
-#messages .message .user-icon{
+.message .user-icon{
 	margin-right: 10px;
 }
-#messages .message .name{
+.message .name{
 	font-weight:bold;
 }
 
-#messages .message .text{
+.message .text{
 	margin-left:4px;
 }
 
-#message-input #txtBoxMessage{
+.message-input input{
 	width:40%;
 }

@@ -33,18 +33,21 @@ app.configure('production', function(){
 
 app.listen(3000);
 
-mongo.connect('mongodb://localhost/express_test');
+mongo.connect('mongodb://localhost/proto');
 
 // Routes
 app.get('/', routes.index);
 
 app.post('/log-in', routes.log_in);
 
-app.get('/conversations/:id/messages', routes.openConversation);
+app.get('/conversations/:id/threads', routes.openConversation);
 
 app.get('/conversations', routes.getConversations);
 
-app.post('/conversations', routes.postConversations);
+app.post('/conversations', routes.postConversation);
+
+// Services
+app.get('/conversations/:id/threads/:threadId/messages.json', routes.getMessages);
 
 // Socket connections
 io.set('authorization', function (data, accept) {
