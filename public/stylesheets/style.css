@@ -1,16 +1,3 @@
-body{
-	background-color:#DDD;
-}
-
-.page-wrapper{
-	margin:0 auto;
-	position: relative;
-	width: 700px;
-	padding:10px;
-	background-color:#FFF;
-	height:100%;
-}
-
 .login{
 	margin:20% auto 0;
 	position: relative;
@@ -20,27 +7,30 @@ body{
 	text-align:center;
 }
 
-div.thread{
-	padding: 10px;
-	border: 1px solid black;
-	margin-bottom: 5px;
+.newMessage
+{
+  margin-top:20px;
 }
 
-.messages .template{
-	display:none;
+.message .username
+{
+  float: left;
+  margin-bottom: 3px;
 }
 
-.message .user-icon{
-	margin-right: 10px;
-}
-.message .name{
-	font-weight:bold;
-}
-
-.message .text{
-	margin-left:4px;
+.message .timestamp
+{
+  float: right;
+  margin-bottom: 3px;
 }
 
-.message-input input{
-	width:40%;
+.message hr, .thread hr
+{
+  margin: 9px 0;
+}
+
+.thread input
+{
+  margin-top: 9px;
+  margin-bottom: 0;
 }

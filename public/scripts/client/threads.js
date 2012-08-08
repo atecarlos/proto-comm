@@ -5,13 +5,91 @@ requirejs.config({
   }
 });
 
-require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
+require(["socket_io", "jquery", "knockout", "bootstrap"],function(socket_io, $, ko, bootstrap){
+
+  function Message(content) {
+    var self = this;
+
+    self.content = ko.observable(content);
+    self.timestamp = ko.observable(getTimestamp());
+    self.username = ko.observable(getUsername());
+
+    function getTimestamp() {
+      var now = new Date();
+      return now.getHours() + ':' + now.getMinutes();
+    }
+
+    function getUsername() {
+      var now = new Date();
+      if ((now.getSeconds() % 2) === 1) {
+        return 'Fernando Trigoso';
+      } else {
+        return 'Carlos Atencio';
+      }    
+    }
+  }
+
+  function Thread(title) {
+    var self = this;
+
+    self.title = ko.observable(title);
+    self.newMessage = ko.observable('');
+
+    self.sendMessage = function (data, event) {
+      var keyCode = (event.which ? event.which : event.keyCode);
+      if (keyCode === 13) {
+        self.messages.push(new Message(self.newMessage()));
+        self.newMessage('');
+        return false;
+      } else {
+        return true;
+      }
+    };
+    
+    self.messages = ko.observableArray([]);
+
+    self.hasMessages = ko.computed(function() {
+      return self.messages().length > 0;
+    });
+  }
+
+  function AppViewModel() {
+    var self = this;
+
+    self.mainThread = new Thread('Financial Reports');
+
+    self.showThreads = ko.computed(function() {
+      return self.mainThread.messages().length >= 3;
+    })
+    
+    self.newThread = ko.observable('');
+    
+    self.threads = ko.observableArray([]);
+    
+    self.askQuestionOnEnter = function (data, event) {
+      var keyCode = (event.which ? event.which : event.keyCode);
+      if (keyCode === 13) {
+        self.askQuestion();
+        return false;
+      } else {
+        return true;
+      }
+    };
+      
+    self.askQuestion = function() {
+       self.threads.push(new Thread(self.newThread()));
+       self.newThread('');        
+    };
+  }
 
   var socket = io.connect('http://localhost:3000'),
       conversationId = $('#hdnConversationId').val();
 
 
   $(document).ready(function(){
+    ko.applyBindings(new AppViewModel());
+    $('#newMessage').focus();
+
     $('#btnAddThread').click(addThread);
 
     $('.thread .message-input input').keyup(function(event) {

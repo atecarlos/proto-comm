@@ -1,26 +1,45 @@
-h2= conversation.topic
-input(type="hidden")(value=conversation.id)#hdnConversationId
-input(type="hidden")(value=name)#hdnName
+h1(data-bind="text: mainThread.title")
+hr
+div.row
+	div.span6#main_thread
+		div.row(data-bind="visible:!mainThread.hasMessages()")
+			div.span6
+				em Messages from the group will appear here
+		div.row(data-bind="foreach: mainThread.messages, visible: mainThread.hasMessages")
+			div.span6.message
+				div.row
+					div.span6
+						div.username.muted(data-bind="text:username")
+						div.timestamp.muted(data-bind="text:timestamp")
+				div.row
+					div.span6.content(data-bind="text:content")
+				hr
+		div.row.newMessage
+			div.span6
+				input.span6#newMessage(type="text", placeholder="Enter your message here", data-bind="value: mainThread.newMessage, valueUpdate: 'afterkeydown', event: { keypress: mainThread.sendMessage }")
 
-div
-	button#btnAddThread Add thread
+	div.span5.offset1
+		div(data-bind="foreach: threads")
+			div.well.thread
+				h6(data-bind="text: title")
+				hr
+				div.row(data-bind="foreach: messages, visible: hasMessages")
+					div.span4.message(style="width: 94%")
+						div.row
+							div.span4(style="width: 94%")
+								div.username.muted(data-bind="text: username")
+								div.timestamp.muted(data-bind="text: timestamp")
+						div.row
+							div.span4.content(style="width: 94%", data-bind="text: content")
+						hr
+			
+		div.well(data-bind="visible: showThreads")
+			div.input-append
+				input.span4(type="text", placeholder="Got a question for the group? Ask it here.", data-bind="value: newThread, valueUpdate: 'afterkeydown', event: { keypress: askQuestionOnEnter }")
+			div Any question you ask can be discussed independently from the main conversation. You can also
+				a share an idea 
 
-div#threads
-	each thread in conversation.threads
-		div.thread
-			input(type="hidden")(id=thread.id)(value=thread.id)
 
-			div.messages
-				!= partial('message', thread.messages)
-				div.template
-					!= partial('message', { message: {} })
-
-			div.message-input
-				input(type="text")
-
-			div
-				button.btnGetMessages Get messages JSON
-				div.json
 
 
 script(type="text/javascript", src="/scripts/require.js", data-main="/scripts/client/threads.js")
