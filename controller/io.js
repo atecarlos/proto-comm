@@ -21,15 +21,23 @@ exports.authorize = function(data, accept, sessionStore){
     }
 }
 
-exports.post = function(socket, data, socketsCollection){
+exports.postMessage = function(socket, data, socketsCollection){
 	Conversation.findById(data.conversationId, function(err, conversation){
         var thread = conversation.threads.id(data.threadId);
-        var msg = { text: data.msg, name: socket.handshake.session.name };
+        var msg = new Message();
+        msg.content = data.content;
+        msg.username = socket.handshake.session.username;
+        msg.timestamp = data.timestamp;
         thread.messages.push(msg);
         conversation.save();
 
-        emit(data.conversationId, socketsCollection, 'new_message', 
-            { text: data.msg, name: socket.handshake.session.name, threadId: thread.id });
+        emit(data.conversationId, socketsCollection, 'get_message', 
+            { 
+                content: data.content, 
+                username: socket.handshake.session.username, 
+                threadId: thread.id,
+                timestamp: data.timestamp,
+            });
     });
 }
 

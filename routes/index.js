@@ -5,8 +5,8 @@ exports.index = function(req, res){
 };
 
 exports.log_in = function(req, res){
-	var name = req.body.name;
-  	req.session.name = name;
+	var username = req.body.username;
+  	req.session.username = username;
   	res.redirect('/conversations');
 };
 
@@ -33,8 +33,8 @@ exports.openConversation = function(req, res){
 			res.json(thread.messages);
 		}else{
 			res.render('threads', { title: 'threads', 
-    							 name: req.session.name,
-    							 conversation: conversation });
+    							 username: req.session.username,
+    							 conversation: JSON.stringify(conversation) });
 		}
 	});
 }

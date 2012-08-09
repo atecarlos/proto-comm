@@ -7,38 +7,28 @@ requirejs.config({
 
 require(["socket_io", "jquery", "knockout", "bootstrap"],function(socket_io, $, ko, bootstrap){
 
-  function Message(content) {
+  var socket = io.connect('http://localhost:3000');
+  var conversation;
+
+  function Message(data) {
     var self = this;
 
-    self.content = ko.observable(content);
-    self.timestamp = ko.observable(getTimestamp());
-    self.username = ko.observable(getUsername());
-
-    function getTimestamp() {
-      var now = new Date();
-      return now.getHours() + ':' + now.getMinutes();
-    }
-
-    function getUsername() {
-      var now = new Date();
-      if ((now.getSeconds() % 2) === 1) {
-        return 'Fernando Trigoso';
-      } else {
-        return 'Carlos Atencio';
-      }    
-    }
+    self.content = ko.observable(data.content);
+    self.timestamp = ko.observable(data.timestamp);
+    self.username = ko.observable(data.username);
   }
 
-  function Thread(title) {
+  function Thread(data) {
     var self = this;
 
-    self.title = ko.observable(title);
+    self.id = data._id;
+    self.title = ko.observable('main thread title');
     self.newMessage = ko.observable('');
 
     self.sendMessage = function (data, event) {
       var keyCode = (event.which ? event.which : event.keyCode);
       if (keyCode === 13) {
-        self.messages.push(new Message(self.newMessage()));
+        self.saveMessage();
         self.newMessage('');
         return false;
       } else {
@@ -48,15 +38,41 @@ require(["socket_io", "jquery", "knockout", "bootstrap"],function(socket_io, $, 
     
     self.messages = ko.observableArray([]);
 
+    for(var i = 0; i < data.messages.length; i++){
+      addMessage(data.messages[i]);
+    }
+
+    function addMessage(data){
+      var message = new Message(data);
+      self.messages.push(message);
+    }
+
+    socket.on('get_message', function(data) {
+      addMessage(data);
+    });
+
     self.hasMessages = ko.computed(function() {
       return self.messages().length > 0;
     });
+
+    self.saveMessage = function(){
+      var data = 
+      { 
+          content: self.newMessage(), 
+          conversationId: conversation.id, 
+          threadId: self.id,
+          timestamp: new Date(),
+      };
+
+      socket.emit('post_message', data);
+    };
   }
 
-  function AppViewModel() {
+  function Conversation(data) {
     var self = this;
 
-    self.mainThread = new Thread('Financial Reports');
+    self.id = data._id;
+    self.mainThread = new Thread(data.threads[0]);
 
     self.showThreads = ko.computed(function() {
       return self.mainThread.messages().length >= 3;
@@ -82,12 +98,10 @@ require(["socket_io", "jquery", "knockout", "bootstrap"],function(socket_io, $, 
     };
   }
 
-  var socket = io.connect('http://localhost:3000'),
-      conversationId = $('#hdnConversationId').val();
-
-
   $(document).ready(function(){
-    ko.applyBindings(new AppViewModel());
+    var data = JSON.parse($('#data').val());
+    conversation = new Conversation(data);
+    ko.applyBindings(conversation);
     $('#newMessage').focus();
 
     $('#btnAddThread').click(addThread);
@@ -101,7 +115,7 @@ require(["socket_io", "jquery", "knockout", "bootstrap"],function(socket_io, $, 
       }
     });
 
-    socket.emit('open_conversation', { conversationId: conversationId });
+    socket.emit('open_conversation', { conversationId: conversation.id });
 
     $('.thread button.btnGetMessages').click(getMessages);
   });
@@ -131,24 +145,4 @@ require(["socket_io", "jquery", "knockout", "bootstrap"],function(socket_io, $, 
   socket.on('thread_added', function(data){
     alert('thread added with id: ' + data.id);
   });
-
-  function emitMessage(txtBox){
-    var name = $('#hdnName').val();
-    var threadId = txtBox.parent().siblings('input[type=hidden]').val();
-    var text = txtBox.val();
-    txtBox.val('');
-    socket.emit('post', { msg: text, conversationId: conversationId, threadId: threadId });
-  }
-
-  socket.on('new_message', function(data) {
-      addNewMessage(data);
-  });
-
-  function addNewMessage(data){
-    var messages = $('input[id=' + data.threadId + ']').siblings('div.messages');
-  	var template = messages.find('div.template > div.message');
-  	template.children('span.name').html(data.name);
-  	template.children('span.text').html(data.text);
-  	template.clone().appendTo(messages).hide().show('medium');
-  }
 });

@@ -1,9 +1,9 @@
 var mongo = require('mongoose');
 
 var messageSchema = new mongo.Schema({
-   	text: String,
-   	name: String,
-   	date: { type: Date, default: Date.now }
+   	content: String,
+   	username: String,
+   	timestamp: { type: Date, default: Date.now }
 });
 
 module.exports = mongo.model('Message', messageSchema);
