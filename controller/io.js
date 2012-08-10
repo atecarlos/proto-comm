@@ -53,12 +53,14 @@ exports.openConversation = function(socket, data){
 }
 
 exports.addThread = function(socket, data, socketsCollection){
+    console.log('thread added')
     Conversation.findById(data.conversationId, function(err, conversation){
         var thread = new Thread();
+        thread.title = data.title;
         conversation.threads.push(thread);
         conversation.save();
 
-        emit(data.conversationId, socketsCollection, 'thread_added', { id: thread.id });
+        emit(data.conversationId, socketsCollection, 'thread_added', { _id: thread.id, title: thread.title });
     });
 }
 

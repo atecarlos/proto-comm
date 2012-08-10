@@ -64,7 +64,7 @@ io.sockets.on('connection', function (socket) {
     ioController.openConversation(socket, data);
   });
 
-  socket.on('new_thread', function(data){
+  socket.on('post_thread', function(data){
     ioController.addThread(socket, data, io.sockets);
   });
 

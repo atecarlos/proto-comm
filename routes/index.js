@@ -1,4 +1,5 @@
-var Conversation = require('../models/conversation');
+var Conversation = require('../models/conversation'),
+    Thread = require('../models/thread');
 
 exports.index = function(req, res){
   res.render('index', { title: 'my chat app' });
@@ -19,7 +20,9 @@ exports.getConversations = function(req, res){
 
 exports.postConversation = function(req, res){
 	var conversation = new Conversation();
-	conversation.topic = req.body.topic;
+	var mainThread = new Thread();
+	mainThread.title = req.body.topic;
+	conversation.threads.push(mainThread);
 	conversation.save();
 
 	res.redirect('/conversations/' + conversation.id + '/threads');

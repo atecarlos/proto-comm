@@ -5,7 +5,7 @@ requirejs.config({
   }
 });
 
-require(["socket_io", "jquery", "knockout", "bootstrap"],function(socket_io, $, ko, bootstrap){
+require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
 
   var socket = io.connect('http://localhost:3000');
   var conversation;
@@ -22,14 +22,13 @@ require(["socket_io", "jquery", "knockout", "bootstrap"],function(socket_io, $, 
     var self = this;
 
     self.id = data._id;
-    self.title = ko.observable('main thread title');
+    self.title = ko.observable(data.title);
     self.newMessage = ko.observable('');
 
     self.sendMessage = function (data, event) {
       var keyCode = (event.which ? event.which : event.keyCode);
       if (keyCode === 13) {
         self.saveMessage();
-        self.newMessage('');
         return false;
       } else {
         return true;
@@ -38,8 +37,10 @@ require(["socket_io", "jquery", "knockout", "bootstrap"],function(socket_io, $, 
     
     self.messages = ko.observableArray([]);
 
-    for(var i = 0; i < data.messages.length; i++){
-      addMessage(data.messages[i]);
+    if(data.messages){
+      for(var i = 0; i < data.messages.length; i++){
+        addMessage(data.messages[i]);
+      }
     }
 
     function addMessage(data){
@@ -49,6 +50,7 @@ require(["socket_io", "jquery", "knockout", "bootstrap"],function(socket_io, $, 
 
     socket.on('get_message', function(data) {
       addMessage(data);
+      self.newMessage('');
     });
 
     self.hasMessages = ko.computed(function() {
@@ -93,9 +95,13 @@ require(["socket_io", "jquery", "knockout", "bootstrap"],function(socket_io, $, 
     };
       
     self.askQuestion = function() {
-       self.threads.push(new Thread(self.newThread()));
-       self.newThread('');        
+       socket.emit('post_thread', { title: self.newThread(), conversationId: self.id });
     };
+
+    socket.on('thread_added', function(data){
+      self.threads.push(new Thread(data));
+      self.newThread('');
+    });
   }
 
   $(document).ready(function(){
@@ -104,20 +110,7 @@ require(["socket_io", "jquery", "knockout", "bootstrap"],function(socket_io, $, 
     ko.applyBindings(conversation);
     $('#newMessage').focus();
 
-    $('#btnAddThread').click(addThread);
-
-    $('.thread .message-input input').keyup(function(event) {
-      if (event.which === 13) {
-        var txtBox = $(this);
-        if(txtBox.val() !== ''){
-          emitMessage($(this));
-        }
-      }
-    });
-
     socket.emit('open_conversation', { conversationId: conversation.id });
-
-    $('.thread button.btnGetMessages').click(getMessages);
   });
 
   function getMessages(){
@@ -137,12 +130,4 @@ require(["socket_io", "jquery", "knockout", "bootstrap"],function(socket_io, $, 
               }
     });
   }
-
-  function addThread(){
-    socket.emit('new_thread', { conversationId: conversationId });
-  }
-
-  socket.on('thread_added', function(data){
-    alert('thread added with id: ' + data.id);
-  });
 });
