@@ -49,8 +49,10 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
     }
 
     socket.on('get_message', function(data) {
-      addMessage(data);
-      self.newMessage('');
+      if(data.threadId === self.id){
+        addMessage(data);
+        self.newMessage('');
+      }
     });
 
     self.hasMessages = ko.computed(function() {
@@ -88,17 +90,17 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
       return self.threads().length > 0 || self.mainThread.messages().length >= 3;
     })
     
-    self.addThread = function (data, event) {
+    self.addNewThread = function (data, event) {
       var keyCode = (event.which ? event.which : event.keyCode);
       if (keyCode === 13) {
-        self.addThread();
+        addThread();
         return false;
       } else {
         return true;
       }
     };
       
-    self.addThread = function() {
+    function addThread() {
        socket.emit('post_thread', { title: self.newThread(), conversationId: self.id });
     };
 

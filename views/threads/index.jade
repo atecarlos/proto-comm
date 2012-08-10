@@ -16,7 +16,7 @@ div.row
 				hr
 		div.row.newMessage
 			div.span6
-				input.span6#newMessage(type="text", placeholder="Enter your message here", data-bind="value: mainThread.newMessage, valueUpdate: 'afterkeydown', event: { keypress: mainThread.sendMessage }")
+				input.span6(type="text", placeholder="Enter your message here", data-bind="value: mainThread.newMessage, valueUpdate: 'afterkeydown', event: { keypress: mainThread.sendMessage }")
 
 	div.span5.offset1
 		div(data-bind="foreach: threads")
@@ -32,10 +32,12 @@ div.row
 						div.row
 							div.span4.content(style="width: 94%", data-bind="text: content")
 						hr
+				div.row
+					input(type="text", data-bind="value: newMessage, valueUpdate: 'afterkeydown', event: { keypress: sendMessage }")
 			
 		div.well(data-bind="visible: showThreads")
 			div.input-append
-				input.span4(type="text", placeholder="Got a question for the group? Ask it here.", data-bind="value: newThread, valueUpdate: 'afterkeydown', event: { keypress: addThread }")
+				input.span4(type="text", placeholder="Got a question for the group? Ask it here.", data-bind="value: newThread, valueUpdate: 'afterkeydown', event: { keypress: addNewThread }")
 			div Any question you ask can be discussed independently from the main conversation. You can also
 				a share an idea 
 
