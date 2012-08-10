@@ -76,25 +76,29 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
     self.id = data._id;
     self.mainThread = new Thread(data.threads[0]);
 
-    self.showThreads = ko.computed(function() {
-      return self.mainThread.messages().length >= 3;
-    })
-    
     self.newThread = ko.observable('');
     
     self.threads = ko.observableArray([]);
+
+    for(var i = 1; i < data.threads.length; i++){
+      self.threads.push(new Thread(data.threads[i]));
+    }
+
+    self.showThreads = ko.computed(function() {
+      return self.threads().length > 0 || self.mainThread.messages().length >= 3;
+    })
     
-    self.askQuestionOnEnter = function (data, event) {
+    self.addThread = function (data, event) {
       var keyCode = (event.which ? event.which : event.keyCode);
       if (keyCode === 13) {
-        self.askQuestion();
+        self.addThread();
         return false;
       } else {
         return true;
       }
     };
       
-    self.askQuestion = function() {
+    self.addThread = function() {
        socket.emit('post_thread', { title: self.newThread(), conversationId: self.id });
     };
 
