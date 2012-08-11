@@ -3,7 +3,7 @@ p Open an existing conversation...
 ul
 	each conversation in conversations
 		li
-			a(href='/conversations/#{conversation.id}/threads')= conversation.threads[0].title
+			a(href='/conversations/#{conversation.id}/threads')= conversation.threads[0].messages[0].content
 
 p Or create a new one
 

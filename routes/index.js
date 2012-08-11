@@ -1,5 +1,6 @@
 var Conversation = require('../models/conversation'),
-    Thread = require('../models/thread');
+    Thread = require('../models/thread'),
+    Message = require('../models/message');
 
 exports.index = function(req, res){
   res.render('index', { title: 'my chat app' });
@@ -21,7 +22,12 @@ exports.getConversations = function(req, res){
 exports.postConversation = function(req, res){
 	var conversation = new Conversation();
 	var mainThread = new Thread();
-	mainThread.title = req.body.topic;
+
+	var title = new Message();
+	title.content = req.body.topic;
+	title.username = req.session.username;
+	
+	mainThread.messages.push(title);
 	conversation.threads.push(mainThread);
 	conversation.save();
 

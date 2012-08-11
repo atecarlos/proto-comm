@@ -7,9 +7,27 @@
 	text-align:center;
 }
 
+.main-thread.title
+{
+  padding-bottom: 6px;
+  margin: 10px 0;
+  border-bottom: 1px solid #EEE;
+}
+
+h3 small {
+  font-size: 13px;
+}
+
 .newMessage
 {
   margin-top:20px;
+}
+
+.message
+{
+  padding-bottom: 7px;
+  margin-bottom: 7px;
+  border-bottom: 1px solid #EEE;
 }
 
 .message .username
@@ -22,6 +40,11 @@
 {
   float: right;
   margin-bottom: 3px;
+}
+
+.message .content
+{
+  
 }
 
 .message hr, .thread hr

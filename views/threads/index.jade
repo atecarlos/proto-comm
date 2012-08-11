@@ -1,5 +1,9 @@
-h1(data-bind="text: mainThread.title")
-hr
+div.main-thread.title
+	h3
+		span(data-bind="text: mainThread.title.content")
+		small
+			span &nbsp;created by&nbsp;
+			span(data-bind="text: mainThread.title.username")
 div.row
 	div.span6#main_thread
 		div.row(data-bind="visible:!mainThread.hasMessages()")
@@ -13,7 +17,6 @@ div.row
 						div.timestamp.muted(data-bind="text:timestamp")
 				div.row
 					div.span6.content(data-bind="text:content")
-				hr
 		div.row.newMessage
 			div.span6
 				input.span6(type="text", placeholder="Enter your message here", data-bind="value: mainThread.newMessage, valueUpdate: 'afterkeydown', event: { keypress: mainThread.sendMessage }")
@@ -21,8 +24,15 @@ div.row
 	div.span5.offset1
 		div(data-bind="foreach: threads")
 			div.well.thread
-				h6(data-bind="text: title")
-				hr
+				div.row
+					div.span4.message(style="width: 94%")
+						div.row
+							div.span4(style="width: 94%")
+								div.username.muted(data-bind="text: title.username")
+								div.timestamp.muted(data-bind="text: title.timestamp")
+						div.row
+							div.span4.content(style="width: 94%")
+								h4(data-bind="text: title.content")
 				div.row(data-bind="foreach: messages, visible: hasMessages")
 					div.span4.message(style="width: 94%")
 						div.row
@@ -31,9 +41,9 @@ div.row
 								div.timestamp.muted(data-bind="text: timestamp")
 						div.row
 							div.span4.content(style="width: 94%", data-bind="text: content")
-						hr
 				div.row
-					input(type="text", data-bind="value: newMessage, valueUpdate: 'afterkeydown', event: { keypress: sendMessage }")
+					div.span6
+						input.span4(type="text", placeholder="Answer", data-bind="value: newMessage, valueUpdate: 'afterkeydown', event: { keypress: sendMessage }")
 			
 		div.well(data-bind="visible: showThreads")
 			div.input-append

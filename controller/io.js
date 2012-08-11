@@ -56,11 +56,16 @@ exports.addThread = function(socket, data, socketsCollection){
     console.log('thread added')
     Conversation.findById(data.conversationId, function(err, conversation){
         var thread = new Thread();
-        thread.title = data.title;
+
+        var title = new Message();
+        title.content = data.title;
+        title.username = socket.handshake.session.username;
+
+        thread.messages.push(title);
         conversation.threads.push(thread);
         conversation.save();
 
-        emit(data.conversationId, socketsCollection, 'thread_added', { _id: thread.id, title: thread.title });
+        emit(data.conversationId, socketsCollection, 'thread_added', { _id: thread.id, messages: thread.messages });
     });
 }
 

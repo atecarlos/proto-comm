@@ -14,15 +14,30 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
     var self = this;
 
     self.content = ko.observable(data.content);
-    self.timestamp = ko.observable(data.timestamp);
+    self.timestamp = ko.observable(formatTimestamp(data.timestamp));
     self.username = ko.observable(data.username);
+
+    function formatTimestamp(timestamp) {
+      var date = new Date(timestamp);
+      var month = date.getMonth() + 1;
+      var day = date.getDate();
+      var hour = date.getHours();
+      var minute = date.getMinutes();
+
+      return month + '/' + day + ' ' + hour + ':' + minute;
+    }
   }
 
   function Thread(data) {
     var self = this;
 
     self.id = data._id;
-    self.title = ko.observable(data.title);
+
+    if (data.messages.length > 0){
+      self.title = new Message(data.messages[0]);
+    } else {
+      self.title = new Message({content: 'missing title'});
+    }
     self.newMessage = ko.observable('');
 
     self.sendMessage = function (data, event) {
@@ -38,7 +53,7 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
     self.messages = ko.observableArray([]);
 
     if(data.messages){
-      for(var i = 0; i < data.messages.length; i++){
+      for(var i = 1; i < data.messages.length; i++){
         addMessage(data.messages[i]);
       }
     }
