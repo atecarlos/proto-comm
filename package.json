@@ -1,9 +1,17 @@
 {
-    "name": "application-name"
-  , "version": "0.0.1"
-  , "private": true
-  , "dependencies": {
-      "express": "2.5.8"
-    , "jade": ">= 0.0.1"
+  "name": "qna-prototype", 
+  "version": "0.0.1", 
+  "private": true,
+  "engines": {
+    "node": "0.8.x",
+    "npm": "1.1.x"
+  },
+  "dependencies": {
+    "express": "2.5.8",
+    "jade": ">= 0.0.1",
+    "mongoose": "2.6.6",
+    "requirejs": "2.0.2",
+    "socket.io": "0.9.6",
+    "cookie": "0.0.3"
   }
 }
