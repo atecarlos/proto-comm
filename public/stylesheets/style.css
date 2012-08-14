@@ -18,6 +18,20 @@ h3 small {
   font-size: 13px;
 }
 
+.question
+{
+  background-color: #CCDAFF;
+}
+
+.idea
+{
+  background-color: #CCFFD8;
+}
+
+.newThreadLinks
+{
+  padding-bottom: 10px;
+}
 .newMessage
 {
   margin-top:20px;
@@ -40,11 +54,6 @@ h3 small {
 {
   float: right;
   margin-bottom: 3px;
-}
-
-.message .content
-{
-  
 }
 
 .message hr, .thread hr
