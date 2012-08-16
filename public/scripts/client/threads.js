@@ -7,7 +7,7 @@ requirejs.config({
 
 require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
 
-  var socket = io.connect('http://localhost:3000');
+  var socket = io.connect(window.location.origin);
   var conversation;
 
   function Message(data) {
