@@ -34,7 +34,8 @@ app.configure('production', function(){
 var port = process.env.PORT || 3000;
 app.listen(port);
 
-mongo.connect('mongodb://localhost/proto');
+var databaseUri = process.env.MONGOLAB_URI || 'mongodb://localhost/proto';
+mongo.connect(databaseUri);
 
 // Routes
 app.get('/', routes.index);
