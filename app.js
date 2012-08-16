@@ -51,6 +51,12 @@ app.post('/conversations', routes.postConversation);
 // Services
 app.get('/conversations/:id/threads/:threadId/messages.json', routes.getMessages);
 
+// needed for heroku
+io.configure(function () { 
+  io.set("transports", ["xhr-polling"]); 
+  io.set("polling duration", 10); 
+});
+
 // Socket connections
 io.set('authorization', function (data, accept) {
     ioController.authorize(data, accept, sessionStore);
