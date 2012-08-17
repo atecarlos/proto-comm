@@ -45,17 +45,18 @@ div.row
 						div.row
 							div.span4.content(style="width: 94%")
 								h4(data-bind="text: title.content")
-				div.row.thread-messages(data-bind="foreach: messages, visible: hasMessages")
-					div.span4.message(style="width: 94%")
-						div.row
-							div.span4(style="width: 94%")
-								div.username.muted(data-bind="text: username")
-								div.timestamp.muted(data-bind="text: timestamp")
-						div.row
-							div.span4.content(style="width: 94%", data-bind="text: content")
-				div.row
-					div.span6
-						input.span4(type="text", placeholder="Answer", data-bind="value: newMessage, valueUpdate: 'afterkeydown', event: { keypress: sendMessage }")
+				div(data-bind="visible: !isCollapsed()")
+					div.row.thread-messages(data-bind="foreach: messages, visible: hasMessages()")
+						div.span4.message(style="width: 94%")
+							div.row
+								div.span4(style="width: 94%")
+									div.username.muted(data-bind="text: username")
+									div.timestamp.muted(data-bind="text: timestamp")
+							div.row
+								div.span4.content(style="width: 94%", data-bind="text: content")
+					div.row
+						div.span6
+							input.span4(type="text", placeholder="Answer", data-bind="value: newMessage, valueUpdate: 'afterkeydown', event: { keypress: sendMessage }")
 
 input#data(type="hidden")(value=conversation)
 

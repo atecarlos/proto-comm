@@ -9,7 +9,6 @@ exports.index = function(req, res){
 
 exports.log_in = function(req, res){
   	req.session.user = users.find(req.body.userId);
-  	console.log('user logged in: ' + req.session.user.name);
   	res.redirect('/conversations');
 };
 

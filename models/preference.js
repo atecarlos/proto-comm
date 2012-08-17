@@ -2,7 +2,7 @@ var mongo = require('mongoose');
 
 var preferenceSchema = new mongo.Schema({
 	flag: Boolean,
-	key: ObjectId,
+	key: String,
 	userId: Number,
 });
 

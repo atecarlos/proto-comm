@@ -1,7 +1,8 @@
 var Conversation = require('../models/conversation'),
     Thread = require('../models/thread'),
     Message = require('../models/message'),
-    Tracker = require('../controller/conversation_tracker');
+    tracker = require('../controller/conversation_tracker'),
+    Preference = require('../models/preference');
 
 exports.authorize = function(data, accept, sessionStore){
 	if (data.headers.cookie) {
@@ -42,14 +43,14 @@ exports.postMessage = function(socket, data, socketsCollection){
 }
 
 function emit(conversationId, socketsCollection, event, data){
-    var ids = Tracker.getUsersIn(conversationId);
+    var ids = tracker.getUsersIn(conversationId);
     for (var i = 0; i < ids.length; i++){
         socketsCollection.socket(ids[i]).emit(event, data);
     }
 }
 
 exports.openConversation = function(socket, data){
-    Tracker.addUserToConversation(socket.id, data.conversationId);
+    tracker.addUserToConversation(socket.id, data.conversationId);
 }
 
 exports.addThread = function(socket, data, socketsCollection){
@@ -71,18 +72,20 @@ exports.addThread = function(socket, data, socketsCollection){
 
 exports.toggleThread = function(socket, data){
     Preference.findOne({ 'key': data.threadId, 'userId': socket.handshake.session.user.id }, function(err, preference){
-        if(preference){
-            preference.flag = flag;
+        console.log(err);
+        if(err !== null){
+            preference.flag = data.isCollapsed;
         }else{
             preference = new Preference();
             preference.flag = data.isCollapsed;
             preference.key = data.threadId;
             preference.userId = socket.handshake.session.user.id;
-            preference.save();
         }
+
+        preference.save();
     });
 }
 
 exports.disconnect = function(socket){
-    Tracker.removeUserFromAllConversations(socket.id);
+    tracker.removeUserFromAllConversations(socket.id);
 }

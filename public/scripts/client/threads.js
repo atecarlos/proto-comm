@@ -15,8 +15,8 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
     var self = this;
 
     self.content = ko.observable(data.content);
-    self.timestamp = ko.observable(formatTimestamp(data.timestamp));
-    self.username = ko.observable(data.user.name);
+    self.timestamp = formatTimestamp(data.timestamp);
+    self.username = data.user.name;
 
     function formatTimestamp(timestamp) {
       var date = new Date(timestamp);
@@ -43,6 +43,7 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
     } else {
       self.title = new Message({content: 'missing title'});
     }
+
     self.newMessage = ko.observable('');
 
     self.sendMessage = function (data, event) {
@@ -91,8 +92,11 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
       socket.emit('post_message', data);
     };
 
+    self.isCollapsed = ko.observable(false);
+
     self.toggle = function(currentThread, event){
-      $(event.currentTarget).siblings().toggle();
+      self.isCollapsed(!self.isCollapsed());
+      socket.emit('toggle_thread', { threadId: self.id, isCollapsed: self.isCollapsed });
     }
   }
 

@@ -68,6 +68,10 @@ io.sockets.on('connection', function (socket) {
     ioController.addThread(socket, data, io.sockets);
   });
 
+  socket.on('toggle_thread', function(data){
+    ioController.toggleThread(socket, data);
+  });
+
   socket.on('disconnect', function(){
     ioController.disconnect(socket);
   });
