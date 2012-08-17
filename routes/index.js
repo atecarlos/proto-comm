@@ -1,14 +1,15 @@
 var Conversation = require('../models/conversation'),
     Thread = require('../models/thread'),
-    Message = require('../models/message');
+    Message = require('../models/message'),
+    users = require('../models/users');
 
 exports.index = function(req, res){
-  res.render('index', { title: 'my chat app' });
+  res.render('index', { title: 'my chat app', users: users });
 };
 
 exports.log_in = function(req, res){
-	var username = req.body.username;
-  	req.session.username = username;
+  	req.session.user = users.find(req.body.userId);
+  	console.log('user logged in: ' + req.session.user.name);
   	res.redirect('/conversations');
 };
 
@@ -25,7 +26,8 @@ exports.postConversation = function(req, res){
 
 	var title = new Message();
 	title.content = req.body.topic;
-	title.username = req.session.username;
+	title.user.id = req.session.user.id;
+	title.user.name = req.session.user.name;
 	
 	mainThread.messages.push(title);
 	conversation.threads.push(mainThread);
@@ -37,13 +39,11 @@ exports.postConversation = function(req, res){
 exports.openConversation = function(req, res){
 	var conversation = Conversation.findById(req.params.id, function(err, conversation){
 		if(req.params.format == 'json'){
-			console.log(req);
 			var thread = conversation.threads.id(req.params.id);
 			res.json(thread.messages);
 		}else{
-			res.render('threads', { title: 'threads', 
-    							 username: req.session.username,
-    							 conversation: JSON.stringify(conversation) });
+			res.render('threads', { title: 'threads',
+    							 	conversation: JSON.stringify(conversation) });
 		}
 	});
 }

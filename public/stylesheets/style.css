@@ -32,6 +32,11 @@ h3 small {
 {
   padding-bottom: 10px;
 }
+
+.thread-header
+{
+  cursor: pointer;
+}
 .newMessage
 {
   margin-top:20px;

@@ -36,7 +36,7 @@ div.row
 
 		div(data-bind="foreach: threads")
 			div.well.thread(data-bind="css: { question: isQuestion, idea: isIdea }")
-				div.row
+				div.row.thread-header(data-bind="click: toggle")
 					div.span4.message(style="width: 94%")
 						div.row
 							div.span4(style="width: 94%")
@@ -45,7 +45,7 @@ div.row
 						div.row
 							div.span4.content(style="width: 94%")
 								h4(data-bind="text: title.content")
-				div.row(data-bind="foreach: messages, visible: hasMessages")
+				div.row.thread-messages(data-bind="foreach: messages, visible: hasMessages")
 					div.span4.message(style="width: 94%")
 						div.row
 							div.span4(style="width: 94%")
@@ -57,7 +57,6 @@ div.row
 					div.span6
 						input.span4(type="text", placeholder="Answer", data-bind="value: newMessage, valueUpdate: 'afterkeydown', event: { keypress: sendMessage }")
 
-input#username(type="hidden")(value=username)
 input#data(type="hidden")(value=conversation)
 
 script(type="text/javascript", src="/scripts/require.js", data-main="/scripts/client/threads.js")

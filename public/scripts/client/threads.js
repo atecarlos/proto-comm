@@ -16,7 +16,7 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
 
     self.content = ko.observable(data.content);
     self.timestamp = ko.observable(formatTimestamp(data.timestamp));
-    self.username = ko.observable(data.username);
+    self.username = ko.observable(data.user.name);
 
     function formatTimestamp(timestamp) {
       var date = new Date(timestamp);
@@ -90,6 +90,10 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
 
       socket.emit('post_message', data);
     };
+
+    self.toggle = function(currentThread, event){
+      $(event.currentTarget).siblings().toggle();
+    }
   }
 
   function Conversation(data) {
