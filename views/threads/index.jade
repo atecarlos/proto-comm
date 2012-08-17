@@ -22,9 +22,21 @@ div.row
 				input.span6(type="text", placeholder="Enter your message here", data-bind="value: mainThread.newMessage, valueUpdate: 'afterkeydown', event: { keypress: mainThread.sendMessage }")
 
 	div.span5.offset1
+		div
+			div.newThreadLinks
+				a#lnkAskQuestion(href="#") Ask a question
+				span(style="margin:0 5px;") |
+				a#lnkShareIdea(href="#") Share an idea
+			div#newQuestion.well.question(style="display: none;")
+				div.input-append
+					input.span4(type="text", placeholder="Got a question for the group? Ask it here.", data-bind="value: newThread, valueUpdate: 'afterkeydown', event: { keypress: addQuestion }")
+			div#newIdea.well.idea(style="display: none;")
+				div.input-append
+					input.span4(type="text", placeholder="Share your idea here and dazzle your group.", data-bind="value: newThread, valueUpdate: 'afterkeydown', event: { keypress: addIdea }")
+
 		div(data-bind="foreach: threads")
-			div.well.thread
-				div.row
+			div.well.thread(data-bind="css: { question: isQuestion, idea: isIdea }")
+				div.row.thread-header(data-bind="click: toggle")
 					div.span4.message(style="width: 94%")
 						div.row
 							div.span4(style="width: 94%")
@@ -33,25 +45,19 @@ div.row
 						div.row
 							div.span4.content(style="width: 94%")
 								h4(data-bind="text: title.content")
-				div.row(data-bind="foreach: messages, visible: hasMessages")
-					div.span4.message(style="width: 94%")
-						div.row
-							div.span4(style="width: 94%")
-								div.username.muted(data-bind="text: username")
-								div.timestamp.muted(data-bind="text: timestamp")
-						div.row
-							div.span4.content(style="width: 94%", data-bind="text: content")
-				div.row
-					div.span6
-						input.span4(type="text", placeholder="Answer", data-bind="value: newMessage, valueUpdate: 'afterkeydown', event: { keypress: sendMessage }")
-			
-		div.well(data-bind="visible: showThreads")
-			div.input-append
-				input.span4(type="text", placeholder="Got a question for the group? Ask it here.", data-bind="value: newThread, valueUpdate: 'afterkeydown', event: { keypress: addNewThread }")
-			div Any question you ask can be discussed independently from the main conversation. You can also
-				a share an idea 
+				div(data-bind="visible: !isCollapsed()")
+					div.row.thread-messages(data-bind="foreach: messages, visible: hasMessages()")
+						div.span4.message(style="width: 94%")
+							div.row
+								div.span4(style="width: 94%")
+									div.username.muted(data-bind="text: username")
+									div.timestamp.muted(data-bind="text: timestamp")
+							div.row
+								div.span4.content(style="width: 94%", data-bind="text: content")
+					div.row
+						div.span6
+							input.span4(type="text", placeholder="Answer", data-bind="value: newMessage, valueUpdate: 'afterkeydown', event: { keypress: sendMessage }")
 
-input#username(type="hidden")(value=username)
 input#data(type="hidden")(value=conversation)
 
 script(type="text/javascript", src="/scripts/require.js", data-main="/scripts/client/threads.js")

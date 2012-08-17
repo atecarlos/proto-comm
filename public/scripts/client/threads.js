@@ -9,13 +9,14 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
 
   var socket = io.connect(window.location.origin);
   var conversation;
+  var threadTypes = { question: 'Q', idea: 'I' };
 
   function Message(data) {
     var self = this;
 
     self.content = ko.observable(data.content);
-    self.timestamp = ko.observable(formatTimestamp(data.timestamp));
-    self.username = ko.observable(data.username);
+    self.timestamp = formatTimestamp(data.timestamp);
+    self.username = data.user.name;
 
     function formatTimestamp(timestamp) {
       var date = new Date(timestamp);
@@ -33,11 +34,16 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
 
     self.id = data._id;
 
+    self.type = data.type;
+    self.isQuestion = data.type === threadTypes.question;
+    self.isIdea = data.type === threadTypes.idea;
+
     if (data.messages.length > 0){
       self.title = new Message(data.messages[0]);
     } else {
       self.title = new Message({content: 'missing title'});
     }
+
     self.newMessage = ko.observable('');
 
     self.sendMessage = function (data, event) {
@@ -85,6 +91,13 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
 
       socket.emit('post_message', data);
     };
+
+    self.isCollapsed = ko.observable(false);
+
+    self.toggle = function(currentThread, event){
+      self.isCollapsed(!self.isCollapsed());
+      socket.emit('toggle_thread', { threadId: self.id, isCollapsed: self.isCollapsed });
+    }
   }
 
   function Conversation(data) {
@@ -100,23 +113,28 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
     for(var i = 1; i < data.threads.length; i++){
       self.threads.push(new Thread(data.threads[i]));
     }
-
-    self.showThreads = ko.computed(function() {
-      return self.threads().length > 0 || self.mainThread.messages().length >= 3;
-    })
     
-    self.addNewThread = function (data, event) {
+    self.addQuestion = function(data, event){
+      return addNewThread(threadTypes.question, event);
+    }
+
+    self.addIdea = function(data, event){
+      return addNewThread(threadTypes.idea, event);
+    }
+
+    function addNewThread (type, event) {
       var keyCode = (event.which ? event.which : event.keyCode);
       if (keyCode === 13) {
-        addThread();
+        addThread(type);
+        self.newThread('');
         return false;
       } else {
         return true;
       }
     };
       
-    function addThread() {
-       socket.emit('post_thread', { title: self.newThread(), conversationId: self.id });
+    function addThread(type) {
+       socket.emit('post_thread', { title: self.newThread(), type: type, conversationId: self.id });
     };
 
     socket.on('thread_added', function(data){
@@ -131,24 +149,19 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
     ko.applyBindings(conversation);
     $('#newMessage').focus();
 
+    $('#lnkAskQuestion').click(showAskQuestion);
+    $('#lnkShareIdea').click(showShareIdea);
+
     socket.emit('open_conversation', { conversationId: conversation.id });
   });
 
-  function getMessages(){
-    var container = $(this).siblings('.json');
-    container.html('');
-    var threadId = container.parent().siblings('input[type=hidden]').val();
+  function showAskQuestion(){
+    $('#newQuestion').toggle();
+    $('#newIdea').hide();
+  }
 
-    $.getJSON('/conversations/' + conversationId + '/threads/' + threadId + '/messages.json', 
-              function(data){
-                for(var i=0; i<data.length; i++){
-                  var inner_list = $('<ul/>', {"style": "margin-left: 15px" })
-                                    .append( $('<li/>', {text: 'name: ' + data[i].name }))
-                                    .append( $('<li/>', {text: 'text: ' + data[i].text }))
-                                    .append( $('<li/>', {text: 'date: ' + data[i].date }));
-                  
-                  container.append(inner_list);
-              }
-    });
+  function showShareIdea(){
+    $('#newIdea').toggle();
+    $('#newQuestion').hide();
   }
 });

@@ -2,8 +2,10 @@
 div.login
 	form(method='post', action="/log-in")
 		div
-			label Please enter your user name
+			label Who are you?
 		div
-			input#txtBoxName(type='text', name='username')
+			select#selUser(name='userId')
+				each user in users
+					option(value=user.id)= user.name
 		div
 			input(type="submit", value="submit")

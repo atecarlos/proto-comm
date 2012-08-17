@@ -2,7 +2,10 @@ var mongo = require('mongoose');
 
 var messageSchema = new mongo.Schema({
    	content: String,
-   	username: String,
+   	user: {
+   		id: Number,
+   		name: String,
+   	},
    	timestamp: { type: Date, default: Date.now }
 });
 
