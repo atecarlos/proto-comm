@@ -72,8 +72,8 @@ exports.addThread = function(socket, data, socketsCollection){
 
 exports.toggleThread = function(socket, data){
     Preference.findOne({ 'key': data.threadId, 'userId': socket.handshake.session.user.id }, function(err, preference){
-        console.log(err);
-        if(err !== null){
+        console.log(data.isCollapsed);
+        if(preference !== null){
             preference.flag = data.isCollapsed;
         }else{
             preference = new Preference();

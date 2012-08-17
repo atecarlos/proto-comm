@@ -96,7 +96,7 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
 
     self.toggle = function(currentThread, event){
       self.isCollapsed(!self.isCollapsed());
-      socket.emit('toggle_thread', { threadId: self.id, isCollapsed: self.isCollapsed });
+      socket.emit('toggle_thread', { threadId: self.id, isCollapsed: self.isCollapsed() });
     }
   }
 
