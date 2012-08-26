@@ -106,8 +106,7 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
     self.id = data._id;
     self.mainThread = new Thread(data.threads[0]);
     self.mainThread.messages.subscribe(function (newValue) {
-      var messagesHeight = $('#main-thread > .messages').height();
-      $('#main-thread').scrollTop(messagesHeight);
+      self.scrollMainThread();
     });
 
     self.newThread = ko.observable('');
@@ -144,7 +143,16 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
     socket.on('thread_added', function(data){
       self.threads.push(new Thread(data));
       self.newThread('');
+      self.scrollSubThreads();
     });
+
+    self.scrollMainThread = function () {
+      $('#main-thread').scrollTop($('#main-thread > .messages').height());
+    };
+
+    self.scrollSubThreads = function () {
+      $('#sub-threads').scrollTop($('#sub-threads > .threads').height())
+    };
   }
 
   $(document).ready(function(){
@@ -155,6 +163,9 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
 
     $('#lnkAskQuestion').click(showAskQuestion);
     $('#lnkShareIdea').click(showShareIdea);
+
+    conversation.scrollMainThread();
+    conversation.scrollSubThreads();
 
     socket.emit('open_conversation', { conversationId: conversation.id });
   });
