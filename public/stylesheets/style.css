@@ -7,6 +7,18 @@
 	text-align:center;
 }
 
+html
+{
+  
+}
+
+#main_thread, #sub_threads
+{  
+  height: 700px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 .main-thread.title
 {
   padding-bottom: 6px;
@@ -36,10 +48,6 @@ h3 small {
 .thread-header
 {
   cursor: pointer;
-}
-.newMessage
-{
-  margin-top:20px;
 }
 
 .message

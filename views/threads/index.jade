@@ -4,7 +4,7 @@ div.main-thread.title
 		small
 			span &nbsp;created by&nbsp;
 			span(data-bind="text: mainThread.title.username")
-div.row
+div.row.threads
 	div.span6#main_thread
 		div.row(data-bind="visible:!mainThread.hasMessages()")
 			div.span6
@@ -17,11 +17,8 @@ div.row
 						div.timestamp.muted(data-bind="text:timestamp")
 				div.row
 					div.span6.content(data-bind="text:content")
-		div.row.newMessage
-			div.span6
-				input.span6(type="text", placeholder="Enter your message here", data-bind="value: mainThread.newMessage, valueUpdate: 'afterkeydown', event: { keypress: mainThread.sendMessage }")
 
-	div.span5.offset1
+	div.span5.offset1#sub_threads
 		div
 			div.newThreadLinks
 				a#lnkAskQuestion(href="#") Ask a question
@@ -57,6 +54,10 @@ div.row
 					div.row
 						div.span6
 							input.span4(type="text", placeholder="Answer", data-bind="value: newMessage, valueUpdate: 'afterkeydown', event: { keypress: sendMessage }")
+div.row.bottom_area
+	div.span6
+		input.span6(type="text", placeholder="Enter your message here", data-bind="value: mainThread.newMessage, valueUpdate: 'afterkeydown', event: { keypress: mainThread.sendMessage }")
+
 
 input#data(type="hidden")(value=conversation)
 
