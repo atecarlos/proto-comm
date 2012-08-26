@@ -105,6 +105,10 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
 
     self.id = data._id;
     self.mainThread = new Thread(data.threads[0]);
+    self.mainThread.messages.subscribe(function (newValue) {
+      var messagesHeight = $('#main-thread > .messages').height();
+      $('#main-thread').scrollTop(messagesHeight);
+    });
 
     self.newThread = ko.observable('');
     

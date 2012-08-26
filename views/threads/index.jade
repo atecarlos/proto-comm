@@ -1,15 +1,15 @@
-div.main-thread.title
+div.main-thread-title
 	h3
 		span(data-bind="text: mainThread.title.content")
 		small
 			span &nbsp;created by&nbsp;
 			span(data-bind="text: mainThread.title.username")
 div.row.threads
-	div.span6#main_thread
+	div.span6#main-thread
 		div.row(data-bind="visible:!mainThread.hasMessages()")
 			div.span6
 				em Messages from the group will appear here
-		div.row(data-bind="foreach: mainThread.messages, visible: mainThread.hasMessages")
+		div.row.messages(data-bind="foreach: mainThread.messages, visible: mainThread.hasMessages")
 			div.span6.message
 				div.row
 					div.span6
@@ -18,7 +18,7 @@ div.row.threads
 				div.row
 					div.span6.content(data-bind="text:content")
 
-	div.span5.offset1#sub_threads
+	div.span5.offset1
 		div
 			div.newThreadLinks
 				a#lnkAskQuestion(href="#") Ask a question
@@ -31,7 +31,7 @@ div.row.threads
 				div.input-append
 					input.span4(type="text", placeholder="Share your idea here and dazzle your group.", data-bind="value: newThread, valueUpdate: 'afterkeydown', event: { keypress: addIdea }")
 
-		div(data-bind="foreach: threads")
+		div#sub-threads(data-bind="foreach: threads")
 			div.well.thread(data-bind="css: { question: isQuestion, idea: isIdea }")
 				div.row.thread-header(data-bind="click: toggle")
 					div.span4.message(style="width: 94%")

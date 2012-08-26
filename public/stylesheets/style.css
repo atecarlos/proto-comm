@@ -12,14 +12,21 @@ html
   
 }
 
-#main_thread, #sub_threads
-{  
-  height: 700px;
+#main-thread, #sub-threads
+{ 
   overflow-x: hidden;
   overflow-y: auto;
 }
+#main-thread
+{
+  height: 675px;
+}
+#sub-threads
+{
+  height: 650px;
+}
 
-.main-thread.title
+.main-thread-title
 {
   padding-bottom: 6px;
   margin: 10px 0;
