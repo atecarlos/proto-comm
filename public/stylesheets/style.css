@@ -37,14 +37,33 @@ h3 small {
   font-size: 13px;
 }
 
+.thread-header
+{
+  height: 50px;
+  overflow: hidden;
+  background-color: lightgray;
+}
+.thread-body-container
+{
+  height: 250px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+.thread-body
+{
+  position: absolute;  
+  bottom: 0;
+}
+
 .question
 {
-  background-color: #CCDAFF;
+  /*background-color: #CCDAFF;*/
 }
 
 .idea
 {
-  background-color: #CCFFD8;
+  /*background-color: #CCFFD8;*/
 }
 
 .newThreadLinks
