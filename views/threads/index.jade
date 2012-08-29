@@ -38,15 +38,14 @@ div.row
 			div.threads(data-bind="foreach: threads")
 				div.well.thread(data-bind="css: { question: isQuestion, idea: isIdea }")
 					div.row.thread-header(data-bind="click: toggle")
-						div.span4.message(style="width: 94%")
-							div.row
-								div.span4(style="width: 94%")
-									div.username.muted(data-bind="text: title.username")
-									div.timestamp.muted(data-bind="text: title.timestamp")
+						div.span4(style="width: 94%")
 							div.row
 								div.span4.content(style="width: 94%")
 									strong(data-bind="text: title.content")
-					div.thread-body-container									
+									span.muted &nbsp;created by&nbsp;
+									span.muted(data-bind="text: title.username")
+					div.thread-body-container	
+						div.thread-body-curtain								
 						div.thread-body(data-bind="visible: !isCollapsed()")
 							div.row.thread-messages(data-bind="foreach: messages, visible: hasMessages()")
 								div.span4.message(style="width: 94%")
