@@ -31,9 +31,11 @@ app.configure('production', function(){
   app.use(express.errorHandler());
 });
 
-app.listen(3000);
+var port = process.env.PORT || 3000;
+app.listen(port);
 
-mongo.connect('mongodb://localhost/proto');
+var databaseUri = process.env.MONGOLAB_URI || 'mongodb://localhost/proto';
+mongo.connect(databaseUri);
 
 // Routes
 app.get('/', routes.index);
@@ -48,6 +50,12 @@ app.post('/conversations', routes.postConversation);
 
 // Services
 app.get('/conversations/:id/threads/:threadId/messages.json', routes.getMessages);
+
+// needed for heroku
+io.configure(function () { 
+  io.set("transports", ["xhr-polling"]); 
+  io.set("polling duration", 10); 
+});
 
 // Socket connections
 io.set('authorization', function (data, accept) {
