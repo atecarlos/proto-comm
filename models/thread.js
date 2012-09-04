@@ -9,3 +9,4 @@ var threadSchema = new mongo.Schema({
 module.exports = mongo.model('Thread', threadSchema);
 
 exports.schema = threadSchema;
+

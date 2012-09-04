@@ -1,7 +1,8 @@
 var Conversation = require('../models/conversation'),
     Thread = require('../models/thread'),
     Message = require('../models/message'),
-    users = require('../models/users');
+    users = require('../models/users'),
+    Preference = require('../models/thread_preference');
 
 exports.index = function(req, res){
   res.render('index', { title: 'my chat app', users: users });
@@ -37,13 +38,12 @@ exports.postConversation = function(req, res){
 
 exports.openConversation = function(req, res){
 	var conversation = Conversation.findById(req.params.id, function(err, conversation){
-		if(req.params.format == 'json'){
-			var thread = conversation.threads.id(req.params.id);
-			res.json(thread.messages);
-		}else{
+		var userPreferences;
+		Preference.find({ 'userId': req.session.user.id, 'conversationId':conversation._id }, function(err, preferences){
 			res.render('threads', { title: 'threads',
-    							 	conversation: JSON.stringify(conversation) });
-		}
+    						 	conversation: JSON.stringify(conversation),
+    						 	preferences: JSON.stringify(preferences) });
+		});
 	});
 }
 

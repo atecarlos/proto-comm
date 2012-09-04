@@ -59,5 +59,6 @@ div.row
 							input.span4(type="text", placeholder="Answer", data-bind="value: newMessage, valueUpdate: 'afterkeydown', event: { keypress: sendMessage }")
 
 input#data(type="hidden")(value=conversation)
+input#preferences(type="hidden")(value=preferences)
 
 script(type="text/javascript", src="/scripts/require.js", data-main="/scripts/client/threads.js")

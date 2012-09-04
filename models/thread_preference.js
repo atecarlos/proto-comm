@@ -2,7 +2,8 @@ var mongo = require('mongoose');
 
 var preferenceSchema = new mongo.Schema({
 	flag: Boolean,
-	key: String,
+	threadId: mongo.Schema.Types.ObjectId,
+	conversationId: mongo.Schema.Types.ObjectId,
 	userId: Number,
 });
 

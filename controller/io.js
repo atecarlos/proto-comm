@@ -2,7 +2,7 @@ var Conversation = require('../models/conversation'),
     Thread = require('../models/thread'),
     Message = require('../models/message'),
     tracker = require('../controller/conversation_tracker'),
-    Preference = require('../models/preference');
+    Preference = require('../models/thread_preference');
 
 exports.authorize = function(data, accept, sessionStore){
 	if (data.headers.cookie) {
@@ -72,13 +72,13 @@ exports.addThread = function(socket, data, socketsCollection){
 
 exports.toggleThread = function(socket, data){
     Preference.findOne({ 'key': data.threadId, 'userId': socket.handshake.session.user.id }, function(err, preference){
-        console.log(data.isCollapsed);
         if(preference !== null){
             preference.flag = data.isCollapsed;
         }else{
             preference = new Preference();
+            preference.conversationId = data.conversationId;
+            preference.threadId = data.threadId;
             preference.flag = data.isCollapsed;
-            preference.key = data.threadId;
             preference.userId = socket.handshake.session.user.id;
         }
 

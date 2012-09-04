@@ -92,15 +92,15 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
       socket.emit('post_message', data);
     };
 
-    self.isCollapsed = ko.observable(false);
+    self.isCollapsed = ko.observable(data.isCollapsed);
 
     self.toggle = function(currentThread, event){
       self.isCollapsed(!self.isCollapsed());
-      socket.emit('toggle_thread', { threadId: self.id, isCollapsed: self.isCollapsed() });
+      socket.emit('toggle_thread', { threadId: self.id, conversationId: conversation.id, isCollapsed: self.isCollapsed() });
     }
   }
 
-  function Conversation(data) {
+  function Conversation(data, preferences) {
     var self = this;
 
     self.id = data._id;
@@ -145,7 +145,8 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
 
   $(document).ready(function(){
     var data = JSON.parse($('#data').val());
-    conversation = new Conversation(data);
+    var preferences = JSON.parse($('#preferences').val());
+    conversation = new Conversation(data, preferences);
     ko.applyBindings(conversation);
     $('#newMessage').focus();
 
