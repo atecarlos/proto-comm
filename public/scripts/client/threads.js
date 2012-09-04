@@ -29,7 +29,7 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
     }
   }
 
-  function Thread(data) {
+  function Thread(data, preference) {
     var self = this;
 
     self.id = data._id;
@@ -92,7 +92,7 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
       socket.emit('post_message', data);
     };
 
-    self.isCollapsed = ko.observable(data.isCollapsed);
+    self.isCollapsed = ko.observable(preference ? preference.flag : false);
 
     self.toggle = function(currentThread, event){
       self.isCollapsed(!self.isCollapsed());
@@ -111,7 +111,8 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
     self.threads = ko.observableArray([]);
 
     for(var i = 1; i < data.threads.length; i++){
-      self.threads.push(new Thread(data.threads[i]));
+      var preference = preferences.getPreferenceFor(data.threads[i]._id);
+      self.threads.push(new Thread(data.threads[i], preference));
     }
     
     self.addQuestion = function(data, event){
@@ -143,13 +144,28 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
     });
   }
 
-  $(document).ready(function(){
-    var data = JSON.parse($('#data').val());
-    var preferences = JSON.parse($('#preferences').val());
-    conversation = new Conversation(data, preferences);
-    ko.applyBindings(conversation);
-    $('#newMessage').focus();
+  function Preferences(data){
+    var self = this;
 
+    self.getPreferenceFor = function(threadId){
+      for(var i = 0; i < data.length; i++){
+        if(data[i].threadId == threadId){
+          return data[i];
+        }
+      }
+    }
+  }
+
+  $(document).ready(function(){
+    var preferencesData = JSON.parse($('#preferences').val());
+    var preferences = new Preferences(preferencesData);
+    
+    var data = JSON.parse($('#data').val());
+    conversation = new Conversation(data, preferences);
+
+    ko.applyBindings(conversation);
+    
+    $('#newMessage').focus();
     $('#lnkAskQuestion').click(showAskQuestion);
     $('#lnkShareIdea').click(showShareIdea);
 
