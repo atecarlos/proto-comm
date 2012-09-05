@@ -9,15 +9,16 @@ div.row
 		div.row(data-bind="visible:!mainThread.hasMessages()")
 			div.span6
 				em Messages from the group will appear here
-		div#main-thread
-			div.messages(data-bind="foreach: mainThread.messages, visible: mainThread.hasMessages")
-				div.message
-					div.row
-						div.span6
-							div.username.muted(data-bind="text:username")
-							div.timestamp.muted(data-bind="text:timestamp")
-					div.row
-						div.span6.content(data-bind="text:content")
+		div.nano
+			div#main-thread.content
+				div.messages(data-bind="foreach: mainThread.messages, visible: mainThread.hasMessages")
+					div.message
+						div.row
+							div.span6
+								div.username.muted(data-bind="text:username")
+								div.timestamp.muted(data-bind="text:timestamp")
+						div.row
+							div.span6(data-bind="text:content")
 		div.row
 			div.span6
 				input.span6(type="text", placeholder="Enter your message here", data-bind="value: mainThread.newMessage, valueUpdate: 'afterkeydown', event: { keypress: mainThread.sendMessage }")
@@ -33,33 +34,38 @@ div.row
 			div#newIdea.span4.well.idea(style="display: none;")
 				div.input-append
 					input.span4(type="text", placeholder="Share your idea here and dazzle your group.", data-bind="value: newThread, valueUpdate: 'afterkeydown', event: { keypress: addIdea }")
-
-		div#sub-threads
-			div.threads(data-bind="foreach: threads")
-				div.well.thread(data-bind="css: { question: isQuestion, idea: isIdea }")
-					div.row.thread-header(data-bind="click: toggle")
-						div.span4(style="width: 94%")
-							div.row
-								div.span4.content(style="width: 94%")
-									strong(data-bind="text: title.content")
-									span.muted &nbsp;created by&nbsp;
-									span.muted(data-bind="text: title.username")
-					div.thread-body-container	
-						div.thread-body-curtain								
-						div.thread-body(data-bind="visible: !isCollapsed()")
-							div.row.thread-messages(data-bind="foreach: messages, visible: hasMessages()")
-								div.span4.message(style="width: 94%")
-									div.row
-										div.span4(style="width: 94%")
-											div.username.muted(data-bind="text: username")
-											div.timestamp.muted(data-bind="text: timestamp")
-									div.row
-										div.span4.content(style="width: 94%", data-bind="text: content")
-							div.row
-								div.span6
-									input.span4(type="text", placeholder="Answer", data-bind="value: newMessage, valueUpdate: 'afterkeydown', event: { keypress: sendMessage }")
+		div.nano
+			div#sub-threads.content
+				div.threads(data-bind="foreach: threads")
+					div.well.thread(data-bind="css: { question: isQuestion, idea: isIdea }")
+						div.row.thread-header(data-bind="click: toggle")
+							div.span4
+								div.row
+									div.span4
+										strong(data-bind="text: title.content")
+										span.muted &nbsp;created by&nbsp;
+										span.muted(data-bind="text: title.username")
+						div.thread-body-container	
+							div.thread-body-curtain								
+							div.thread-body(data-bind="visible: !isCollapsed()")
+								div.row.thread-messages(data-bind="foreach: messages, visible: hasMessages()")
+									div.span4.message
+										div.row
+											div.span4
+												div.username.muted(data-bind="text: username")
+												div.timestamp.muted(data-bind="text: timestamp")
+										div.row
+											div.span4(data-bind="text: content")
+								div.row
+									div.span4
+										input.span4(type="text", placeholder="Answer", data-bind="value: newMessage, valueUpdate: 'afterkeydown', event: { keypress: sendMessage }")
 
 
 input#data(type="hidden")(value=conversation)
 
-script(type="text/javascript", src="/scripts/require.js", data-main="/scripts/client/threads.js")
+script(type="text/javascript", src="/scripts/lib/jquery.js")
+script(type="text/javascript", src="/scripts/lib/jquery.nanoscroller.min.js")
+script(type="text/javascript", src="/scripts/lib/bootstrap.js")
+script(type="text/javascript", src="/scripts/lib/knockout.js")
+script(type="text/javascript", src="/socket.io/socket.io.js")
+script(type="text/javascript", src="/scripts/client/threads.js")

@@ -12,13 +12,35 @@
   overflow-x: hidden;
   overflow-y: auto;
 }
-#main-thread
+#main-thread, #sub-threads, .nano
 {
   height: 675px;
 }
-#sub-threads
+#main-thread
 {
-  height: 675px;
+  width: 485px;
+}
+
+#main-thread .span6
+{
+  width: 94%;
+}
+
+.span6
+{
+  width: 485px;
+}
+.span5
+{
+  width: 405px;
+}
+.offset1
+{
+  margin-left: 50px;
+}
+.span4, input.span4
+{
+  width: 94%;
 }
 
 .main-thread-title
