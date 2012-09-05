@@ -7,25 +7,92 @@
 	text-align:center;
 }
 
-.main-thread.title
+#main-thread, #sub-threads
+{ 
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+#main-thread, #sub-threads, .nano
+{
+  height: 675px;
+}
+#main-thread
+{
+  width: 485px;
+}
+
+#main-thread .span6
+{
+  width: 94%;
+}
+
+.span6
+{
+  width: 485px;
+}
+.span5
+{
+  width: 405px;
+}
+.offset1
+{
+  margin-left: 50px;
+}
+.span4, input.span4
+{
+  width: 94%;
+}
+
+.main-thread-title
 {
   padding-bottom: 6px;
   margin: 10px 0;
   border-bottom: 1px solid #EEE;
 }
 
-h3 small {
-  font-size: 13px;
+.well
+{
+  background-color: transparent;
+}
+.thread-header
+{
+  cursor: pointer;
+  max-height: 40px;
+  overflow: hidden;
+  padding-bottom: 5px;
+}
+.thread-body-container
+{
+  height: 270px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+.thread-body-curtain {
+  position: absolute;
+  top:0;
+  z-index: 2;
+  height: 18px;
+  width:100%;
+  margin: 0;
+  background: transparent url('../images/std-grad-18.png') repeat-x scroll 0 100%;
+}
+.thread-body
+{
+  position: absolute;  
+  bottom: 0;
+  z-index: 1;
+  width: 100%;
 }
 
 .question
 {
-  background-color: #CCDAFF;
+  /*background-color: #CCDAFF;*/
 }
 
 .idea
 {
-  background-color: #CCFFD8;
+  /*background-color: #CCFFD8;*/
 }
 
 .newThreadLinks
@@ -33,20 +100,15 @@ h3 small {
   padding-bottom: 10px;
 }
 
-.thread-header
-{
-  cursor: pointer;
-}
-.newMessage
-{
-  margin-top:20px;
-}
-
 .message
 {
   padding-bottom: 7px;
   margin-bottom: 7px;
   border-bottom: 1px solid #EEE;
+}
+.message:last-child
+{
+  border-bottom: 0;
 }
 
 .message .username
