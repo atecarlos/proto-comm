@@ -34,10 +34,6 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
 
     self.id = data._id;
 
-    self.type = data.type;
-    self.isQuestion = data.type === threadTypes.question;
-    self.isIdea = data.type === threadTypes.idea;
-
     if (data.messages.length > 0){
       self.title = new Message(data.messages[0]);
     } else {
@@ -114,19 +110,11 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
       var preference = preferences.getPreferenceFor(data.threads[i]._id);
       self.threads.push(new Thread(data.threads[i], preference));
     }
-    
-    self.addQuestion = function(data, event){
-      return addNewThread(threadTypes.question, event);
-    }
 
-    self.addIdea = function(data, event){
-      return addNewThread(threadTypes.idea, event);
-    }
-
-    function addNewThread (type, event) {
+    self.addNewThread = function(data, event) {
       var keyCode = (event.which ? event.which : event.keyCode);
       if (keyCode === 13) {
-        addThread(type);
+        addThread();
         self.newThread('');
         return false;
       } else {
@@ -134,8 +122,8 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
       }
     };
       
-    function addThread(type) {
-       socket.emit('post_thread', { title: self.newThread(), type: type, conversationId: self.id });
+    function addThread() {
+       socket.emit('post_thread', { title: self.newThread(), conversationId: self.id });
     };
 
     socket.on('thread_added', function(data){
@@ -166,19 +154,12 @@ require(["socket_io", "jquery", "knockout"],function(socket_io, $, ko){
     ko.applyBindings(conversation);
     
     $('#newMessage').focus();
-    $('#lnkAskQuestion').click(showAskQuestion);
-    $('#lnkShareIdea').click(showShareIdea);
+    $('#lnkNewThread').click(toggleNewThread);
 
     socket.emit('open_conversation', { conversationId: conversation.id });
   });
 
-  function showAskQuestion(){
-    $('#newQuestion').toggle();
-    $('#newIdea').hide();
-  }
-
-  function showShareIdea(){
-    $('#newIdea').toggle();
-    $('#newQuestion').hide();
+  function toggleNewThread(){
+    $('#newThread').toggle();
   }
 });

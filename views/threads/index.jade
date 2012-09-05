@@ -23,19 +23,17 @@ div.row
 
 	div.span5.offset1
 		div
-			div.newThreadLinks
-				a#lnkAskQuestion(href="#") Ask a question
-				span(style="margin:0 5px;") |
-				a#lnkShareIdea(href="#") Share an idea
-			div#newQuestion.well.question(style="display: none;")
+			div
+				p 
+					span Have something else on your mind? 
+					a#lnkNewThread(href="#") Share it 
+					span with the group
+			div#newThread.well(style="display: none;")
 				div.input-append
-					input.span4(type="text", placeholder="Got a question for the group? Ask it here.", data-bind="value: newThread, valueUpdate: 'afterkeydown', event: { keypress: addQuestion }")
-			div#newIdea.well.idea(style="display: none;")
-				div.input-append
-					input.span4(type="text", placeholder="Share your idea here and dazzle your group.", data-bind="value: newThread, valueUpdate: 'afterkeydown', event: { keypress: addIdea }")
+					input.span4(type="text", placeholder="What's on your mind?", data-bind="value: newThread, valueUpdate: 'afterkeydown', event: { keypress: addNewThread }")
 
 		div(data-bind="foreach: threads")
-			div.well.thread(data-bind="css: { question: isQuestion, idea: isIdea }")
+			div.well.thread
 				div.row.thread-header(data-bind="click: toggle")
 					div.span4.message(style="width: 94%")
 						div.row
