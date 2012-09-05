@@ -43,9 +43,9 @@ div.row
 										strong(data-bind="text: title.content")
 										span.muted &nbsp;created by&nbsp;
 										span.muted(data-bind="text: title.username")
-						div.thread-body-container	
+						div.thread-body-container(data-bind="visible: !isCollapsed()")
 							div.thread-body-curtain								
-							div.thread-body(data-bind="visible: !isCollapsed()")
+							div.thread-body
 								div.row.thread-messages(data-bind="foreach: messages, visible: hasMessages()")
 									div.span4.message
 										div.row
