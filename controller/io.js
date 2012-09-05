@@ -56,7 +56,6 @@ exports.openConversation = function(socket, data){
 exports.addThread = function(socket, data, socketsCollection){
     Conversation.findById(data.conversationId, function(err, conversation){
         var thread = new Thread();
-        thread.type = data.type;
 
         var title = new Message();
         title.content = data.title;

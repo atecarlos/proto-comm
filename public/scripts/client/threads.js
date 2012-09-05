@@ -108,27 +108,19 @@ function Conversation(data, preferences) {
     self.threads.push(new Thread(data.threads[i], preference));
   }
 
-  self.addQuestion = function(data, event){
-    return addNewThread(threadTypes.question, event);
-  }
-
-  self.addIdea = function(data, event){
-    return addNewThread(threadTypes.idea, event);
-  }
-
-  function addNewThread (type, event) {
+  self.addNewThread = function(data, event) {
     var keyCode = (event.which ? event.which : event.keyCode);
     if (keyCode === 13) {
-      addThread(type);
+      addThread();
       self.newThread('');
       return false;
     } else {
       return true;
     }
   };
-    
-  function addThread(type) {
-     socket.emit('post_thread', { title: self.newThread(), type: type, conversationId: self.id });
+      
+  function addThread() {
+    socket.emit('post_thread', { title: self.newThread(), conversationId: self.id });
   };
 
   socket.on('thread_added', function(data){
@@ -168,8 +160,7 @@ $(document).ready(function(){
   ko.applyBindings(conversation);
     
   $('#newMessage').focus();
-  $('#lnkAskQuestion').click(showAskQuestion);
-  $('#lnkShareIdea').click(showShareIdea);
+  $('#lnkNewThread').click(toggleNewThread);
 
   conversation.scrollMainThread();
   conversation.scrollSubThreads();
@@ -179,12 +170,6 @@ $(document).ready(function(){
   socket.emit('open_conversation', { conversationId: conversation.id });
 });
 
-function showAskQuestion(){
-  $('#newQuestion').toggle();
-  $('#newIdea').hide();
-}
-
-function showShareIdea(){
-  $('#newIdea').toggle();
-  $('#newQuestion').hide();
+function toggleNewThread(){
+  $('#newThread').toggle();
 }
