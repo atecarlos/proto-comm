@@ -70,15 +70,29 @@ exports.addThread = function(socket, data, socketsCollection){
 }
 
 exports.toggleThread = function(socket, data){
-    Preference.findOne({ 'threadId': data.threadId, 'userId': socket.handshake.session.user.id }, function(err, preference){
+    addOrUpdatePreference(data, socket.handshake.session.user.id, function(preference, flag){
+        preference.flags.isCollapsed = flag;
+    });
+}
+
+exports.dismissThread = function(socket, data){
+    addOrUpdatePreference(data, socket.handshake.session.user.id, function(preference, flag){
+        console.log(flag);
+        preference.flags.isDismissed = flag;
+    });
+}
+
+function addOrUpdatePreference(data, userId, updateFlag){
+    Preference.findOne({ 'threadId': data.threadId, 'userId': userId }, function(err, preference){
         if(preference !== null){
-            preference.flag = data.isCollapsed;
+            updateFlag(preference, data.flag);
         }else{
             preference = new Preference();
             preference.conversationId = data.conversationId;
             preference.threadId = data.threadId;
-            preference.flag = data.isCollapsed;
-            preference.userId = socket.handshake.session.user.id;
+            preference.userId = userId;
+
+            updateFlag(preference, data.flag);
         }
 
         preference.save();

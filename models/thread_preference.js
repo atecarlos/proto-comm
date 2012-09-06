@@ -1,7 +1,10 @@
 var mongo = require('mongoose');
 
 var preferenceSchema = new mongo.Schema({
-	flag: Boolean,
+	flags: {
+		isCollapsed: Boolean,
+		isDismissed: Boolean,
+	},
 	threadId: mongo.Schema.Types.ObjectId,
 	conversationId: mongo.Schema.Types.ObjectId,
 	userId: Number,

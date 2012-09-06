@@ -54,13 +54,24 @@
 {
   background-color: transparent;
 }
-.thread-header
+.thread .top
 {
   cursor: pointer;
   max-height: 40px;
   overflow: hidden;
-  padding-bottom: 5px;
+  padding:0 15px 4px;
 }
+
+.thread .header
+{
+  width:80%;
+}
+
+.thread .dismiss
+{
+  float:right;
+}
+
 .thread-body-container
 {
   height: 270px;

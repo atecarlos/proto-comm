@@ -80,6 +80,10 @@ io.sockets.on('connection', function (socket) {
     ioController.toggleThread(socket, data);
   });
 
+  socket.on('dismiss_thread', function(data){
+    ioController.dismissThread(socket, data);
+  });
+
   socket.on('disconnect', function(){
     ioController.disconnect(socket);
   });

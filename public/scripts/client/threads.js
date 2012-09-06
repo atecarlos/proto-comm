@@ -82,12 +82,18 @@ function Thread(data, preference) {
     socket.emit('post_message', data);
   }
 
-  self.isCollapsed = ko.observable(preference ? preference.flag : false);
+  self.collapsed = ko.observable(preference ? preference.flags.isCollapsed : false);
+  self.dismissed = ko.observable(preference ? preference.flags.isDismissed : false);
 
   self.toggle = function(currentThread, event){
-    self.isCollapsed(!self.isCollapsed());
-    socket.emit('toggle_thread', { threadId: self.id, conversationId: conversation.id, isCollapsed: self.isCollapsed() });
-  }    
+    self.collapsed(!self.collapsed());
+    socket.emit('toggle_thread', { threadId: self.id, conversationId: conversation.id, flag: self.collapsed() });
+  }
+
+  self.dismiss = function(currentThread, event){
+    self.dismissed(!self.dismissed());
+    socket.emit('dismiss_thread', { threadId: self.id, conversationId: conversation.id, flag: self.dismissed() });
+  } 
 };
 
 function Conversation(data, preferences) {

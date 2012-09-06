@@ -35,15 +35,17 @@ div.row
 		div.nano
 			div#sub-threads.content
 				div.threads(data-bind="foreach: threads")
-					div.well.thread(data-bind="css: { question: isQuestion, idea: isIdea }")
-						div.row.thread-header(data-bind="click: toggle")
+					div.well.thread(data-bind="visible: !dismissed()")
+						div.row.top
 							div.span4
 								div.row
-									div.span4
+									span.header(data-bind="click: toggle")
 										strong(data-bind="text: title.content")
 										span.muted &nbsp;created by&nbsp;
 										span.muted(data-bind="text: title.username")
-						div.thread-body-container(data-bind="visible: !isCollapsed()")
+									span.dismiss
+										a(href="#", data-bind="click: dismiss") x
+						div.thread-body-container(data-bind="visible: !collapsed()")
 							div.thread-body-curtain								
 							div.thread-body
 								div.row.thread-messages(data-bind="foreach: messages, visible: hasMessages()")
