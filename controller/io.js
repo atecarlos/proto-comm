@@ -22,7 +22,7 @@ exports.authorize = function(data, accept, sessionStore){
     }
 }
 
-exports.postMessage = function(socket, data, socketsCollection){
+exports.sendMessage = function(socket, data, socketsCollection){
 	Conversation.findById(data.conversationId, function(err, conversation){
         var thread = conversation.threads.id(data.threadId);
         var msg = new Message();
@@ -32,7 +32,7 @@ exports.postMessage = function(socket, data, socketsCollection){
         thread.messages.push(msg);
         conversation.save();
 
-        emit(data.conversationId, socketsCollection, 'get_message', 
+        emit(data.conversationId, socketsCollection, 'receive_message', 
             { 
                 content: data.content, 
                 user: socket.handshake.session.user, 

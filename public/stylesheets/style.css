@@ -72,6 +72,12 @@
   float:right;
 }
 
+.thread .unread-counter
+{
+  float:right;
+  margin-right: 10px;
+}
+
 .thread-body-container
 {
   height: 270px;
@@ -79,6 +85,7 @@
   overflow: hidden;
   position: relative;
 }
+
 .thread-body-curtain {
   position: absolute;
   top:0;

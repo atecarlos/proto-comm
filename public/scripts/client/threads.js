@@ -35,16 +35,6 @@ function Thread(data, preference) {
   }
 
   self.newMessage = ko.observable('');
-
-  self.sendMessage = function (data, event) {
-    var keyCode = (event.which ? event.which : event.keyCode);
-    if (keyCode === 13) {
-      self.saveMessage();
-      return false;
-    } else {
-      return true;
-    }
-  };
   
   self.messages = ko.observableArray([]);
 
@@ -59,18 +49,21 @@ function Thread(data, preference) {
     self.messages.push(message);
   }
 
-  socket.on('get_message', function(data) {
-    if(data.threadId === self.id){
-      addMessage(data);
-      self.newMessage('');
-    }
-  });
-
   self.hasMessages = ko.computed(function() {
     return self.messages().length > 0;
   });
 
-  self.saveMessage = function(){
+  self.sendMessage = function (data, event) {
+    var keyCode = (event.which ? event.which : event.keyCode);
+    if (keyCode === 13) {
+      sendMessageToServer();
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  function sendMessageToServer(){
     var data = 
     { 
         content: self.newMessage(), 
@@ -79,21 +72,46 @@ function Thread(data, preference) {
         timestamp: new Date(),
     };
 
-    socket.emit('post_message', data);
+    socket.emit('send_message', data);
+  }
+
+  socket.on('receive_message', function(data) {
+    if(data.threadId === self.id){
+      receiveMessage(data);
+      self.newMessage('');
+    }
+  });
+
+  function receiveMessage(message){
+    if(self.dismissed()){
+      setCollapsedFlagTo(true);
+      self.toggleDismiss();
+      self.unreadCounter(self.unreadCounter() + 1);
+    }else if(self.collapsed()){
+      self.unreadCounter(self.unreadCounter() + 1);      
+    }
+
+    addMessage(message);
   }
 
   self.collapsed = ko.observable(preference ? preference.flags.isCollapsed : false);
   self.dismissed = ko.observable(preference ? preference.flags.isDismissed : false);
 
-  self.toggle = function(currentThread, event){
-    self.collapsed(!self.collapsed());
+  self.toggleCollapse = function(currentThread, event){
+    setCollapsedFlagTo(!self.collapsed());
+  }
+
+  function setCollapsedFlagTo(value){
+    self.collapsed(value);
     socket.emit('toggle_thread', { threadId: self.id, conversationId: conversation.id, flag: self.collapsed() });
   }
 
-  self.dismiss = function(currentThread, event){
+  self.toggleDismiss = function(currentThread, event){
     self.dismissed(!self.dismissed());
     socket.emit('dismiss_thread', { threadId: self.id, conversationId: conversation.id, flag: self.dismissed() });
-  } 
+  }
+
+  self.unreadCounter = ko.observable(0);
 };
 
 function Conversation(data, preferences) {

@@ -39,12 +39,14 @@ div.row
 						div.row.top
 							div.span4
 								div.row
-									span.header(data-bind="click: toggle")
+									span.header(data-bind="click: toggleCollapse")
 										strong(data-bind="text: title.content")
 										span.muted &nbsp;created by&nbsp;
 										span.muted(data-bind="text: title.username")
 									span.dismiss
-										a(href="#", data-bind="click: dismiss") x
+										a(href="#", data-bind="click: toggleDismiss") x
+									span.badge.badge-important.unread-counter(data-bind="text: unreadCounter")
+
 						div.thread-body-container(data-bind="visible: !collapsed()")
 							div.thread-body-curtain								
 							div.thread-body

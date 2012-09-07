@@ -64,8 +64,8 @@ io.set('authorization', function (data, accept) {
 
 io.sockets.on('connection', function (socket) {
   
-  socket.on('post_message', function(data) {
-    ioController.postMessage(socket, data, io.sockets);
+  socket.on('send_message', function(data) {
+    ioController.sendMessage(socket, data, io.sockets);
   });
 
   socket.on('open_conversation', function(data){
