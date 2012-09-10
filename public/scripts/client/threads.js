@@ -94,10 +94,13 @@ function Thread(data, preference) {
     addMessage(message);
   }
 
+  self.unreadCounter = ko.observable(0);
+
   self.collapsed = ko.observable(preference ? preference.flags.isCollapsed : false);
   self.dismissed = ko.observable(preference ? preference.flags.isDismissed : false);
 
   self.toggleCollapse = function(currentThread, event){
+    self.unreadCounter(0);
     setCollapsedFlagTo(!self.collapsed());
   }
 
@@ -110,8 +113,6 @@ function Thread(data, preference) {
     self.dismissed(!self.dismissed());
     socket.emit('dismiss_thread', { threadId: self.id, conversationId: conversation.id, flag: self.dismissed() });
   }
-
-  self.unreadCounter = ko.observable(0);
 };
 
 function Conversation(data, preferences) {

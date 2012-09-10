@@ -45,7 +45,7 @@ div.row
 										span.muted(data-bind="text: title.username")
 									span.dismiss
 										a(href="#", data-bind="click: toggleDismiss") x
-									span.badge.badge-important.unread-counter(data-bind="text: unreadCounter")
+									span.badge.badge-important.unread-counter(data-bind="text: unreadCounter, visible: collapsed")
 
 						div.thread-body-container(data-bind="visible: !collapsed()")
 							div.thread-body-curtain								
