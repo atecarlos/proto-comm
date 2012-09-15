@@ -1,9 +1,9 @@
 var socket = io.connect(window.location.origin);
-var conversation;
+var conversationObj;
 var threadTypes = { question: 'Q', idea: 'I' };
 
-function Message(data) {
-  var self = this;
+function message(data) {
+  var self = {};
 
   self.content = ko.observable(data.content);
   self.timestamp = formatTimestamp(data.timestamp);
@@ -18,10 +18,12 @@ function Message(data) {
 
     return month + '/' + day + ' ' + hour + ':' + minute;
   }
+
+  return self;
 }
 
-function Thread(data, preference) {
-  var self = this;
+function thread(data, preference) {
+  var self = {};
 
   self.id = data._id;
   self.type = data.type;
@@ -29,9 +31,9 @@ function Thread(data, preference) {
   self.isIdea = data.type === threadTypes.idea;
 
   if (data.messages.length > 0){
-    self.title = new Message(data.messages[0]);
+    self.title = message(data.messages[0]);
   } else {
-    self.title = new Message({content: 'missing title'});
+    self.title = message({content: 'missing title'});
   }
 
   self.newMessage = ko.observable('');
@@ -45,8 +47,8 @@ function Thread(data, preference) {
   }
 
   function addMessage(data){
-    var message = new Message(data);
-    self.messages.push(message);
+    var msg = message(data);
+    self.messages.push(msg);
   }
 
   self.hasMessages = ko.computed(function() {
@@ -67,7 +69,7 @@ function Thread(data, preference) {
     var data = 
     { 
         content: self.newMessage(), 
-        conversationId: conversation.id, 
+        conversationId: conversationObj.id, 
         threadId: self.id,
         timestamp: new Date(),
     };
@@ -102,17 +104,17 @@ function Thread(data, preference) {
   self.toggleCollapse = function(){
     self.unreadCounter(0);
     setCollapsedFlagTo(!self.collapsed());
-  }
+  };
 
   function setCollapsedFlagTo(value){
     self.collapsed(value);
-    socket.emit('toggle_thread', { threadId: self.id, conversationId: conversation.id, flag: self.collapsed() });
-  }
+    socket.emit('toggle_thread', { threadId: self.id, conversationId: conversationObj.id, flag: self.collapsed() });
+  };
 
   self.toggleDismiss = function(){
     self.dismissed(!self.dismissed());
-    socket.emit('dismiss_thread', { threadId: self.id, conversationId: conversation.id, flag: self.dismissed() });
-  }
+    socket.emit('dismiss_thread', { threadId: self.id, conversationId: conversationObj.id, flag: self.dismissed() });
+  };
 
   self.menuClick = function (){
     if(self.dismissed()){
@@ -121,14 +123,16 @@ function Thread(data, preference) {
     if(self.collapsed()){
       self.toggleCollapse();
     }
-  }
+  };
+
+  return self;
 };
 
-function Conversation(data, preferences) {
-  var self = this;
+function conversation(data, preferences) {
+  var self = {};
 
   self.id = data._id;
-  self.mainThread = new Thread(data.threads[0]);
+  self.mainThread = thread(data.threads[0]);
   self.mainThread.messages.subscribe(function (newValue) {
     self.scrollMainThread();
   });
@@ -139,7 +143,7 @@ function Conversation(data, preferences) {
 
   for(var i = 1; i < data.threads.length; i++){
     var preference = preferences.getPreferenceFor(data.threads[i]._id);
-    self.threads.push(new Thread(data.threads[i], preference));
+    self.threads.push(thread(data.threads[i], preference));
   }
 
   self.addNewThread = function(data, event) {
@@ -159,7 +163,7 @@ function Conversation(data, preferences) {
   };
 
   socket.on('thread_added', function(data){
-    self.threads.push(new Thread(data));
+    self.threads.push(thread(data));
     self.newThread('');
     self.scrollSubThreads();
   });
@@ -171,10 +175,12 @@ function Conversation(data, preferences) {
   self.scrollSubThreads = function () {
     $('#sub-threads').scrollTop($('#sub-threads > .threads').height())
   };
+
+  return self;
 }
 
-function Preferences(data){
-  var self = this;
+function preference(data){
+  var self = {};
 
   self.getPreferenceFor = function(threadId){
     for(var i = 0; i < data.length; i++){
@@ -182,27 +188,29 @@ function Preferences(data){
         return data[i];
       }
     }
-  }
+  };
+
+  return self;
 }
 
 $(document).ready(function(){
   var preferencesData = JSON.parse($('#preferences').val());
-  var preferences = new Preferences(preferencesData);
+  var preferences = preference(preferencesData);
     
   var data = JSON.parse($('#data').val());
-  conversation = new Conversation(data, preferences);
+  conversationObj = conversation(data, preferences);
 
-  ko.applyBindings(conversation);
+  ko.applyBindings(conversationObj);
     
   $('#newMessage').focus();
   $('#btn-new-thread').click(toggleNewThread);
 
-  conversation.scrollMainThread();
-  conversation.scrollSubThreads();
+  conversationObj.scrollMainThread();
+  conversationObj.scrollSubThreads();
 
   $(".nano").nanoScroller();
 
-  socket.emit('open_conversation', { conversationId: conversation.id });
+  socket.emit('open_conversation', { conversationId: conversationObj.id });
 });
 
 function toggleNewThread(){
