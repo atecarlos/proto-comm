@@ -115,6 +115,9 @@ function Thread(data, preference) {
   }
 
   self.menuClick = function (){
+    if(self.dismissed()){
+      self.toggleDismiss();
+    }
     if(self.collapsed()){
       self.toggleCollapse();
     }

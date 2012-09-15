@@ -70,6 +70,11 @@
   background-color: transparent;
 }
 
+#newThread input
+{
+  width:95%;
+}
+
 .thread .top
 {
   cursor: pointer;
@@ -117,11 +122,6 @@
   bottom: 0;
   z-index: 1;
   width: 100%;
-}
-
-.newThreadLinks
-{
-  padding-bottom: 10px;
 }
 
 .message
