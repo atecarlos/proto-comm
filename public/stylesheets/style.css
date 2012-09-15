@@ -16,9 +16,10 @@
 {
   height: 675px;
 }
+
 #main-thread
 {
-  width: 485px;
+  width: 99%;
 }
 
 #main-thread .span6
@@ -26,34 +27,49 @@
   width: 94%;
 }
 
-.span6
-{
-  width: 485px;
-}
-.span5
-{
-  width: 405px;
-}
-.offset1
-{
-  margin-left: 50px;
-}
-.span4, input.span4
-{
-  width: 94%;
-}
-
-.main-thread-title
+.main-top-bar
 {
   padding-bottom: 6px;
   margin: 10px 0;
   border-bottom: 1px solid #EEE;
 }
 
+.main-top-bar .title h3
+{
+  margin:0;
+}
+
+.threads
+{
+  width:95%;
+}
+
+.thread-switcher
+{
+  float: right;
+  margin-top: 1%;
+}
+
+.thread-switcher .btn-group, .thread-switcher .btn-info
+{
+  float:right;
+}
+
+.thread-switcher .btn-group
+{
+  margin-right: 10px;
+}
+
+.thread-switcher .caret
+{
+  margin-left: 10px;
+}
+
 .well
 {
   background-color: transparent;
 }
+
 .thread .top
 {
   cursor: pointer;

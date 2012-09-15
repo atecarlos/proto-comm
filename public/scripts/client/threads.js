@@ -99,7 +99,7 @@ function Thread(data, preference) {
   self.collapsed = ko.observable(preference ? preference.flags.isCollapsed : false);
   self.dismissed = ko.observable(preference ? preference.flags.isDismissed : false);
 
-  self.toggleCollapse = function(currentThread, event){
+  self.toggleCollapse = function(){
     self.unreadCounter(0);
     setCollapsedFlagTo(!self.collapsed());
   }
@@ -109,9 +109,15 @@ function Thread(data, preference) {
     socket.emit('toggle_thread', { threadId: self.id, conversationId: conversation.id, flag: self.collapsed() });
   }
 
-  self.toggleDismiss = function(currentThread, event){
+  self.toggleDismiss = function(){
     self.dismissed(!self.dismissed());
     socket.emit('dismiss_thread', { threadId: self.id, conversationId: conversation.id, flag: self.dismissed() });
+  }
+
+  self.menuClick = function (){
+    if(self.collapsed()){
+      self.toggleCollapse();
+    }
   }
 };
 
@@ -137,6 +143,7 @@ function Conversation(data, preferences) {
     var keyCode = (event.which ? event.which : event.keyCode);
     if (keyCode === 13) {
       addThread();
+      toggleNewThread();
       self.newThread('');
       return false;
     } else {
@@ -185,7 +192,7 @@ $(document).ready(function(){
   ko.applyBindings(conversation);
     
   $('#newMessage').focus();
-  $('#lnkNewThread').click(toggleNewThread);
+  $('#btn-new-thread').click(toggleNewThread);
 
   conversation.scrollMainThread();
   conversation.scrollSubThreads();
@@ -196,5 +203,5 @@ $(document).ready(function(){
 });
 
 function toggleNewThread(){
-  $('#newThread').toggle();
+  $('#newThread').slideToggle();
 }
