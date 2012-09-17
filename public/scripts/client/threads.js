@@ -1,8 +1,8 @@
 var socket = io.connect(window.location.origin);
-var conversationObj;
+var conversation;
 var threadTypes = { question: 'Q', idea: 'I' };
 
-function message(data) {
+function createMessage(data) {
   var self = {};
 
   self.content = ko.observable(data.content);
@@ -22,7 +22,7 @@ function message(data) {
   return self;
 }
 
-function thread(data, preference) {
+function createThread(data, preference) {
   var self = {};
 
   self.id = data._id;
@@ -31,9 +31,9 @@ function thread(data, preference) {
   self.isIdea = data.type === threadTypes.idea;
 
   if (data.messages.length > 0){
-    self.title = message(data.messages[0]);
+    self.title = createMessage(data.messages[0]);
   } else {
-    self.title = message({content: 'missing title'});
+    self.title = createMessage({content: 'missing title'});
   }
 
   self.newMessage = ko.observable('');
@@ -47,7 +47,7 @@ function thread(data, preference) {
   }
 
   function addMessage(data){
-    var msg = message(data);
+    var msg = createMessage(data);
     self.messages.push(msg);
   }
 
@@ -69,7 +69,7 @@ function thread(data, preference) {
     var data = 
     { 
         content: self.newMessage(), 
-        conversationId: conversationObj.id, 
+        conversationId: conversation.id, 
         threadId: self.id,
         timestamp: new Date(),
     };
@@ -108,12 +108,12 @@ function thread(data, preference) {
 
   function setCollapsedFlagTo(value){
     self.collapsed(value);
-    socket.emit('toggle_thread', { threadId: self.id, conversationId: conversationObj.id, flag: self.collapsed() });
+    socket.emit('toggle_thread', { threadId: self.id, conversationId: conversation.id, flag: self.collapsed() });
   };
 
   self.toggleDismiss = function(){
     self.dismissed(!self.dismissed());
-    socket.emit('dismiss_thread', { threadId: self.id, conversationId: conversationObj.id, flag: self.dismissed() });
+    socket.emit('dismiss_thread', { threadId: self.id, conversationId: conversation.id, flag: self.dismissed() });
   };
 
   self.menuClick = function (){
@@ -128,11 +128,11 @@ function thread(data, preference) {
   return self;
 };
 
-function conversation(data, preferences) {
+function createConversation(data, preferences) {
   var self = {};
 
   self.id = data._id;
-  self.mainThread = thread(data.threads[0]);
+  self.mainThread = createThread(data.threads[0]);
   self.mainThread.messages.subscribe(function (newValue) {
     self.scrollMainThread();
   });
@@ -143,7 +143,7 @@ function conversation(data, preferences) {
 
   for(var i = 1; i < data.threads.length; i++){
     var preference = preferences.getPreferenceFor(data.threads[i]._id);
-    self.threads.push(thread(data.threads[i], preference));
+    self.threads.push(createThread(data.threads[i], preference));
   }
 
   self.addNewThread = function(data, event) {
@@ -163,7 +163,7 @@ function conversation(data, preferences) {
   };
 
   socket.on('thread_added', function(data){
-    self.threads.push(thread(data));
+    self.threads.push(createThread(data));
     self.newThread('');
     self.scrollSubThreads();
   });
@@ -198,19 +198,19 @@ $(document).ready(function(){
   var preferences = preference(preferencesData);
     
   var data = JSON.parse($('#data').val());
-  conversationObj = conversation(data, preferences);
+  conversation = createConversation(data, preferences);
 
-  ko.applyBindings(conversationObj);
+  ko.applyBindings(conversation);
     
   $('#newMessage').focus();
   $('#btn-new-thread').click(toggleNewThread);
 
-  conversationObj.scrollMainThread();
-  conversationObj.scrollSubThreads();
+  conversation.scrollMainThread();
+  conversation.scrollSubThreads();
 
   $(".nano").nanoScroller();
 
-  socket.emit('open_conversation', { conversationId: conversationObj.id });
+  socket.emit('open_conversation', { conversationId: conversation.id });
 });
 
 function toggleNewThread(){
