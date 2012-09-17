@@ -125,6 +125,12 @@ function thread(data, preference) {
     }
   };
 
+  self.hidden = ko.observable(false);
+
+  self.expand = function () {
+    conversationObj.expandThread(self);
+  }
+
   return self;
 };
 
@@ -175,6 +181,14 @@ function conversation(data, preferences) {
   self.scrollSubThreads = function () {
     $('#sub-threads').scrollTop($('#sub-threads > .threads').height())
   };
+
+  self.expandThread = function (threadToExpand) {
+    for (var i = 1; i < self.threads().length; i++) {
+      if (self.threads()[i] !== threadToExpand) {
+        self.threads()[i].hidden(true);
+      }
+    }
+  }
 
   return self;
 }
