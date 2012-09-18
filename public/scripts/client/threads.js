@@ -126,9 +126,20 @@ function thread(data, preference) {
   };
 
   self.hidden = ko.observable(false);
+  self.expanded = ko.observable(false);
 
   self.expand = function () {
-    conversationObj.expandThread(self);
+    hideOtherThreads();
+    self.expanded(true);
+  }
+
+  function hideOtherThreads () {
+    var threads = conversationObj.threads();
+    for (var i = 1; i < threads.length; i++) {
+      if (threads[i] !== self) {
+        threads[i].hidden(true);
+      }
+    }
   }
 
   return self;
@@ -181,14 +192,6 @@ function conversation(data, preferences) {
   self.scrollSubThreads = function () {
     $('#sub-threads').scrollTop($('#sub-threads > .threads').height())
   };
-
-  self.expandThread = function (threadToExpand) {
-    for (var i = 1; i < self.threads().length; i++) {
-      if (self.threads()[i] !== threadToExpand) {
-        self.threads()[i].hidden(true);
-      }
-    }
-  }
 
   return self;
 }

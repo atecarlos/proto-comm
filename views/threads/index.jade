@@ -54,7 +54,7 @@ div.row
 										a.icon-remove(href="#", data-bind="click: toggleDismiss")										
 									span.badge.badge-important.unread-counter(data-bind="text: unreadCounter, visible: collapsed")
 
-						div.thread-body-container(data-bind="visible: !collapsed()")
+						div.thread-body-container(data-bind="visible: !collapsed(), css: { expanded: expanded }")
 							div.thread-body-curtain								
 							div.thread-body
 								div.row.thread-messages(data-bind="foreach: messages, visible: hasMessages()")

@@ -107,6 +107,11 @@
   position: relative;
 }
 
+.thread-body-container.expanded
+{
+  height: 590px;
+}
+
 .thread-body-curtain {
   position: absolute;
   top:0;
