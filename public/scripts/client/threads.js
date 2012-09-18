@@ -193,6 +193,7 @@ function preference(data){
   return self;
 }
 
+
 $(document).ready(function(){
   var preferencesData = JSON.parse($('#preferences').val());
   var preferences = preference(preferencesData);
@@ -214,14 +215,5 @@ $(document).ready(function(){
 });
 
 function toggleNewThread(){
-  var container = $('.new-thread-container');
-  var button = $(this);
-
-  if(container.is(':visible')){
-    button.html('Add');
-  }else {
-    button.html('Cancel');
-  }
-
-  container.slideToggle();
+  $('#newThread').modal('toggle') 
 }

@@ -45,22 +45,6 @@
   width: 75px;
 }
 
-.new-thread-container
-{
-  display: none;
-  position: absolute;
-  z-index: 3;
-  right:0;
-  top: 45px;
-  width: 35%;
-  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1),inset 0 -1px 0 rgba(0, 0, 0, .07)
-}
-
-.new-thread-container.well
-{
-  margin-bottom: 0;
-}
-
 #newThread input
 {
   width:95%;
