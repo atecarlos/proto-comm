@@ -14,6 +14,9 @@ div.main-top-bar
 				ul.dropdown-menu#thread-list(data-bind="foreach: threads")
 					li
 						a(href="#", data-bind="text: title.content, event: { click: menuClick }")
+		div#newThread.new-thread-container.well
+			div.input-append
+				input.span4(type="text", placeholder="What else would you like to talk about?", data-bind="value: newThread, valueUpdate: 'afterkeydown', event: { keypress: addNewThread }")
 div.row
 	div.span7
 		div.row(data-bind="visible:!mainThread.hasMessages()")
@@ -33,10 +36,6 @@ div.row
 			div.span6
 				input.span6(type="text", placeholder="Enter your message here", data-bind="value: mainThread.newMessage, valueUpdate: 'afterkeydown', event: { keypress: mainThread.sendMessage }")
 	div.span5
-		div
-			div#newThread.well(style="display: none;")
-				div.input-append
-					input.span4(type="text", placeholder="What's on your mind?", data-bind="value: newThread, valueUpdate: 'afterkeydown', event: { keypress: addNewThread }")
 		div.nano
 			div#sub-threads.content
 				div.threads(data-bind="foreach: threads")

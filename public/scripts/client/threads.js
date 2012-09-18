@@ -214,5 +214,14 @@ $(document).ready(function(){
 });
 
 function toggleNewThread(){
-  $('#newThread').slideToggle();
+  var container = $('.new-thread-container');
+  var button = $(this);
+
+  if(container.is(':visible')){
+    button.html('Add');
+  }else {
+    button.html('Cancel');
+  }
+
+  container.slideToggle();
 }

@@ -32,11 +32,38 @@
   padding-bottom: 6px;
   margin: 10px 0;
   border-bottom: 1px solid #EEE;
+  position:relative;
 }
 
 .main-top-bar .title h3
 {
   margin:0;
+}
+
+#btn-new-thread
+{
+  width: 75px;
+}
+
+.new-thread-container
+{
+  display: none;
+  position: absolute;
+  z-index: 3;
+  right:0;
+  top: 45px;
+  width: 35%;
+  box-shadow: inset 1px 1px 0 rgba(0, 0, 0, .1),inset 0 -1px 0 rgba(0, 0, 0, .07)
+}
+
+.new-thread-container.well
+{
+  margin-bottom: 0;
+}
+
+#newThread input
+{
+  width:95%;
 }
 
 .threads
@@ -65,14 +92,9 @@
   margin-left: 10px;
 }
 
-.well
+.well.thread
 {
   background-color: transparent;
-}
-
-#newThread input
-{
-  width:95%;
 }
 
 .thread .top
