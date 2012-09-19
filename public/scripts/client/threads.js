@@ -134,7 +134,7 @@ function createThread(data, preference) {
   }
 
   function hideOtherThreads () {
-    var threads = conversationObj.threads();
+    var threads = conversation.threads();
     for (var i = 1; i < threads.length; i++) {
       if (threads[i] !== self) {
         threads[i].hidden(true);
