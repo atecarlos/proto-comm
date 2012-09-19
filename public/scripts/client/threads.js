@@ -128,16 +128,17 @@ function createThread(data, preference) {
   self.hidden = ko.observable(false);
   self.expanded = ko.observable(false);
 
-  self.expand = function () {
-    hideOtherThreads();
-    self.expanded(true);
+  self.toggleExpand = function () {
+    self.collapsed(false);
+    self.expanded(!self.expanded());
+    showHideOtherThreads(self.expanded());
   }
 
-  function hideOtherThreads () {
+  function showHideOtherThreads (showOrHide) {
     var threads = conversation.threads();
-    for (var i = 1; i < threads.length; i++) {
-      if (threads[i] !== self) {
-        threads[i].hidden(true);
+    for (var i = 0; i < threads.length; i++) {
+      if (threads[i].id !== self.id) {
+        threads[i].hidden(showOrHide);
       }
     }
   }
