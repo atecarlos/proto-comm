@@ -102,6 +102,9 @@ function createThread(data, preference) {
   self.dismissed = ko.observable(preference ? preference.flags.isDismissed : false);
 
   self.toggleCollapse = function(){
+    if(self.expanded()){
+      expand(false);
+    }
     self.unreadCounter(0);
     setCollapsedFlagTo(!self.collapsed());
   };
@@ -130,8 +133,12 @@ function createThread(data, preference) {
 
   self.toggleExpand = function () {
     self.collapsed(false);
-    self.expanded(!self.expanded());
-    showHideOtherThreads(self.expanded());
+    expand(!self.expanded());
+  }
+
+  function expand(toExpand){
+    self.expanded(toExpand);
+    showHideOtherThreads(toExpand);
   }
 
   function showHideOtherThreads (showOrHide) {
