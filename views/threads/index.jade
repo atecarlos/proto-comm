@@ -45,7 +45,7 @@ div.row
 		div.nano
 			div#sub-threads.content
 				div.threads(data-bind="foreach: threads")
-					div.well.thread(data-bind="visible: !dismissed()")
+					div.well.thread(data-bind="visible: !dismissed() && !hidden()")
 						div.row.top
 							div.span4
 								div.row
@@ -53,11 +53,13 @@ div.row
 										strong(data-bind="text: title.content")
 										span.muted &nbsp;created by&nbsp;
 										span.muted(data-bind="text: title.username")
-									span.dismiss
-										a(href="#", data-bind="click: toggleDismiss") x
+									span.actions
+										a.icon-resize-full(href="#", data-bind="click: expand")
+										span &nbsp;
+										a.icon-remove(href="#", data-bind="click: toggleDismiss")										
 									span.badge.badge-important.unread-counter(data-bind="text: unreadCounter, visible: collapsed")
 
-						div.thread-body-container(data-bind="visible: !collapsed()")
+						div.thread-body-container(data-bind="visible: !collapsed(), css: { expanded: expanded }")
 							div.thread-body-curtain								
 							div.thread-body
 								div.row.thread-messages(data-bind="foreach: messages, visible: hasMessages()")

@@ -94,7 +94,7 @@
   width:80%;
 }
 
-.thread .dismiss
+.thread .actions
 {
   float:right;
 }
@@ -111,6 +111,11 @@
   width: 100%;
   overflow: hidden;
   position: relative;
+}
+
+.thread-body-container.expanded
+{
+  height: 590px;
 }
 
 .thread-body-curtain {
