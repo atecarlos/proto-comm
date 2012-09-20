@@ -79,24 +79,28 @@
 .well.thread
 {
   background-color: transparent;
+  position: relative;
 }
 
 .thread .top
 {
-  cursor: pointer;
   max-height: 40px;
   overflow: hidden;
-  padding:0 15px 4px;
+  padding:0 19px 8px;
 }
 
 .thread .header
 {
+  cursor: pointer;
   width:80%;
 }
 
 .thread .actions
 {
-  float:right;
+  position: absolute;
+  right:0;
+  top:0;
+  padding: 5px 5px 0 0;
 }
 
 .thread .unread-counter

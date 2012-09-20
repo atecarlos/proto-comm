@@ -46,19 +46,19 @@ div.row
 			div#sub-threads.content
 				div.threads(data-bind="foreach: threads")
 					div.well.thread(data-bind="visible: !dismissed() && !hidden()")
+						div.actions
+							a.icon-resize-full(href="#", data-bind="click: toggleExpand, visible: !expanded()")
+							a.icon-resize-small(href="#", data-bind="click: toggleExpand, visible: expanded")
+							a.icon-remove(href="#", data-bind="click: toggleDismiss")
 						div.row.top
 							div.span4
 								div.row
 									span.header(data-bind="click: toggleCollapse")
 										strong(data-bind="text: title.content")
-										span.muted &nbsp;created by&nbsp;
-										span.muted(data-bind="text: title.username")
-									span.actions
-										a.icon-resize-full(href="#", data-bind="click: toggleExpand, visible: !expanded()")
-										a.icon-resize-small(href="#", data-bind="click: toggleExpand, visible: expanded")
-										span &nbsp;
-										a.icon-remove(href="#", data-bind="click: toggleDismiss")										
 									span.badge.badge-important.unread-counter(data-bind="text: unreadCounter, visible: collapsed")
+								div.row.muted(data-bind="visible: !collapsed()")
+										span created by&nbsp;
+										span(data-bind="text: title.username")
 
 						div.thread-body-container(data-bind="visible: !collapsed(), css: { expanded: expanded }")
 							div.thread-body-curtain								
