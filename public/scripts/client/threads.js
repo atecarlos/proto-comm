@@ -77,14 +77,7 @@ function createThread(data, preference) {
     socket.emit('send_message', data);
   }
 
-  socket.on('receive_message', function(data) {
-    if(data.threadId === self.id){
-      receiveMessage(data);
-      self.newMessage('');
-    }
-  });
-
-  function receiveMessage(message){
+  self.receiveMessage = function(message){
     if(self.dismissed()){
       setCollapsedFlagTo(true);
       self.toggleDismiss();
@@ -191,6 +184,15 @@ function createConversation(data, preferences) {
     self.threads.push(createThread(data));
     self.newThread('');
     self.scrollSubThreads();
+  });
+
+  socket.on('receive_message', function(data) {
+    ko.utils.arrayForEach(self.threads(), function(thread){
+      if(data.threadId === thread.id){
+        thread.receiveMessage(data);
+        thread.newMessage('');
+      }
+    });
   });
 
   self.scrollMainThread = function () {
