@@ -76,6 +76,16 @@
   margin-left: 10px;
 }
 
+.thread-switcher .unread-counter
+{
+  margin-left: 10px;
+}
+
+.thread-switcher .dropdown-menu
+{
+  width: 100%;
+}
+
 .well.thread
 {
   background-color: transparent;
@@ -92,7 +102,7 @@
 .thread .header
 {
   cursor: pointer;
-  width:80%;
+  width:70%;
 }
 
 .thread .actions

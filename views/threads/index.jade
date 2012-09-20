@@ -11,6 +11,7 @@ div.main-top-bar
 			div.btn-group
 				a.btn.dropdown-toggle(data-toggle="dropdown", href="#") Side Conversations
 					span.caret
+					span.badge.badge-info.unread-counter(data-bind="text: unreadCounter")
 				ul.dropdown-menu#thread-list(data-bind="foreach: threads")
 					li
 						a(href="#", data-bind="text: title.content, event: { click: menuClick }")
@@ -55,10 +56,12 @@ div.row
 								div.row
 									span.header(data-bind="click: toggleCollapse")
 										strong(data-bind="text: title.content")
-									span.badge.badge-important.unread-counter(data-bind="text: unreadCounter, visible: collapsed")
+									span.badge.badge-info.unread-counter(data-bind="text: unreadCounter, visible: collapsed")
 								div.row.muted(data-bind="visible: !collapsed()")
-										span created by&nbsp;
+										span.created-by created by 
 										span(data-bind="text: title.username")
+
+						hr(data-bind="visible: !collapsed()")
 
 						div.thread-body-container(data-bind="visible: !collapsed(), css: { expanded: expanded }")
 							div.thread-body-curtain								

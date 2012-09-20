@@ -201,6 +201,14 @@ function createConversation(data, preferences) {
     $('#sub-threads').scrollTop($('#sub-threads > .threads').height())
   };
 
+  self.unreadCounter = ko.computed(function (){
+    var total = 0;
+    ko.utils.arrayForEach(self.threads(), function(thread){
+      total += thread.unreadCounter();
+    });
+    return total;
+  });
+
   return self;
 }
 
