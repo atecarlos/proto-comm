@@ -76,9 +76,28 @@
   margin-left: 10px;
 }
 
-.thread-switcher .unread-counter
+.thread-switcher .dropdown-toggle .unread-counter
 {
   margin-left: 10px;
+}
+
+.thread-switcher .dropdown-menu a
+{
+  padding: 3px 16px;
+}
+
+.thread-switcher .dropdown-menu .title
+{
+  width:80%;
+  display: inline-block;
+  overflow: hidden;
+  white-space: pre-line;
+  float:left;
+}
+
+.thread-switcher .dropdown-menu .unread-counter
+{
+  float: right;
 }
 
 .thread-switcher .dropdown-menu

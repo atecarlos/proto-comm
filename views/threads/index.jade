@@ -14,7 +14,9 @@ div.main-top-bar
 					span.badge.badge-info.unread-counter(data-bind="text: unreadCounter")
 				ul.dropdown-menu#thread-list(data-bind="foreach: threads")
 					li
-						a(href="#", data-bind="text: title.content, event: { click: menuClick }")
+						a.clearfix(href="#", data-bind="event: { click: menuClick }")
+							span.title(data-bind="text: title.content")
+							span.badge.badge-info.unread-counter(data-bind="text: unreadCounter, visible: unreadCounter() > 0")
 		div#newThread.modal.hide.fade.in(style="display: none")
 			div.modal-header
 				a.close(data-dismiss="modal") x
