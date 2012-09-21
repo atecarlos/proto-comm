@@ -112,6 +112,12 @@ function createThread(data, preference) {
     socket.emit('dismiss_thread', { threadId: self.id, conversationId: conversation.id, flag: self.dismissed() });
   };
 
+  self.focused = ko.observable(false);
+
+  self.focused.subscribe(function (hasFocus){
+    console.log(hasFocus);
+  });
+
   self.menuClick = function (){
     if(self.dismissed()){
       self.toggleDismiss();
@@ -119,6 +125,7 @@ function createThread(data, preference) {
     if(self.collapsed()){
       self.toggleCollapse();
     }
+    self.focused(true);
   };
 
   self.hidden = ko.observable(false);

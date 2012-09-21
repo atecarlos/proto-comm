@@ -78,7 +78,7 @@ div.row
 											div.span4(data-bind="text: content")
 								div.row
 									div.span4
-										input.span4(type="text", placeholder="Answer", data-bind="value: newMessage, valueUpdate: 'afterkeydown', event: { keypress: sendMessage }")
+										input.span4(type="text", data-bind="value: newMessage, valueUpdate: 'afterkeydown', hasfocus: focused, event: { keypress: sendMessage }")
 
 input#data(type="hidden")(value=conversation)
 input#preferences(type="hidden")(value=preferences)
