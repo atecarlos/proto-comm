@@ -50,6 +50,42 @@
   width:95%;
 }
 
+.left-side, .right-side
+{
+  position:relative;
+}
+
+.tip
+{
+  position:absolute;
+}
+
+.left-side .tip
+{
+  width:70%;
+}
+
+.right-side .top.tip
+{
+  margin-left: 45px;
+}
+
+.middle.tip
+{
+  top: 40%;
+}
+
+.bottom.tip
+{
+  top:80%;
+}
+
+.tip p
+{
+  font-size: 18px;
+  text-align: center;
+}
+
 .threads
 {
   width:370px;

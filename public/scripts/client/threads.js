@@ -185,6 +185,10 @@ function createConversation(data, preferences) {
     self.threads.push(createThread(data.threads[i], preference));
   }
 
+  self.hasThreads = ko.computed(function (){
+    return self.threads().length > 0;
+  });
+
   self.addNewThread = function(data, event) {
     var keyCode = (event.which ? event.which : event.keyCode);
     if (keyCode === 13) {

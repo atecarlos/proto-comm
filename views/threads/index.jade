@@ -27,10 +27,14 @@ div.main-top-bar
 			div.modal-footer
 				button.btn(data-dismiss="modal") Cancel
 div.row
-	div.span7
-		div.row(data-bind="visible:!mainThread.hasMessages()")
-			div.span6
-				em Messages from the group will appear here
+	div.span7.left-side
+		div(data-bind="visible:!mainThread.hasMessages()")
+			div.middle.tip
+				p.muted This is where you can exchange messages regarding 
+					span(data-bind="text: mainThread.title.content")
+			div.bottom.tip
+				p.muted Go ahead! Try it out!
+					img(src="/images/curved_arrow_down.png", width="125px", height="100px")
 		div.nano
 			div#main-thread.content
 				div.messages(data-bind="foreach: mainThread.messages, visible: mainThread.hasMessages")
@@ -44,7 +48,14 @@ div.row
 		div.row
 			div.span6
 				input.span6(type="text", placeholder="Enter your message here", data-bind="value: mainThread.newMessage, valueUpdate: 'afterkeydown', event: { keypress: mainThread.sendMessage }")
-	div.span5
+	div.span5.right-side
+		div(data-bind="visible: !hasThreads()")
+			div.top.tip
+				p.muted Start a side conversation 
+					img(src="/images/curved_arrow_up.png", width="100px", height="50px")
+			div.middle.tip
+				p.muted Your group can also engage in side conversations regarding 
+					span(data-bind="text: mainThread.title.content")
 		div.nano
 			div#sub-threads.content
 				div.threads(data-bind="foreach: threads")
