@@ -16,7 +16,7 @@ div.main-top-bar
 					li
 						a.clearfix(href="#", data-bind="event: { click: menuClick }")
 							span.title(data-bind="text: title.content")
-							span.badge.badge-info.unread-counter(data-bind="text: unreadCounter, visible: unreadCounter() > 0")
+							span.badge.badge-info.unread-counter(data-bind="text: unreadCounter, visible: showCounter")
 		div#newThread.modal.hide.fade.in(style="display: none")
 			div.modal-header
 				a.close(data-dismiss="modal") x
@@ -58,7 +58,7 @@ div.row
 								div.row
 									span.header(data-bind="click: toggleCollapse")
 										strong(data-bind="text: title.content")
-									span.badge.badge-info.unread-counter(data-bind="text: unreadCounter, visible: collapsed")
+									span.badge.badge-info.unread-counter(data-bind="text: unreadCounter, visible: collapsed && showCounter")
 								div.row.muted(data-bind="visible: !collapsed()")
 										span.created-by created by 
 										span(data-bind="text: title.username")
@@ -68,7 +68,7 @@ div.row
 						div.thread-body-container(data-bind="visible: !collapsed(), css: { expanded: expanded }")
 							div.thread-body-curtain								
 							div.thread-body
-								div.row.thread-messages(data-bind="foreach: messages, visible: hasMessages()")
+								div.row.thread-messages.clearfix(data-bind="foreach: shownMessages, visible: hasMessages()")
 									div.span4.message
 										div.row
 											div.span4
@@ -76,9 +76,9 @@ div.row
 												div.timestamp.muted(data-bind="text: timestamp")
 										div.row
 											div.span4(data-bind="text: content")
-								div.row
-									div.span4
-										input.span4(type="text", data-bind="value: newMessage, valueUpdate: 'afterkeydown', hasfocus: focused, event: { keypress: sendMessage }")
+							div.row
+								div.span4
+									input.span4(type="text", data-bind="value: newMessage, valueUpdate: 'afterkeydown', hasfocus: focused, event: { keypress: sendMessage }")
 
 input#data(type="hidden")(value=conversation)
 input#preferences(type="hidden")(value=preferences)

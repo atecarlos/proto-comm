@@ -52,7 +52,7 @@
 
 .threads
 {
-  width:95%;
+  width:370px;
 }
 
 .thread-switcher
@@ -138,33 +138,24 @@
   margin-right: 10px;
 }
 
-.thread-body-container
+.thread .thread-body-container
 {
-  height: 270px;
   width: 100%;
-  overflow: hidden;
   position: relative;
-}
-
-.thread-body-container.expanded
-{
-  height: 590px;
 }
 
 .thread-body-curtain {
   position: absolute;
   top:0;
   z-index: 2;
-  height: 18px;
+  height: 10px;
   width:100%;
   margin: 0;
   background: transparent url('../images/std-grad-18.png') repeat-x scroll 0 100%;
 }
-.thread-body
-{
-  position: absolute;  
-  bottom: 0;
-  z-index: 1;
+.thread .thread-body
+{ 
+  max-height: 270px;
   width: 100%;
 }
 

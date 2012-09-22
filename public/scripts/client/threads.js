@@ -91,6 +91,10 @@ function createThread(data, preference) {
 
   self.unreadCounter = ko.observable(0);
 
+  self.showCounter = ko.computed(function() {
+    return self.unreadCounter() > 0;
+  });
+
   self.collapsed = ko.observable(preference ? preference.flags.isCollapsed : false);
   self.dismissed = ko.observable(preference ? preference.flags.isDismissed : false);
 
@@ -149,6 +153,16 @@ function createThread(data, preference) {
       }
     }
   }
+
+  self.shownMessages = ko.computed(function (){
+    var length = self.messages().length;
+
+    if(self.expanded() || length <= 4){
+      return self.messages;
+    }else{
+      return self.messages.slice(length - 4, length);
+    }
+  });
 
   return self;
 };
