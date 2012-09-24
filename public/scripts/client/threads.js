@@ -11,7 +11,6 @@ $(document).ready(function(){
   ko.applyBindings(conversation);
     
   $('#newMessage').focus();
-  $('#btn-new-thread').click(toggleNewThread);
 
   conversation.scrollMainThread();
   conversation.scrollSubThreads();
@@ -20,7 +19,3 @@ $(document).ready(function(){
 
   socket.emit('open_conversation', { conversationId: conversation.id });
 });
-
-function toggleNewThread(){
-  $('#newThread').modal('toggle') 
-}

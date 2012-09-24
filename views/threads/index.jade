@@ -7,7 +7,7 @@ div.main-top-bar
 					span &nbsp;created by&nbsp;
 					span(data-bind="text: mainThread.title.username")
 		div.span6.thread-switcher
-			button.btn.btn-info#btn-new-thread(type="button") Add
+			button.btn.btn-info#btn-new-thread(type="button", data-bind="event: { click: toggleNewThread }") Add
 			div.btn-group
 				a.btn.dropdown-toggle(data-toggle="dropdown", href="#") Side Conversations
 					span.caret

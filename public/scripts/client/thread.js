@@ -1,4 +1,4 @@
-function createThread(data, preference) {
+function createThread(data, preference, conversation) {
   var self = {};
 
   self.id = data._id;
@@ -52,6 +52,7 @@ function createThread(data, preference) {
   }
 
   self.receiveMessage = function(message){
+    console.log('message received')
     if(self.dismissed()){
       setCollapsedFlagTo(true);
       self.toggleDismiss();
@@ -61,6 +62,7 @@ function createThread(data, preference) {
     }
 
     addMessage(message);
+    adjustScrolling();
   }
 
   self.unreadCounter = ko.observable(0);
@@ -83,11 +85,13 @@ function createThread(data, preference) {
   function setCollapsedFlagTo(value){
     self.collapsed(value);
     socket.emit('toggle_thread', { threadId: self.id, conversationId: conversation.id, flag: self.collapsed() });
+    adjustScrolling();
   };
 
   self.toggleDismiss = function(){
     self.dismissed(!self.dismissed());
     socket.emit('dismiss_thread', { threadId: self.id, conversationId: conversation.id, flag: self.dismissed() });
+    adjustScrolling();
   };
 
   self.focused = ko.observable(false);
@@ -117,6 +121,7 @@ function createThread(data, preference) {
   function expand(toExpand){
     self.expanded(toExpand);
     showHideOtherThreads(toExpand);
+    adjustScrolling();
   }
 
   function showHideOtherThreads (showOrHide) {
@@ -137,6 +142,10 @@ function createThread(data, preference) {
       return self.messages.slice(length - 4, length);
     }
   });
+
+  function adjustScrolling(){
+    $(".nano").nanoScroller();
+  }
 
   return self;
 };
