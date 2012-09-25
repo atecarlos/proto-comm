@@ -24,8 +24,7 @@ function createConversation(data, preferences) {
     var keyCode = (event.which ? event.which : event.keyCode);
     if (keyCode === 13) {
       addThread();
-      toggleNewThread();
-      self.newThread('');
+      self.toggleNewThread();
       return false;
     } else {
       return true;
@@ -43,6 +42,7 @@ function createConversation(data, preferences) {
   };
 
   socket.on('thread_added', function(data){
+    console.log('thread added')
     self.threads.push(createThread(data));
     self.newThread('');
     self.scrollSubThreads();
