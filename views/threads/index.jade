@@ -7,7 +7,7 @@ div.main-top-bar
 					span &nbsp;created by&nbsp;
 					span(data-bind="text: mainThread.title.username")
 		div.span6.thread-switcher
-			button.btn#btn-new-thread(type="button", data-bind="event: { click: toggleNewThread }, visible: hasThreads || mainThread.hasMessages") Add
+			button.btn#btn-new-thread(type="button", data-bind="event: { click: toggleNewThread }, visible: hasThreads() || mainThread.hasMessages()") Add
 			div.btn-group(data-bind="visible: hasThreads")
 				a.btn.dropdown-toggle(data-toggle="dropdown", href="#") Side Conversations
 					span.caret
@@ -41,9 +41,9 @@ div.row
 				br
 				span or
 				br
-				a start a side conversation.
-	div.span7.left-side
-		div(data-bind="visible:!mainThread.hasMessages() && hasThreads")
+				a(data-bind="event: { click: toggleNewThread }") start a side conversation.
+	div.span7.left-side(data-bind="visible: mainThread.hasMessages() || hasThreads()")
+		div(data-bind="visible:!mainThread.hasMessages() && hasThreads()")
 			div.middle.tip
 				p This is where you can exchange messages regarding 
 					span(data-bind="text: mainThread.title.content")
@@ -62,8 +62,8 @@ div.row
 							div.span6(data-bind="text:content")
 		div.row
 			div.span6
-				textarea#main-thread-new-message.span6(rows=3, type="text", placeholder="Enter your message here", data-bind="value: mainThread.newMessage, valueUpdate: 'afterkeydown', event: { keypress: mainThread.sendMessage }, visible: mainThread.hasMessages")
-	div.span5.right-side
+				textarea#main-thread-new-message.span6(rows=3, type="text", placeholder="Enter your message here", data-bind="value: mainThread.newMessage, valueUpdate: 'afterkeydown', event: { keypress: mainThread.sendMessage }")
+	div.span5.right-side(data-bind="visible: mainThread.hasMessages() || hasThreads()")
 		div(data-bind="visible: !hasThreads() && mainThread.hasMessages")
 			div.top.tip
 				p.muted Start a side conversation 
