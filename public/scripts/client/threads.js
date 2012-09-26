@@ -10,7 +10,7 @@ $(document).ready(function(){
 
   ko.applyBindings(conversation);
     
-  $('#newMessage').focus();
+  $('#main-thread-new-message').focus();
 
   conversation.scrollMainThread();
   conversation.scrollSubThreads();

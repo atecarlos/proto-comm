@@ -14,7 +14,7 @@
 }
 #main-thread, #sub-threads, .nano
 {
-  height: 675px;
+  height: 655px;
 }
 
 #main-thread
@@ -25,6 +25,11 @@
 #main-thread .span6
 {
   width: 94%;
+}
+
+#main-thread-new-message
+{
+  font-size: 16px;
 }
 
 .main-top-bar
@@ -60,6 +65,22 @@
   position:absolute;
 }
 
+.default-tips .first
+{
+  position:absolute;
+  top: 15%;
+  left: 32%; 
+  font-size: 20px; 
+}
+
+.default-tips p
+{
+  font-size: 22px;
+  text-align: center;
+  line-height: 30px;
+}
+
+
 .left-side .tip
 {
   width:70%;
@@ -77,7 +98,7 @@
 
 .bottom.tip
 {
-  top:80%;
+  top:75%;
 }
 
 .tip p
@@ -97,7 +118,7 @@
   margin-top: 1%;
 }
 
-.thread-switcher .btn-group, .thread-switcher .btn-info
+.thread-switcher .btn-group, .thread-switcher #btn-new-thread
 {
   float:right;
 }
