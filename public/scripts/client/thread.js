@@ -52,7 +52,6 @@ function createThread(data, preference, conversation) {
   }
 
   self.receiveMessage = function(message){
-    console.log('message received')
     if(self.dismissed()){
       setCollapsedFlagTo(true);
       self.toggleDismiss();
@@ -96,10 +95,6 @@ function createThread(data, preference, conversation) {
 
   self.focused = ko.observable(false);
 
-  self.focused.subscribe(function (hasFocus){
-    console.log(hasFocus);
-  });
-
   self.menuClick = function (){
     if(self.dismissed()){
       self.toggleDismiss();
@@ -107,6 +102,7 @@ function createThread(data, preference, conversation) {
     if(self.collapsed()){
       self.toggleCollapse();
     }
+
     self.focused(true);
   };
 

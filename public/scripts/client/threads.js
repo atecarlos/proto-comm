@@ -9,13 +9,11 @@ $(document).ready(function(){
   conversation = createConversation(data, preferences);
 
   ko.applyBindings(conversation);
-    
-  $('#main-thread-new-message').focus();
 
   conversation.scrollMainThread();
-  conversation.scrollSubThreads();
 
   $(".nano").nanoScroller();
 
+  $('#main-thread-new-message').focus();
   socket.emit('open_conversation', { conversationId: conversation.id });
 });

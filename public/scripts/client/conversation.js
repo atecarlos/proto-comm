@@ -33,8 +33,7 @@ function createConversation(data, preferences) {
   
   self.toggleNewThread = function (){
     $('#newThread').modal('toggle');
-    setTimeout(function () { $('#newThread input').focus(); }, 400)
-    
+    setTimeout(function () { $('#newThread input').focus(); }, 400);
   }
 
   function addThread() {
@@ -42,11 +41,16 @@ function createConversation(data, preferences) {
   };
 
   socket.on('thread_added', function(data){
-    console.log('thread added')
-    self.threads.push(createThread(data));
+    var thread = createThread(data);
+    self.threads.push(thread);
     self.newThread('');
     self.scrollSubThreads();
+    thread.focused(true);
   });
+
+  function scrollSubThreads() {
+    $('#sub-threads').scrollTop($('#sub-threads > .threads').height())
+  };
 
   socket.on('receive_message', function(data) {
     if(data.threadId == self.mainThread.id){
@@ -64,10 +68,6 @@ function createConversation(data, preferences) {
 
   self.scrollMainThread = function () {
     $('#main-thread').scrollTop($('#main-thread > .messages').height());
-  };
-
-  self.scrollSubThreads = function () {
-    $('#sub-threads').scrollTop($('#sub-threads > .threads').height())
   };
 
   self.unreadCounter = ko.computed(function (){
