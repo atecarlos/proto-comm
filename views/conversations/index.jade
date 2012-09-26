@@ -1,9 +1,12 @@
 p Open an existing conversation...
 
-ul
+table
 	each conversation in conversations
-		li
-			a(href='/conversations/#{conversation.id}/threads')= conversation.threads[0].messages[0].content
+		tr
+			td
+				a(href='/conversations/#{conversation.id}/threads')= conversation.threads[0].messages[0].content
+			td
+				a(href="/conversations/#{conversation.id}/remove", style="padding-left: 10px") Remove
 
 p Or create a new one
 

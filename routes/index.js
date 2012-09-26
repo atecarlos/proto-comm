@@ -47,6 +47,14 @@ exports.openConversation = function(req, res){
 	});
 }
 
+exports.removeConversation = function(req, res){
+	var conversation = Conversation.findById(req.params.id, function(err, conversation){
+		conversation.remove(function (){
+			res.redirect('/conversations');
+		});
+	});
+};
+
 exports.getMessages = function(req, res){
 	var conversation = Conversation.findById(req.params.id, function(err, conversation){
 		thread = conversation.threads.id(req.params.threadId);

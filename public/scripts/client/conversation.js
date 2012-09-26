@@ -7,6 +7,10 @@ function createConversation(data, preferences) {
     self.scrollMainThread();
   });
 
+  self.scrollMainThread = function () {
+    $('#main-thread').scrollTop($('#main-thread > .messages').height());
+  };
+  
   self.newThread = ko.observable('');
   
   self.threads = ko.observableArray([]);
@@ -65,10 +69,6 @@ function createConversation(data, preferences) {
       });
     }
   });
-
-  self.scrollMainThread = function () {
-    $('#main-thread').scrollTop($('#main-thread > .messages').height());
-  };
 
   self.unreadCounter = ko.computed(function (){
     var total = 0;

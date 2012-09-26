@@ -48,6 +48,8 @@ app.get('/conversations', routes.getConversations);
 
 app.post('/conversations', routes.postConversation);
 
+app.get('/conversations/:id/remove', routes.removeConversation)
+
 // Services
 app.get('/conversations/:id/threads/:threadId/messages.json', routes.getMessages);
 
