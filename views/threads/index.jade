@@ -7,8 +7,8 @@ div.main-top-bar
 					span &nbsp;created by&nbsp;
 					span(data-bind="text: mainThread.title.username")
 		div.span6.thread-switcher
-			button.btn.btn-info#btn-new-thread(type="button", data-bind="event: { click: toggleNewThread }") Add
-			div.btn-group
+			button.btn#btn-new-thread(type="button", data-bind="event: { click: toggleNewThread }, visible: hasThreads() || mainThread.hasMessages()") Add
+			div.btn-group(data-bind="visible: hasThreads")
 				a.btn.dropdown-toggle(data-toggle="dropdown", href="#") Side Conversations
 					span.caret
 					span.badge.badge-info.unread-counter(data-bind="text: unreadCounter")
@@ -27,13 +27,28 @@ div.main-top-bar
 			div.modal-footer
 				button.btn(data-dismiss="modal") Cancel
 div.row
-	div.span7.left-side
-		div(data-bind="visible:!mainThread.hasMessages()")
+	div.default-tips(data-bind="visible:!mainThread.hasMessages() && !hasThreads()")
+		div.first
+			p 
+				span You can have many conversations regarding
+				br
+				span(data-bind="text: mainThread.title.content")
+				span . 
+			p
+				span Start talking in the main conversation:
+			p
+				textarea#main-thread-new-message.span6(rows=3, type="text", placeholder="", data-bind="value: mainThread.newMessage, valueUpdate: 'afterkeydown', event: { keypress: mainThread.sendMessage }")
+				br
+				span or
+				br
+				a(data-bind="event: { click: toggleNewThread }") start a side conversation.
+	div.span7.left-side(data-bind="visible: mainThread.hasMessages() || hasThreads()")
+		div(data-bind="visible:!mainThread.hasMessages() && hasThreads()")
 			div.middle.tip
-				p.muted This is where you can exchange messages regarding 
+				p This is where you can exchange messages regarding 
 					span(data-bind="text: mainThread.title.content")
 			div.bottom.tip
-				p.muted Go ahead! Try it out!
+				p Go ahead! Try it out!
 					img(src="/images/curved_arrow_down.png", width="125px", height="100px")
 		div.nano
 			div#main-thread.content
@@ -47,9 +62,9 @@ div.row
 							div.span6(data-bind="text:content")
 		div.row
 			div.span6
-				input.span6(type="text", placeholder="Enter your message here", data-bind="value: mainThread.newMessage, valueUpdate: 'afterkeydown', event: { keypress: mainThread.sendMessage }")
-	div.span5.right-side
-		div(data-bind="visible: !hasThreads()")
+				textarea#main-thread-new-message.span6(rows=3, type="text", placeholder="Enter your message here", data-bind="value: mainThread.newMessage, valueUpdate: 'afterkeydown', event: { keypress: mainThread.sendMessage }")
+	div.span5.right-side(data-bind="visible: mainThread.hasMessages() || hasThreads()")
+		div(data-bind="visible: !hasThreads() && mainThread.hasMessages")
 			div.top.tip
 				p.muted Start a side conversation 
 					img(src="/images/curved_arrow_up.png", width="100px", height="50px")
