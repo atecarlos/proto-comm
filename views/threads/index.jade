@@ -2,10 +2,10 @@ div.main-top-bar
 	div.row
 		div.span6.title
 			h3
-				span(data-bind="text: mainThread.title.content")
+				span(data-bind="text: mainThread.topic")
 				small
 					span &nbsp;created by&nbsp;
-					span(data-bind="text: mainThread.title.username")
+					span(data-bind="text: mainThread.createdBy")
 		div.span6.thread-switcher
 			button.btn#btn-new-thread(type="button", data-bind="event: { click: toggleNewThread }, visible: hasThreads() || mainThread.hasMessages()") Add
 			div.btn-group(data-bind="visible: hasThreads")
@@ -15,7 +15,7 @@ div.main-top-bar
 				ul.dropdown-menu#thread-list(data-bind="foreach: threads")
 					li
 						a.clearfix(href="#", data-bind="event: { click: menuClick }")
-							span.title(data-bind="text: title.content")
+							span.title(data-bind="text: topic")
 							span.badge.badge-info.unread-counter(data-bind="text: unreadCounter, visible: showCounter")
 		div#newThread.modal.hide.fade.in(style="display: none")
 			div.modal-header
@@ -32,7 +32,7 @@ div.row
 			p 
 				span You can have many conversations regarding
 				br
-				span(data-bind="text: mainThread.title.content")
+				span(data-bind="text: mainThread.topic")
 				span . 
 			p
 				span Start talking in the main conversation:
@@ -46,7 +46,7 @@ div.row
 		div(data-bind="visible:!mainThread.hasMessages() && hasThreads()")
 			div.middle.tip
 				p This is where you can exchange messages regarding 
-					span(data-bind="text: mainThread.title.content")
+					span(data-bind="text: mainThread.topic")
 			div.bottom.tip
 				p Go ahead! Try it out!
 					img(src="/images/curved_arrow_down.png", width="125px", height="100px")
@@ -70,7 +70,7 @@ div.row
 					img(src="/images/curved_arrow_up.png", width="100px", height="50px")
 			div.middle.tip
 				p.muted Your group can also engage in side conversations regarding 
-					span(data-bind="text: mainThread.title.content")
+					span(data-bind="text: mainThread.topic")
 		div.nano
 			div#sub-threads.content
 				div.threads(data-bind="foreach: threads")
@@ -83,11 +83,11 @@ div.row
 							div.span4
 								div.row
 									span.header(data-bind="click: toggleCollapse")
-										strong(data-bind="text: title.content")
+										strong(data-bind="text: topic")
 									span.badge.badge-info.unread-counter(data-bind="text: unreadCounter, visible: collapsed && showCounter")
 								div.row.muted(data-bind="visible: !collapsed()")
 										span.created-by created by 
-										span(data-bind="text: title.username")
+										span(data-bind="text: createdBy")
 
 						hr(data-bind="visible: !collapsed()")
 

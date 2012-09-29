@@ -41,14 +41,14 @@ function createConversation(data, preferences) {
   }
 
   function addThread() {
-    socket.emit('post_thread', { title: self.newThread(), conversationId: self.id });
+    socket.emit('post_thread', { topic: self.newThread(), conversationId: self.id });
   };
 
   socket.on('thread_added', function(data){
-    var thread = createThread(data);
+    var thread = createThread(data, undefined, self);
     self.threads.push(thread);
     self.newThread('');
-    self.scrollSubThreads();
+    scrollSubThreads();
     thread.focused(true);
   });
 
@@ -59,13 +59,11 @@ function createConversation(data, preferences) {
   socket.on('receive_message', function(data) {
     if(data.threadId == self.mainThread.id){
       self.mainThread.receiveMessage(data);
-      self.mainThread.newMessage('');
     }else{
         ko.utils.arrayForEach(self.threads(), function(thread){
-        if(data.threadId === thread.id){
-          thread.receiveMessage(data);
-          thread.newMessage('');
-        }
+          if(data.threadId === thread.id){
+            thread.receiveMessage(data);
+          }
       });
     }
   });

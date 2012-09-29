@@ -2,20 +2,15 @@ function createThread(data, preference, conversation) {
   var self = {};
 
   self.id = data._id;
-  self.type = data.type;
-
-  if (data.messages.length > 0){
-    self.title = createMessage(data.messages[0]);
-  } else {
-    self.title = createMessage({content: 'missing title'});
-  }
+  self.topic = data.topic;
+  self.createdBy = data.createdBy;
 
   self.newMessage = ko.observable('');
   
   self.messages = ko.observableArray([]);
 
   if(data.messages){
-    for(var i = 1; i < data.messages.length; i++){
+    for(var i = 0; i < data.messages.length; i++){
       addMessage(data.messages[i]);
     }
   }
@@ -48,6 +43,7 @@ function createThread(data, preference, conversation) {
         timestamp: new Date(),
     };
 
+    self.newMessage('');
     socket.emit('send_message', data);
   }
 

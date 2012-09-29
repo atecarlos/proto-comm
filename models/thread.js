@@ -2,6 +2,8 @@ var mongo = require('mongoose'),
 	message = require('./message');
 
 var threadSchema = new mongo.Schema({
+	topic: String,
+   	createdBy : String,
 	messages: [message.schema]
 });
 

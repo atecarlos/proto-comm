@@ -56,16 +56,13 @@ exports.openConversation = function(socket, data){
 exports.addThread = function(socket, data, socketsCollection){
     Conversation.findById(data.conversationId, function(err, conversation){
         var thread = new Thread();
+        thread.topic = data.topic;
+        thread.createdBy = socket.handshake.session.user.name;
 
-        var title = new Message();
-        title.content = data.title;
-        title.user = socket.handshake.session.user;
-
-        thread.messages.push(title);
         conversation.threads.push(thread);
         conversation.save();
 
-        emit(data.conversationId, socketsCollection, 'thread_added', { _id: thread.id, type: thread.type, messages: thread.messages });
+        emit(data.conversationId, socketsCollection, 'thread_added', { _id: thread.id, topic: thread.topic, createdBy: thread.createdBy });
     });
 }
 
@@ -77,7 +74,6 @@ exports.toggleThread = function(socket, data){
 
 exports.dismissThread = function(socket, data){
     addOrUpdatePreference(data, socket.handshake.session.user.id, function(preference, flag){
-        console.log(flag);
         preference.flags.isDismissed = flag;
     });
 }

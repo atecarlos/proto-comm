@@ -21,15 +21,11 @@ exports.getConversations = function(req, res){
 }
 
 exports.postConversation = function(req, res){
-	var conversation = new Conversation();
 	var mainThread = new Thread();
+	mainThread.topic = req.body.topic;
+	mainThread.createdBy = req.session.user.name;
 
-	var title = new Message();
-	title.content = req.body.topic;
-	title.user.id = req.session.user.id;
-	title.user.name = req.session.user.name;
-	
-	mainThread.messages.push(title);
+	var conversation = new Conversation();
 	conversation.threads.push(mainThread);
 	conversation.save();
 
@@ -41,8 +37,8 @@ exports.openConversation = function(req, res){
 		var userPreferences;
 		Preference.find({ 'userId': req.session.user.id, 'conversationId':conversation._id }, function(err, preferences){
 			res.render('threads', { title: 'threads',
-    						 	conversation: JSON.stringify(conversation),
-    						 	preferences: JSON.stringify(preferences) });
+    						 		conversation: JSON.stringify(conversation),
+    						 		preferences: JSON.stringify(preferences) });
 		});
 	});
 }
