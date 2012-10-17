@@ -1,8 +1,14 @@
 var mongo = require('mongoose'),
-	Thread = require('./thread');
+	message = require('./message');
 
-var conversationSchema = new mongo.Schema({
-   	threads: [Thread.schema]
+var schema = new mongo.Schema({
+	topic: String,
+   	createdBy : String,
+   	timestamp: { type: Date, default: Date.now },
+	messages: [message.schema]
 });
 
-module.exports = mongo.model('Conversation', conversationSchema);
+module.exports = mongo.model('Conversation', schema);
+
+exports.schema = schema;
+

@@ -38,20 +38,17 @@ var databaseUri = process.env.MONGOLAB_URI || 'mongodb://localhost/proto';
 mongo.connect(databaseUri);
 
 // Routes
-app.get('/', routes.index);
+app.get('/', routes.home);
 
 app.post('/log-in', routes.log_in);
 
-app.get('/conversations/:id/threads', routes.openConversation);
+app.get('/conversations', routes.readConversations);
 
-app.get('/conversations', routes.getConversations);
+app.post('/conversations', routes.createConversation);
 
-app.post('/conversations', routes.postConversation);
+app.get('/conversations/:id', routes.readConversation);
 
 app.get('/conversations/:id/remove', routes.removeConversation);
-
-// Services
-app.get('/conversations/:id/threads/:threadId/messages.json', routes.getMessages);
 
 // needed for heroku
 io.configure(function () { 
@@ -74,17 +71,17 @@ io.sockets.on('connection', function (socket) {
     ioController.openConversation(socket, data);
   });
 
-  socket.on('post_thread', function(data){
-    ioController.addThread(socket, data, io.sockets);
+  socket.on('create_conversation', function(data){
+    ioController.createConversation(socket, data, io.sockets);
   });
 
-  socket.on('toggle_thread', function(data){
+  /*socket.on('toggle_thread', function(data){
     ioController.toggleThread(socket, data);
   });
 
   socket.on('dismiss_thread', function(data){
     ioController.dismissThread(socket, data);
-  });
+  });*/
 
   socket.on('disconnect', function(){
     ioController.disconnect(socket);

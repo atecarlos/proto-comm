@@ -1,10 +1,9 @@
 var Conversation = require('../models/conversation'),
-    Thread = require('../models/thread'),
     Message = require('../models/message'),
     users = require('../models/users'),
-    Preference = require('../models/thread_preference');
+    Preference = require('../models/conversation_preference');
 
-exports.index = function(req, res){
+exports.home = function(req, res){
   res.render('index', { title: 'my chat app', users: users });
 };
 
@@ -13,30 +12,27 @@ exports.log_in = function(req, res){
   	res.redirect('/conversations');
 };
 
-exports.getConversations = function(req, res){
+exports.readConversations = function(req, res){
 	Conversation.find(function(err, conversations){
 		res.render('conversations', { conversations: conversations,
 									  title: 'conversations'});
 	});
 }
 
-exports.postConversation = function(req, res){
-	var mainThread = new Thread();
-	mainThread.topic = req.body.topic;
-	mainThread.createdBy = req.session.user.name;
-
+exports.createConversation = function(req, res){
 	var conversation = new Conversation();
-	conversation.threads.push(mainThread);
+	conversation.topic = req.body.topic;
+	conversation.createdBy = req.session.user.name;
 	conversation.save();
 
-	res.redirect('/conversations/' + conversation.id + '/threads');
+	res.redirect('/conversations/' + conversation.id);
 }
 
-exports.openConversation = function(req, res){
+exports.readConversation = function(req, res){
 	var conversation = Conversation.findById(req.params.id, function(err, conversation){
 		var userPreferences;
 		Preference.find({ 'userId': req.session.user.id, 'conversationId':conversation._id }, function(err, preferences){
-			res.render('threads', { title: 'threads',
+			res.render('conversations/chat', { title: 'chat',
     						 		conversation: JSON.stringify(conversation),
     						 		preferences: JSON.stringify(preferences) });
 		});
@@ -50,10 +46,3 @@ exports.removeConversation = function(req, res){
 		});
 	});
 };
-
-exports.getMessages = function(req, res){
-	var conversation = Conversation.findById(req.params.id, function(err, conversation){
-		thread = conversation.threads.id(req.params.threadId);
-		res.json(thread.messages);
-	});
-}

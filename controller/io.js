@@ -1,8 +1,7 @@
 var Conversation = require('../models/conversation'),
-    Thread = require('../models/thread'),
     Message = require('../models/message'),
     tracker = require('../controller/conversation_tracker'),
-    Preference = require('../models/thread_preference');
+    Preference = require('../models/conversation_preference');
 
 exports.authorize = function(data, accept, sessionStore){
 	if (data.headers.cookie) {
@@ -24,19 +23,18 @@ exports.authorize = function(data, accept, sessionStore){
 
 exports.sendMessage = function(socket, data, socketsCollection){
 	Conversation.findById(data.conversationId, function(err, conversation){
-        var thread = conversation.threads.id(data.threadId);
         var msg = new Message();
         msg.content = data.content;
         msg.user = socket.handshake.session.user;
         msg.timestamp = data.timestamp;
-        thread.messages.push(msg);
+        conversation.messages.push(msg);
         conversation.save();
 
         emit(data.conversationId, socketsCollection, 'receive_message', 
             { 
                 content: data.content, 
                 user: socket.handshake.session.user, 
-                threadId: thread.id,
+                conversationId: data.conversationId,
                 timestamp: data.timestamp,
             });
     });
@@ -53,20 +51,19 @@ exports.openConversation = function(socket, data){
     tracker.addUserToConversation(socket.id, data.conversationId);
 }
 
-exports.addThread = function(socket, data, socketsCollection){
-    Conversation.findById(data.conversationId, function(err, conversation){
-        var thread = new Thread();
-        thread.topic = data.topic;
-        thread.createdBy = socket.handshake.session.user.name;
+exports.createConversation = function(socket, data, socketsCollection){
 
-        conversation.threads.push(thread);
-        conversation.save();
+    var conversation = new Conversation();
+    conversation.topic = data.topic;
+    conversation.createdBy = socket.handshake.session.user.name;
+    conversation.threads.push(mainThread);
+    conversation.save();
 
-        emit(data.conversationId, socketsCollection, 'thread_added', { _id: thread.id, topic: thread.topic, createdBy: thread.createdBy });
-    });
+    emit(data.conversationId, socketsCollection, 'conversation_added', 
+        { _id: thread.id, topic: thread.topic, createdBy: thread.createdBy });
 }
 
-exports.toggleThread = function(socket, data){
+/*exports.toggleThread = function(socket, data){
     addOrUpdatePreference(data, socket.handshake.session.user.id, function(preference, flag){
         preference.flags.isCollapsed = flag;
     });
@@ -93,7 +90,7 @@ function addOrUpdatePreference(data, userId, updateFlag){
 
         preference.save();
     });
-}
+}*/
 
 exports.disconnect = function(socket){
     tracker.removeUserFromAllConversations(socket.id);

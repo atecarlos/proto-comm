@@ -1,15 +1,15 @@
 var socket = io.connect(window.location.origin);
 
 $(document).ready(function(){
-  var preferencesData = JSON.parse($('#preferences').val());
-  var preferences = createPreference(preferencesData);
+  /*var preferencesData = JSON.parse($('#preferences').val());
+  var preferences = createPreference(preferencesData);*/
     
   var data = JSON.parse($('#data').val());
-  var conversation = createConversation(data, preferences);
+  var conversation = createConversation(data);
 
   ko.applyBindings(conversation);
 
-  conversation.scrollMainThread();
+  /*conversation.scrollMainThread();*/
 
   $(".nano").nanoScroller();
 

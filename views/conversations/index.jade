@@ -4,7 +4,7 @@ table
 	each conversation in conversations
 		tr
 			td
-				a(href='/conversations/#{conversation.id}/threads')= conversation.threads[0].messages[0].content
+				a(href='/conversations/#{conversation.id}')= conversation.topic
 			td
 				a(href="/conversations/#{conversation.id}/remove", style="padding-left: 10px") Remove
 
