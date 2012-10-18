@@ -9,9 +9,9 @@ $(document).ready(function(){
 
   ko.applyBindings(conversation);
 
-  /*conversation.scrollMainThread();*/
+  /*conversation.scrollMainThread();
 
-  $(".nano").nanoScroller();
+  $(".nano").nanoScroller();*/
 
   $('#main-thread-new-message').focus();
   socket.emit('open_conversation', { conversationId: conversation.id });

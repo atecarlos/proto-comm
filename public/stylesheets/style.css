@@ -1,3 +1,7 @@
+body{
+  font-size:12px;
+}
+
 .login{
 	margin:20% auto 0;
 	position: relative;
@@ -7,218 +11,42 @@
 	text-align:center;
 }
 
-#main-thread, #sub-threads
+.conversation
 { 
   overflow-x: hidden;
   overflow-y: auto;
 }
-#main-thread, #sub-threads, .nano
+
+.desktop
+{
+  background-color: #888888;
+  padding: 20px;
+}
+
+.conversation
+{
+  background-color: #FFFFFF;
+  border: 2px solid #000000;
+  padding: 7px;
+}
+
+.conversation .nano
 {
   height: 655px;
 }
 
-#main-thread
-{
-  width: 99%;
-}
-
-#main-thread .span6
-{
-  width: 94%;
-}
-
-#main-thread-new-message
+.conversation textarea
 {
   font-size: 16px;
+  width: 95%;
 }
 
-.main-top-bar
+.messages .row
 {
-  padding-bottom: 6px;
-  margin: 10px 0;
-  border-bottom: 1px solid #EEE;
-  position:relative;
+  margin-left:0;
 }
-
-.main-top-bar .title h3
-{
-  margin:0;
-}
-
-#btn-new-thread
-{
-  width: 75px;
-}
-
-#newThread input
-{
-  width:95%;
-}
-
-.left-side, .right-side
-{
-  position:relative;
-}
-
-.tip
-{
-  position:absolute;
-}
-
-.default-tips .first
-{
-  position:absolute;
-  top: 15%;
-  left: 32%; 
-  font-size: 20px; 
-}
-
-.default-tips p
-{
-  font-size: 22px;
-  text-align: center;
-  line-height: 30px;
-}
-
-
-.left-side .tip
-{
-  width:70%;
-}
-
-.right-side .top.tip
-{
-  margin-left: 45px;
-}
-
-.middle.tip
-{
-  top: 40%;
-}
-
-.bottom.tip
-{
-  top:75%;
-}
-
-.tip p
-{
-  font-size: 18px;
-  text-align: center;
-}
-
-.threads
-{
-  width:370px;
-}
-
-.thread-switcher
-{
-  float: right;
-  margin-top: 1%;
-}
-
-.thread-switcher .btn-group, .thread-switcher #btn-new-thread
-{
-  float:right;
-}
-
-.thread-switcher .btn-group
-{
-  margin-right: 10px;
-}
-
-.thread-switcher .caret
-{
-  margin-left: 10px;
-}
-
-.thread-switcher .dropdown-toggle .unread-counter
-{
-  margin-left: 10px;
-}
-
-.thread-switcher .dropdown-menu a
-{
-  padding: 3px 16px;
-}
-
-.thread-switcher .dropdown-menu .title
-{
-  width:80%;
-  display: inline-block;
-  overflow: hidden;
-  white-space: pre-line;
-  float:left;
-}
-
-.thread-switcher .dropdown-menu .unread-counter
-{
-  float: right;
-}
-
-.thread-switcher .dropdown-menu
-{
-  width: 100%;
-}
-
-.well.thread
-{
-  background-color: transparent;
-  position: relative;
-}
-
-.thread .top
-{
-  max-height: 40px;
-  overflow: hidden;
-  padding:0 19px 8px;
-}
-
-.thread .header
-{
-  cursor: pointer;
-  width:70%;
-}
-
-.thread .actions
-{
-  position: absolute;
-  right:0;
-  top:0;
-  padding: 5px 5px 0 0;
-}
-
-.thread .unread-counter
-{
-  float:right;
-  margin-right: 10px;
-}
-
-.thread .thread-body-container
-{
-  width: 100%;
-  position: relative;
-}
-
-.thread-body-curtain {
-  position: absolute;
-  top:0;
-  z-index: 2;
-  height: 10px;
-  width:100%;
-  margin: 0;
-  background: transparent url('../images/std-grad-18.png') repeat-x scroll 0 100%;
-}
-.thread .thread-body
-{ 
-  max-height: 270px;
-  width: 100%;
-}
-
 .message
 {
-  padding-bottom: 7px;
   margin-bottom: 7px;
   border-bottom: 1px solid #EEE;
 }
@@ -244,8 +72,7 @@
   margin: 9px 0;
 }
 
-.thread input
+.film-strip
 {
-  margin-top: 9px;
-  margin-bottom: 0;
+  background-color: #3399FF;
 }

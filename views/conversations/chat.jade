@@ -1,17 +1,19 @@
-div.span7.left-side
-		div.nano
-			div#main-thread.content
-				div.messages(data-bind="foreach: messages, visible: hasMessages")
-					div.message
-						div.row
-							div.span6
-								div.username.muted(data-bind="text:username")
-								div.timestamp.muted(data-bind="text:timestamp")
-						div.row
-							div.span6(data-bind="text:content")
-		div.row
-			div.span6
-				textarea#main-thread-new-message.span6(rows=3, type="text", placeholder="Enter your message here", data-bind="value: newMessage, valueUpdate: 'afterkeydown', event: { keypress: sendMessage }")
+div.desktop
+	div.conversations.row-fluid
+		div.conversation.span4
+				div.nano
+					div.content
+						div.messages(data-bind="foreach: messages, visible: hasMessages")
+							div.message.row
+								div.row
+									div.span9.muted(data-bind="text:username")
+									div.span3.muted(data-bind="text:timestamp")
+								div
+									div(data-bind="text:content")
+				div.text-input
+					textarea(rows=3, placeholder="Enter your message here", data-bind="value: newMessage, valueUpdate: 'afterkeydown', event: { keypress: sendMessage }")
+	div.row.film-strip
+		span strip
 
 input#data(type="hidden")(value=conversation)
 
