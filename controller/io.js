@@ -51,16 +51,16 @@ exports.openConversation = function(socket, data){
     tracker.addUserToConversation(socket.id, data.conversationId);
 }
 
-exports.createConversation = function(socket, data, socketsCollection){
-
+exports.createConversation = function(socket, data){
     var conversation = new Conversation();
     conversation.topic = data.topic;
     conversation.createdBy = socket.handshake.session.user.name;
-    conversation.threads.push(mainThread);
     conversation.save();
+    tracker.addUserToConversation(socket.id, conversation.id);
 
-    emit(data.conversationId, socketsCollection, 'conversation_added', 
-        { _id: thread.id, topic: thread.topic, createdBy: thread.createdBy });
+    var dataToEmit = { _id: conversation.id, topic: conversation.topic, createdBy: conversation.createdBy };
+    socket.emit('conversation_added', dataToEmit);
+    socket.broadcast.emit('conversation_added', dataToEmit);
 }
 
 /*exports.toggleThread = function(socket, data){

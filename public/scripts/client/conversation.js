@@ -58,6 +58,8 @@ function createConversation(data) {
     addMessage(message);
   }
 
+  self.focused = ko.observable(false);
+
   /*
   self.unreadCounter = ko.observable(0);
 
@@ -87,8 +89,6 @@ function createConversation(data) {
     socket.emit('dismiss_thread', { threadId: self.id, conversationId: conversation.id, flag: self.dismissed() });
     adjustScrolling();
   };
-
-  self.focused = ko.observable(false);
 
   self.menuClick = function (){
     if(self.dismissed()){

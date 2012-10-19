@@ -72,7 +72,7 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.on('create_conversation', function(data){
-    ioController.createConversation(socket, data, io.sockets);
+    ioController.createConversation(socket, data);
   });
 
   /*socket.on('toggle_thread', function(data){

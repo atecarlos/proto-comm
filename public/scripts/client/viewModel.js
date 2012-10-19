@@ -1,7 +1,7 @@
 function createViewModel(data, preferences) {
   var self = {};
   
-  // self.newConversation = ko.observable('');
+  self.newConversationTopic = ko.observable('');
   
   self.conversations = ko.observableArray([]);
 
@@ -9,11 +9,12 @@ function createViewModel(data, preferences) {
     self.conversations.push(createConversation(data[i]));
   }
 
-  /*self.addNewConversation = function(data, event) {
+  self.addNewConversation = function(data, event) {
     var keyCode = (event.which ? event.which : event.keyCode);
     if (keyCode === 13) {
       addConversation();
       self.toggleNewConversation();
+      self.newConversationTopic('');
       return false;
     } else {
       return true;
@@ -26,41 +27,27 @@ function createViewModel(data, preferences) {
   }
 
   function addConversation() {
-    socket.emit('create_conversation', { topic: self.newConversation(), conversationId: self.id });
+    socket.emit('create_conversation', { topic: self.newConversationTopic(), conversationId: self.id });
   };
 
   socket.on('conversation_added', function(data){
-    var conversation = createConversation(data, undefined, self);
+    var conversation = createConversation(data);
     self.conversations.push(conversation);
-    self.newConversation('');
-    // scrollSubConversations();
     conversation.focused(true);
   });
-
-  function scrollSubConversations() {
-    $('#sub-conversations').scrollTop($('#sub-conversations > .conversations').height())
-  };*/
 
   socket.on('receive_message', function(data) {
     ko.utils.arrayForEach(self.conversations(), function(conversation){
       if(data.conversationId === conversation.id){
         conversation.receiveMessage(data);
-        adjustScrolling();
+        self.adjustScrolling();
       }
     });
   });
 
-  function adjustScrolling(){
-    $(".nano").nanoScroller();
+  self.adjustScrolling = function (){
+    $(".nano").nanoScroller({ scroll: 'bottom' });
   }
-
-  /*self.unreadCounter = ko.computed(function (){
-    var total = 0;
-    ko.utils.arrayForEach(self.conversations(), function(conversation){
-      total += conversation.unreadCounter();
-    });
-    return total;
-  });*/
 
   return self;
 }

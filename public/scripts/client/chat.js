@@ -9,9 +9,5 @@ $(document).ready(function(){
 
   ko.applyBindings(viewModel);
 
-  /*conversation.scrollMainThread();
-
-  $(".nano").nanoScroller();*/
-
-  $('#main-thread-new-message').focus();
+  viewModel.adjustScrolling();
 });
