@@ -29,18 +29,14 @@ exports.createConversation = function(req, res){
 }
 
 exports.readConversation = function(req, res){
-	var conversation = Conversation.findById(req.params.id, function(err, conversation){
-		var userPreferences;
-		Preference.find({ 'userId': req.session.user.id, 'conversationId':conversation._id }, function(err, preferences){
-			res.render('conversations/chat', { title: 'chat',
-    						 		conversation: JSON.stringify(conversation),
-    						 		preferences: JSON.stringify(preferences) });
-		});
+	Conversation.find({}, function(err, conversations){
+		res.render('conversations/chat', { title: 'chat',
+    				conversations: JSON.stringify(conversations) });
 	});
 }
 
 exports.removeConversation = function(req, res){
-	var conversation = Conversation.findById(req.params.id, function(err, conversation){
+	Conversation.findById(req.params.id, function(err, conversation){
 		conversation.remove(function (){
 			res.redirect('/conversations');
 		});

@@ -5,14 +5,13 @@ $(document).ready(function(){
   var preferences = createPreference(preferencesData);*/
     
   var data = JSON.parse($('#data').val());
-  var conversation = createConversation(data);
+  var viewModel = createViewModel(data);
 
-  ko.applyBindings(conversation);
+  ko.applyBindings(viewModel);
 
   /*conversation.scrollMainThread();
 
   $(".nano").nanoScroller();*/
 
   $('#main-thread-new-message').focus();
-  socket.emit('open_conversation', { conversationId: conversation.id });
 });

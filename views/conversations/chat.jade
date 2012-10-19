@@ -1,13 +1,13 @@
 div.desktop
-	div.conversations.row-fluid
+	div.conversations.row-fluid(data-bind="foreach: conversations")
 		div.conversation.span4
 				div.nano
 					div.content
 						div.messages(data-bind="foreach: messages, visible: hasMessages")
 							div.message.row
 								div.row
-									div.span9.muted(data-bind="text:username")
-									div.span3.muted(data-bind="text:timestamp")
+									div.username.muted(data-bind="text:username")
+									div.timestamp.muted(data-bind="text:timestamp")
 								div
 									div(data-bind="text:content")
 				div.text-input
@@ -15,7 +15,7 @@ div.desktop
 	div.row.film-strip
 		span strip
 
-input#data(type="hidden")(value=conversation)
+input#data(type="hidden")(value=conversations)
 
 script(type="text/javascript", src="/scripts/lib/jquery.js")
 script(type="text/javascript", src="/scripts/lib/jquery.nanoscroller.min.js")
@@ -24,4 +24,5 @@ script(type="text/javascript", src="/scripts/lib/knockout.js")
 script(type="text/javascript", src="/socket.io/socket.io.js")
 script(type="text/javascript", src="/scripts/client/message.js")
 script(type="text/javascript", src="/scripts/client/conversation.js")
+script(type="text/javascript", src="/scripts/client/viewModel.js")
 script(type="text/javascript", src="/scripts/client/chat.js")

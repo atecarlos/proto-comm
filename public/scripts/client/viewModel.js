@@ -1,16 +1,15 @@
 function createViewModel(data, preferences) {
   var self = {};
   
-  self.newConversation = ko.observable('');
+  // self.newConversation = ko.observable('');
   
   self.conversations = ko.observableArray([]);
 
-  for(var i = 1; i < data.conversations.length; i++){
-    var preference = preferences.getPreferenceFor(data.conversations[i]._id);
-    self.conversations.push(createConversation(data.conversations[i], preference, self));
+  for(var i = 0; i < data.length; i++){
+    self.conversations.push(createConversation(data[i]));
   }
 
-  self.addNewConversation = function(data, event) {
+  /*self.addNewConversation = function(data, event) {
     var keyCode = (event.which ? event.which : event.keyCode);
     if (keyCode === 13) {
       addConversation();
@@ -38,21 +37,22 @@ function createViewModel(data, preferences) {
     conversation.focused(true);
   });
 
-  /*function scrollSubConversations() {
+  function scrollSubConversations() {
     $('#sub-conversations').scrollTop($('#sub-conversations > .conversations').height())
   };*/
 
   socket.on('receive_message', function(data) {
-    if(data.conversationId == self.mainConversation.id){
-      self.mainConversation.receiveMessage(data);
-    }else{
-        ko.utils.arrayForEach(self.conversations(), function(conversation){
-          if(data.conversationId === conversation.id){
-            conversation.receiveMessage(data);
-          }
-      });
-    }
+    ko.utils.arrayForEach(self.conversations(), function(conversation){
+      if(data.conversationId === conversation.id){
+        conversation.receiveMessage(data);
+        adjustScrolling();
+      }
+    });
   });
+
+  function adjustScrolling(){
+    $(".nano").nanoScroller();
+  }
 
   /*self.unreadCounter = ko.computed(function (){
     var total = 0;

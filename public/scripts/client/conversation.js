@@ -56,12 +56,7 @@ function createConversation(data) {
     }*/
 
     addMessage(message);
-    adjustScrolling();
   }
-
-  socket.on('receive_message', function(data) {
-    self.receiveMessage(data);
-  });
 
   /*
   self.unreadCounter = ko.observable(0);
@@ -138,10 +133,8 @@ function createConversation(data) {
       return self.messages.slice(length - 4, length);
     }
   });*/
-
-  function adjustScrolling(){
-    $(".nano").nanoScroller();
-  }
+  
+  socket.emit('open_conversation', { conversationId: self.id });
 
   return self;
 };
