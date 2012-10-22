@@ -13,32 +13,16 @@ exports.log_in = function(req, res){
 };
 
 exports.readConversations = function(req, res){
-	Conversation.find(function(err, conversations){
-		res.render('conversations', { conversations: conversations,
-									  title: 'conversations'});
-	});
-}
-
-exports.createConversation = function(req, res){
-	var conversation = new Conversation();
-	conversation.topic = req.body.topic;
-	conversation.createdBy = req.session.user.name;
-	conversation.save();
-
-	res.redirect('/conversations/' + conversation.id);
-}
-
-exports.readConversation = function(req, res){
 	Conversation.find({}, function(err, conversations){
-		res.render('conversations/chat', { title: 'chat',
+		res.render('conversations', { title: 'chat',
     				conversations: JSON.stringify(conversations) });
 	});
 }
 
-exports.removeConversation = function(req, res){
+/*exports.removeConversation = function(req, res){
 	Conversation.findById(req.params.id, function(err, conversation){
 		conversation.remove(function (){
 			res.redirect('/conversations');
 		});
 	});
-};
+};*/

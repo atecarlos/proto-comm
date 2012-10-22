@@ -46,8 +46,6 @@ app.get('/conversations', routes.readConversations);
 
 app.post('/conversations', routes.createConversation);
 
-app.get('/conversations/:id', routes.readConversation);
-
 app.get('/conversations/:id/remove', routes.removeConversation);
 
 // needed for heroku
