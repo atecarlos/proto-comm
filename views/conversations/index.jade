@@ -7,8 +7,8 @@ div#newConversation.modal.hide.fade.in(style="display: none")
 						input.span4(type="text", data-bind="value: newConversationTopic, valueUpdate: 'afterkeydown', event: { keypress: addNewConversation }")
 			div.modal-footer
 				button.btn(data-dismiss="modal") Cancel
-div.desktop
-	div.conversations.row-fluid(data-bind="foreach: conversations")
+div.desktop(data-bind="with: desktop")
+	div.conversations.row-fluid(data-bind="foreach: active")
 		div.conversation.span4
 				div.nano
 					div.content
@@ -22,9 +22,20 @@ div.desktop
 				div.text-input
 					textarea(rows=3, placeholder="Enter your message here", data-bind="value: newMessage, valueUpdate: 'afterkeydown', hasfocus: focused, event: { keypress: sendMessage }")
 	div.row.film-strip
-		button.btn(type="button", data-bind="event: { click: toggleNewConversation }") Add
+		ul(data-bind="foreach: strip")
+			li(data-bind="text: topic")
+
+	button.btn(type="button", data-bind="event: { click: $parent.toggleNewConversation }") Add
+
+div.conversations
+	ul(data-bind="foreach: conversations")
+		li
+			a(data-bind="text: topic, event: { click: $root.desktop.addToActive }", href="#") 
+			a(href="#", data-bind="event: { click: $root.desktop.addToStrip }") Add to strip
+			a(href="#", data-bind="event: { click: $root.desktop.removeFromStrip }") Remove from strip
 
 input#data(type="hidden")(value=conversations)
+input#desktop(type="hidden")(value=desktop);
 
 script(type="text/javascript", src="/scripts/lib/jquery.js")
 script(type="text/javascript", src="/scripts/lib/jquery.nanoscroller.min.js")
@@ -33,5 +44,6 @@ script(type="text/javascript", src="/scripts/lib/knockout.js")
 script(type="text/javascript", src="/socket.io/socket.io.js")
 script(type="text/javascript", src="/scripts/client/message.js")
 script(type="text/javascript", src="/scripts/client/conversation.js")
+script(type="text/javascript", src="/scripts/client/desktop.js")
 script(type="text/javascript", src="/scripts/client/viewModel.js")
 script(type="text/javascript", src="/scripts/client/conversations.js")

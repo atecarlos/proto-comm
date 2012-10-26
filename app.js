@@ -7,6 +7,8 @@ var express = require('express')
   , routes = require('./routes')
   , sessionStore = new express.session.MemoryStore()
   , ioController = require('./controller/io')
+  , desktopIo = require('./controller/desktop_io')
+  , conversationIo = require('./controller/conversation_io')
   , app = express.createServer()
   , io = require('socket.io').listen(app)
   , mongo = require('mongoose');
@@ -62,27 +64,22 @@ io.set('authorization', function (data, accept) {
 io.sockets.on('connection', function (socket) {
   
   socket.on('send_message', function(data) {
-    ioController.sendMessage(socket, data, io.sockets);
-  });
-
-  socket.on('open_conversation', function(data){
-    ioController.openConversation(socket, data);
+    conversationIo.sendMessage(socket, data);
   });
 
   socket.on('create_conversation', function(data){
-    ioController.createConversation(socket, data);
+    conversationIo.createConversation(socket, data);
   });
 
-  /*socket.on('toggle_thread', function(data){
-    ioController.toggleThread(socket, data);
+  socket.on('add_to_strip', function(data){
+    desktopIo.addToStrip(socket, data);
   });
 
-  socket.on('dismiss_thread', function(data){
-    ioController.dismissThread(socket, data);
-  });*/
-
-  socket.on('disconnect', function(){
-    ioController.disconnect(socket);
+  socket.on('remove_from_strip', function(data){
+    desktopIo.removeFromStrip(socket, data);
   });
 
+  socket.on('add_to_active', function(data){
+    desktopIo.addToActive(socket, data);
+  });
 });
