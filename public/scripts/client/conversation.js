@@ -15,14 +15,18 @@ function createConversation(data) {
     }
   }
 
+  self.lastMessages = ko.computed(function () {
+    if(self.messages().length - 2 >= 0){
+      return self.messages.slice(self.messages().length - 2);  
+    }else{
+      return self.messages();
+    }
+  });
+
   function addMessage(data){
     var msg = createMessage(data);
     self.messages.push(msg);
   }
-
-  self.hasMessages = ko.computed(function() {
-    return self.messages().length > 0;
-  });
 
   self.sendMessage = function (data, event) {
     var keyCode = (event.which ? event.which : event.keyCode);
@@ -49,8 +53,6 @@ function createConversation(data) {
   self.receiveMessage = function(message){
     addMessage(message);
   }
-
-  self.focused = ko.observable(false);
 
   return self;
 };

@@ -2,7 +2,9 @@ var Desktop = require('../models/desktop');
 
 exports.addToStrip = function(socket, data){
     updateDesktop(socket, function(desktop){
-        desktop.strip.push(data.conversationId);
+        if(desktop.strip.indexOf(data.conversationId) < 0){
+            desktop.strip.push(data.conversationId);            
+        }
     });
 }
 
@@ -15,7 +17,9 @@ exports.removeFromStrip = function(socket, data){
 
 exports.addToActive = function(socket, data){
     updateDesktop(socket, function(desktop){
-        desktop.strip.push(data.conversationId);
+        if(desktop.active.indexOf(data.conversationId) < 0){
+            desktop.active.push(data.conversationId);
+        }
     });
 }
 

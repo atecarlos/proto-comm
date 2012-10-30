@@ -14,23 +14,16 @@ exports.log_in = function(req, res){
 
 exports.readConversations = function(req, res){
 	Conversation.find({}, function(err, conversations){
-		Desktop.findOne({ userId: req.session.user.id }).populate('strip').exec(function(err, desktop){
-			if(desktop == null){
-				desktop = new Desktop();
-				desktop.userId = req.session.user.id;
-				desktop.save();
-			}
-			res.render('conversations', { title: 'desktop',
-    				conversations: JSON.stringify(conversations),
-    				desktop: JSON.stringify(desktop) });
-		});
+		Desktop.findOne({ userId: req.session.user.id },
+				function(err, desktop){
+					if(desktop == null){
+						desktop = new Desktop();
+						desktop.userId = req.session.user.id;
+						desktop.save();
+					}
+					res.render('conversations', { title: 'desktop',
+		    				conversations: JSON.stringify(conversations),
+		    				desktop: JSON.stringify(desktop) });
+				});
 	});
 }
-
-/*exports.removeConversation = function(req, res){
-	Conversation.findById(req.params.id, function(err, conversation){
-		conversation.remove(function (){
-			res.redirect('/conversations');
-		});
-	});
-};*/

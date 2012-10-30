@@ -1,8 +1,8 @@
 var mongo = require('mongoose');
 
 var schema = new mongo.Schema({
-	strip: [{ type: mongo.Schema.Types.ObjectId, ref:'Conversation' }],
-	active: [{ type: mongo.Schema.Types.ObjectId, ref:'Conversation' }],
+	strip: [ mongo.Schema.Types.ObjectId ],
+	active: [ mongo.Schema.Types.ObjectId ],
 	userId: Number,
 });
 

@@ -1,7 +1,5 @@
 function createViewModel(data, desktopData) {
   var self = {};
-  
-  self.desktop = createDesktop(desktopData);
 
   self.newConversationTopic = ko.observable('');
   
@@ -9,6 +7,8 @@ function createViewModel(data, desktopData) {
   for(var i = 0; i < data.length; i++){
     self.conversations.push(createConversation(data[i]));
   }
+
+  self.desktop = createDesktop(desktopData, self.conversations());
 
   self.addNewConversation = function(data, event) {
     var keyCode = (event.which ? event.which : event.keyCode);
@@ -27,6 +27,10 @@ function createViewModel(data, desktopData) {
     setTimeout(function () { $('#newConversation input').focus(); }, 400);
   }
 
+  self.toggleAllConversations = function () {
+    $('#allConversations').modal('toggle');
+  }
+
   function addConversation() {
     socket.emit('create_conversation', { topic: self.newConversationTopic(), conversationId: self.id });
   };
@@ -34,7 +38,6 @@ function createViewModel(data, desktopData) {
   socket.on('conversation_added', function(data){
     var conversation = createConversation(data);
     self.conversations.push(conversation);
-    conversation.focused(true);
   });
 
   socket.on('receive_message', function(data) {

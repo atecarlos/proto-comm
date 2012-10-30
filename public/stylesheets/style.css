@@ -11,6 +11,20 @@ body{
 	text-align:center;
 }
 
+.conversation-blocks{
+  padding:20px;
+}
+
+.conversation-blocks div.span4{
+  border-radius:8px;
+  border:1px solid #000;
+  padding: 0 4px 4px 4px;
+}
+
+.conversation-blocks div.span4 h3{
+  border-bottom: 1px solid #ccc;
+}
+
 .conversation
 { 
   overflow-x: hidden;
@@ -19,7 +33,6 @@ body{
 
 .desktop
 {
-  background-color: #888888;
   padding: 20px;
 }
 
@@ -32,7 +45,7 @@ body{
 
 .conversation .nano
 {
-  height: 655px;
+  height: 500px;
 }
 
 .conversation textarea
@@ -72,7 +85,10 @@ body{
   margin: 9px 0;
 }
 
-.film-strip
-{
-  background-color: #3399FF;
+.film-strip .item{
+    border-radius: 10px;
+    border:solid 1px #ccc; 
+    width:100px;
+    height:100px;
+    text-align: center;
 }
