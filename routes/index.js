@@ -1,5 +1,4 @@
 var Conversation = require('../models/conversation'),
-    Message = require('../models/message'),
     users = require('../models/users'),
     Desktop = require('../models/desktop');
 

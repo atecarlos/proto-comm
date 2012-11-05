@@ -1,20 +1,12 @@
 function createDesktop(data, conversations){
   var self = {};
 
-  self.strip = ko.observableArray([]);
-  self.active = ko.observableArray([]);
+  self.conversations = ko.observableArray([]);
 
-  for(var i = 0; i < data.active.length; i++){
-    var activeConversation = getConversation(data.active[i]);
-    if(activeConversation){
-      self.active.push(activeConversation);
-    }
-  }
-
-  for(var j = 0; j < data.strip.length; j++){
-    var conversationInStrip = getConversation(data.strip[j]);
-    if(conversationInStrip){
-      self.strip.push(conversationInStrip);
+  for(var i = 0; i < data.conversations.length; i++){
+    var conversation = getConversation(data.conversations[i]);
+    if(conversation){
+      self.conversations.push(conversation);
     }
   }
 
@@ -26,22 +18,16 @@ function createDesktop(data, conversations){
     }
   }
 
-  self.addToStrip = function(conversation){
-    socket.emit('add_to_strip', { conversationId: conversation.id });
-    self.strip.push(conversation);
+  self.add = function(conversation){
+    socket.emit('add_to_desktop', { conversationId: conversation.id });
+    self.conversations.push(conversation);
   };
 
-  self.removeFromStrip = function(conversation){
-    socket.emit('remove_from_strip', { conversationId: conversation.id });
-    var index = self.strip.indexOf(conversation);
-    self.strip.splice(index, 1);
+  self.remove = function(conversation){
+    socket.emit('remove_from_desktop', { conversationId: conversation.id });
+    var index = self.conversations.indexOf(conversation);
+    self.conversations.splice(index, 1);
   };
-
-  self.addToActive = function(conversation){
-    self.addToStrip(conversation);
-  	socket.emit('add_to_active', { conversationId: conversation.id });
-    self.active.push(conversation);
-  }
 
   return self;
 }

@@ -71,15 +71,11 @@ io.sockets.on('connection', function (socket) {
     conversationIo.createConversation(socket, data);
   });
 
-  socket.on('add_to_strip', function(data){
-    desktopIo.addToStrip(socket, data);
+  socket.on('add_to_desktop', function(data){
+    desktopIo.add(socket, data);
   });
 
-  socket.on('remove_from_strip', function(data){
-    desktopIo.removeFromStrip(socket, data);
-  });
-
-  socket.on('add_to_active', function(data){
-    desktopIo.addToActive(socket, data);
+  socket.on('remove_from_desktop', function(data){
+    desktopIo.remove(socket, data);
   });
 });
