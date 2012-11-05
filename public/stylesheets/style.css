@@ -15,10 +15,16 @@ body{
   padding:20px;
 }
 
-.conversation-blocks div.span4{
+.conversation-blocks div.block{
   border-radius:8px;
   border:1px solid #000;
   padding: 0 4px 4px 4px;
+  width: 125px;
+  height: 125px;
+}
+
+.conversation-blocks div + div{
+  margin-left: 20px;
 }
 
 .conversation-blocks div.span4 h3{

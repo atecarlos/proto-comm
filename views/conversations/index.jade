@@ -12,15 +12,14 @@ div#allConversations.modal.hide.fade.in
 				a.close(data-dismiss="modal") x
 				h4 All conversations
 	div.conversation-blocks.row-fluid(data-bind="foreach: conversations")
-		div.span4
-			h3
+		div.pull-left.block
+			div
 				a(data-bind="text: topic, event: { click: $root.desktop.addToActive }", href="#") 
 			div(data-bind="foreach: lastMessages")
 				div.muted(data-bind="text: username")
 				div(data-bind="text:content")
 			div
 				a.pull-left(href="#", data-bind="event: { click: $root.desktop.addToStrip }") Add to strip
-				a.pull-right(href="#", data-bind="event: { click: $root.desktop.removeFromStrip }") Remove from strip
 
 div#newConversation.modal.hide.fade.in
 			div.modal-header
@@ -48,10 +47,11 @@ div.desktop(data-bind="with: desktop")
 					textarea(rows=3, placeholder="Enter your message here", data-bind="value: newMessage, valueUpdate: 'afterkeydown', event: { keypress: sendMessage }")
 
 	hr 
-	
+
 	div.film-strip(data-bind="foreach: strip")
 		div.item.pull-left
 			a(href="#", data-bind="text: topic")
+			a.pull-right(href="#", data-bind="event: { click: $parent.removeFromStrip }") Remove
 
 input#data(type="hidden")(value=conversations)
 input#desktop(type="hidden")(value=desktop);
