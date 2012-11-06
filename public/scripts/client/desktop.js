@@ -10,6 +10,21 @@ function createDesktop(data, conversations){
     }
   }
 
+  self.leftConversation = ko.observable(self.conversations()[0]);
+
+  self.hasLeftConversation = ko.computed(function(){
+    return self.leftConversation() !== undefined;
+  });
+
+  self.rightConversation = ko.computed(function() {
+    var leftIndex = self.conversations.indexOf(self.leftConversation());
+    return self.conversations()[leftIndex + 1];
+  });
+
+  self.hasRightConversation = ko.computed(function(){
+    return self.rightConversation() !== undefined;
+  });
+
   function getConversation(conversationId){
     for(var c = 0; c < conversations.length; c++){
       if(conversations[c].id == conversationId){
@@ -27,6 +42,10 @@ function createDesktop(data, conversations){
     socket.emit('remove_from_desktop', { conversationId: conversation.id });
     var index = self.conversations.indexOf(conversation);
     self.conversations.splice(index, 1);
+  };
+
+  self.changeView = function(leftConversation){
+    self.leftConversation(leftConversation);
   };
 
   return self;
