@@ -33,10 +33,6 @@ function createViewModel(data, desktopData) {
     setTimeout(function () { $('#newConversation input').focus(); }, 400);
   }
 
-  self.toggleAllConversations = function () {
-    $('#allConversations').modal('toggle');
-  }
-
   function addConversation() {
     socket.emit('create_conversation', { topic: self.newConversationTopic(), conversationId: self.id });
   };
@@ -59,6 +55,15 @@ function createViewModel(data, desktopData) {
   self.adjustScrolling = function (){
     $(".nano").nanoScroller({ scroll: 'bottom' });
   }
+
+  self.toggleAllConversations = function() {
+    $('#allConversations').modal('toggle');
+  };
+
+  self.openConversation = function(conversation){
+    self.toggleAllConversations();
+    self.desktop.addAndFocus(conversation);
+  };
 
   return self;
 }

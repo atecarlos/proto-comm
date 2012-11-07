@@ -20,7 +20,7 @@ div#allConversations.modal.hide.fade.in
 	div.conversation-blocks.row-fluid(data-bind="foreach: conversations")
 		div.pull-left.block
 			div
-				a(data-bind="text: topic, event: { click: $root.desktop.add }", href="#") 
+				a(data-bind="text: topic, event: { click: $root.openConversation }", href="#") 
 			div(data-bind="foreach: lastMessages")
 				div.muted(data-bind="text: username")
 				div(data-bind="text:content")
@@ -69,8 +69,8 @@ div.desktop(data-bind="with: desktop")
 
 	div.film-strip(data-bind="foreach: conversations")
 		div.item.pull-left
-			a(href="#", data-bind="text: topic, click: $parent.changeView")
-			a.pull-right(href="#", data-bind="event: { click: $parent.remove }") Remove
+			a(href="#", data-bind="text: topic, click: $parent.focus")
+			a.pull-right(href="#", data-bind="event: { click: $parent.remove }") X
 
 input#data(type="hidden")(value=conversations)
 input#desktop(type="hidden")(value=desktop);

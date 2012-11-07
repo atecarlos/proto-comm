@@ -37,10 +37,21 @@ function createDesktop(data, conversations){
     }
   }
 
+  function hasConversation(conversation){
+    return self.conversations.indexOf(conversation) >= 0;
+  }
+
   self.add = function(conversation){
-    socket.emit('add_to_desktop', { conversationId: conversation.id });
-    self.conversations.push(conversation);
+    if(!hasConversation(conversation)){
+      socket.emit('add_to_desktop', { conversationId: conversation.id });
+      self.conversations.push(conversation);
+    }
   };
+
+  self.addAndFocus = function(conversation){
+    self.add(conversation);
+    self.focus(conversation);
+  }
 
   self.remove = function(conversation){
     socket.emit('remove_from_desktop', { conversationId: conversation.id });
@@ -48,7 +59,7 @@ function createDesktop(data, conversations){
     self.conversations.splice(index, 1);
   };
 
-  self.changeView = function(leftConversation){
+  self.focus = function(leftConversation){
     self.leftIndex(self.conversations.indexOf(leftConversation));
   };
 
