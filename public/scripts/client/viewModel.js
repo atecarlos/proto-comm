@@ -10,6 +10,12 @@ function createViewModel(data, desktopData) {
 
   self.desktop = createDesktop(desktopData, self.conversations());
 
+  self.otherConversations = ko.computed(function(){
+    return self.conversations().filter(function(el){
+      return self.desktop.conversations().indexOf(el) < 0;
+    });
+  });
+
   self.addNewConversation = function(data, event) {
     var keyCode = (event.which ? event.which : event.keyCode);
     if (keyCode === 13) {

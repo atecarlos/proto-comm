@@ -6,6 +6,12 @@ div.navbar
 				a(href="#", data-bind="event: { click: toggleNewConversation }") Add
 			li
 				a(href="#", data-bind="event: { click: toggleAllConversations }") Show All
+			li.dropdown
+				a.dropdown-toggle(href="#", data-toggle="dropdown") Other conversations
+					b.caret
+				ul.dropdown-menu(data-bind="foreach: otherConversations")
+					li
+						a(href="#", data-bind="text: topic")
 
 div#allConversations.modal.hide.fade.in
 	div.modal-header
