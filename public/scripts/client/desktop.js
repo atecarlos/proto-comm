@@ -10,7 +10,11 @@ function createDesktop(data, conversations){
     }
   }
 
-  self.leftConversation = ko.observable(self.conversations()[0]);
+  self.leftIndex = ko.observable(0);
+
+  self.leftConversation = ko.computed(function(){
+    return self.conversations()[self.leftIndex()];
+  });
 
   self.hasLeftConversation = ko.computed(function(){
     return self.leftConversation() !== undefined;
@@ -45,7 +49,7 @@ function createDesktop(data, conversations){
   };
 
   self.changeView = function(leftConversation){
-    self.leftConversation(leftConversation);
+    self.leftIndex(self.conversations.indexOf(leftConversation));
   };
 
   return self;

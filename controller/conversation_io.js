@@ -29,6 +29,6 @@ exports.createConversation = function(socket, data){
     conversation.save(function(err){
         var dataToEmit = { _id: conversation.id, topic: conversation.topic, createdBy: conversation.createdBy };
         socket.emit('conversation_added', dataToEmit);
-        socket.broadcast.emit('new_conversation_added', dataToEmit);
+        socket.broadcast.emit('conversation_added', dataToEmit);
     });
 }

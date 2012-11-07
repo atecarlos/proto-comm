@@ -35,18 +35,10 @@ function createViewModel(data, desktopData) {
     socket.emit('create_conversation', { topic: self.newConversationTopic(), conversationId: self.id });
   };
 
-  // By other users
-  socket.on('new_conversation_added', function(data){
-    var conversation = createConversation(data);
-    self.conversations.push(conversation);
-    self.desktop.addToStrip(conversation);
-  });
-
-  // By current user
   socket.on('conversation_added', function(data){
     var conversation = createConversation(data);
     self.conversations.push(conversation);
-    self.desktop.addToActive(conversation);
+    self.desktop.add(conversation);
   });
 
   socket.on('receive_message', function(data) {
