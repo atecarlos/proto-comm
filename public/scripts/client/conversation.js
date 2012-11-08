@@ -9,6 +9,10 @@ function createConversation(data) {
   
   self.messages = ko.observableArray([]);
 
+  self.focused = ko.observable(false);
+
+  self.unreadCounter = ko.observable(0);
+
   if(data.messages){
     for(var i = 0; i < data.messages.length; i++){
       addMessage(data.messages[i]);
@@ -52,6 +56,9 @@ function createConversation(data) {
 
   self.receiveMessage = function(message){
     addMessage(message);
+    if(!self.focused()){
+      self.unreadCounter(self.unreadCounter() + 1);
+    }
   }
 
   return self;
