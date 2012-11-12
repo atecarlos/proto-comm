@@ -10,12 +10,6 @@ function createViewModel(data, desktopData) {
 
   self.desktop = createDesktop(desktopData, self.conversations());
 
-  self.otherConversations = ko.computed(function(){
-    return self.conversations().filter(function(el){
-      return self.desktop.conversations().indexOf(el) < 0;
-    });
-  });
-
   self.addNewConversation = function(data, event) {
     var keyCode = (event.which ? event.which : event.keyCode);
     if (keyCode === 13) {
@@ -56,14 +50,28 @@ function createViewModel(data, desktopData) {
     $(".nano").nanoScroller({ scroll: 'bottom' });
   }
 
-  self.toggleAllConversations = function() {
-    $('#allConversations').modal('toggle');
-  };
+  self.showAll = {
+    toggle: function(){
+      $('#allConversations').modal('toggle');
+    },
 
-  self.openConversation = function(conversation){
-    self.toggleAllConversations();
-    self.desktop.addAndFocus(conversation);
-  };
+    open: function(conversation){
+      self.showAll.toggle();
+      self.desktop.addAndFocus(conversation);
+    }
+  }
+
+  self.otherConversations = {
+    open: function (conversation){
+      self.desktop.addAndFocus(conversation);
+    },
+
+    list: ko.computed(function(){
+      return self.conversations().filter(function(el){
+        return self.desktop.conversations().indexOf(el) < 0;
+      });
+    })
+  }
 
   return self;
 }

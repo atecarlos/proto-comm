@@ -5,13 +5,13 @@ div.navbar
 			li
 				a(href="#", data-bind="event: { click: toggleNewConversation }") Add
 			li
-				a(href="#", data-bind="event: { click: toggleAllConversations }") Show All
+				a(href="#", data-bind="event: { click: showAll.toggle }") Show All
 			li.dropdown
 				a.dropdown-toggle(href="#", data-toggle="dropdown") Other conversations
 					b.caret
-				ul.dropdown-menu(data-bind="foreach: otherConversations")
+				ul.dropdown-menu(data-bind="foreach: otherConversations.list")
 					li
-						a(href="#")
+						a(href="#", data-bind="event: { click: $parent.otherConversations.open }")
 							span(data-bind="text: topic")
 							span.badge(data-bind="text: unreadCounter, visible: showUnreadCounter")
 
@@ -22,7 +22,7 @@ div#allConversations.modal.hide.fade.in
 	div.conversation-blocks.row-fluid(data-bind="foreach: conversations")
 		div.pull-left.block
 			div
-				a(data-bind="text: topic, event: { click: $root.openConversation }", href="#") 
+				a(data-bind="text: topic, event: { click: $root.showAll.open }", href="#") 
 			div(data-bind="foreach: lastMessages")
 				div.muted(data-bind="text: username")
 				div(data-bind="text:content")
