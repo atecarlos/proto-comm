@@ -11,8 +11,9 @@ div.navbar
 					b.caret
 				ul.dropdown-menu(data-bind="foreach: otherConversations")
 					li
-						a(href="#", data-bind="text: topic")
-							span.badge(data-bind="text: unreadCounter")
+						a(href="#")
+							span(data-bind="text: topic")
+							span.badge(data-bind="text: unreadCounter, visible: showUnreadCounter")
 
 div#allConversations.modal.hide.fade.in
 	div.modal-header
