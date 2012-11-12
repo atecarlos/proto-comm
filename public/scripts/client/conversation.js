@@ -61,5 +61,9 @@ function createConversation(data) {
     }
   }
 
+  self.showUnreadCounter = ko.computed(function(){
+    return self.unreadCounter() > 0;
+  });
+
   return self;
 };
