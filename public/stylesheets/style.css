@@ -99,14 +99,11 @@ body{
     text-align: center;
 }
 
+.film-strip .item.highlight{
+  background-color: #FFFFCC;
+}
+
 .item + .item
 {
   margin-left: 10px;
-}
-
-.film-strip .ui-state-highlight
-{ 
-  width: 100px;
-  float: left;
-  display: block;
 }

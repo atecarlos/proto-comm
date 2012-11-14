@@ -70,7 +70,7 @@ div.desktop(data-bind="with: desktop")
 	hr 
 
 	div.film-strip(data-bind="foreach: conversations")
-		div.item.pull-left
+		div.item.pull-left(data-bind="css: { highlight: focused }")
 			a(href="#", data-bind="text: topic, click: $parent.focus")
 			a.pull-right(href="#", data-bind="event: { click: $parent.remove }") X
 			div(data-bind="visible: showUnreadCounter")
