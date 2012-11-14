@@ -103,3 +103,10 @@ body{
 {
   margin-left: 10px;
 }
+
+.film-strip .ui-state-highlight
+{ 
+  width: 100px;
+  float: left;
+  display: block;
+}

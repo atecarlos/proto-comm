@@ -21,3 +21,11 @@ function updateDesktop(socket, update){
         desktop.save();
     });
 }
+
+exports.changeIndex = function(socket, data){
+    updateDesktop(socket, function(desktop) {
+        var conversation = desktop.conversations[data.startIndex];
+        desktop.conversations.splice(data.startIndex, 1);
+        desktop.conversations.splice(data.stopIndex, 0, conversation);
+    });
+}

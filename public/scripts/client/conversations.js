@@ -9,4 +9,5 @@ $(document).ready(function(){
   ko.applyBindings(viewModel);
 
   viewModel.adjustScrolling();
+  viewModel.desktop.setupSorting();
 });

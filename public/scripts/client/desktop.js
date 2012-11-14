@@ -79,5 +79,28 @@ function createDesktop(data, conversations){
     });
   }
 
+  self.setupSorting = function(){
+    var currentSort = { startIndex: -1, stopIndex: -1 };
+
+    $('.film-strip').sortable({
+      start: function(event, ui){
+        currentSort.startIndex = ui.item.index();
+      },
+      stop: function(event, ui){
+        currentSort.stopIndex = ui.item.index();
+        socket.emit('change_index', currentSort);
+        reorder();
+      }
+    });
+
+    function reorder(){
+      var conversation = self.conversations()[currentSort.startIndex];
+      self.conversations.splice(currentSort.startIndex, 1);
+      self.conversations.splice(currentSort.stopIndex, 0, conversation);
+    }
+
+    $('.film-strip').disableSelection();
+  }
+
   return self;
 }

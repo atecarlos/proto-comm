@@ -78,4 +78,8 @@ io.sockets.on('connection', function (socket) {
   socket.on('remove_from_desktop', function(data){
     desktopIo.remove(socket, data);
   });
+
+  socket.on('change_index', function(data){
+    desktopIo.changeIndex(socket, data);
+  });
 });
