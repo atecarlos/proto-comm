@@ -10,6 +10,7 @@ function createDesktop(data, conversations){
     }
   }
 
+  self.leftConversationIndex = ko.observable();
   self.leftConversation = ko.observable();
   self.rightConversation = ko.observable();
 
@@ -66,6 +67,7 @@ function createDesktop(data, conversations){
     socket.emit('remove_from_desktop', { conversationId: conversation.id });
     var index = self.conversations.indexOf(conversation);
     self.conversations.splice(index, 1);
+    setLeftAndRightConversation(self.leftConversation());
   };
 
   self.focus = function(leftConversation){
