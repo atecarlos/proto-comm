@@ -10,26 +10,23 @@ function createDesktop(data, conversations){
     }
   }
 
-  self.leftConversationIndex = ko.observable();
-  self.leftConversation = ko.observable();
-  self.rightConversation = ko.observable();
+  self.leftConversationIndex = ko.observable(0);
 
-  function setLeftAndRightConversation(leftConversation){
-    self.leftConversation(leftConversation);
-    self.leftConversation().focused(true);
-    self.leftConversation().unreadCounter(0);
+  self.leftConversation = ko.computed(function(){
+    var conversation = self.conversations()[self.leftConversationIndex()];
+    conversation.focused(true);
+    conversation.unreadCounter(0);
+    return conversation;
+  });
 
-    var leftConversationIndex = self.conversations.indexOf(leftConversation);
-    var rightConversation = self.conversations()[leftConversationIndex + 1];
-    self.rightConversation(rightConversation);
-    
-    if(self.rightConversation()){
-      self.rightConversation().focused(true);
-      self.rightConversation().unreadCounter(0);
+  self.rightConversation = ko.computed(function(){
+    var conversation = self.conversations()[self.leftConversationIndex() + 1];
+    if(conversation){
+      conversation.focused(true);
+      conversation.unreadCounter(0);  
     }
-  };
-
-  setLeftAndRightConversation(self.conversations()[0]);
+    return conversation;
+  });
 
   self.hasLeftConversation = ko.computed(function(){
     return self.leftConversation() !== undefined;
@@ -67,12 +64,11 @@ function createDesktop(data, conversations){
     socket.emit('remove_from_desktop', { conversationId: conversation.id });
     var index = self.conversations.indexOf(conversation);
     self.conversations.splice(index, 1);
-    setLeftAndRightConversation(self.leftConversation());
   };
 
   self.focus = function(leftConversation){
     clearFocus();
-    setLeftAndRightConversation(leftConversation);
+    self.leftConversationIndex(self.conversations.indexOf(leftConversation));
   };
 
   function clearFocus(){
@@ -91,6 +87,7 @@ function createDesktop(data, conversations){
       stop: function(event, ui){
         currentSort.stopIndex = ui.item.index();
         socket.emit('change_index', currentSort);
+        clearFocus();
         reorder();
       }
     });

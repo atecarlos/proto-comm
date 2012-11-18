@@ -61,17 +61,34 @@ function createViewModel(data, desktopData) {
     }
   }
 
-  self.otherConversations = {
-    open: function (conversation){
-      self.desktop.addAndFocus(conversation);
-    },
+  self.otherConversations = function(){
+    var other = this;
 
-    list: ko.computed(function(){
+    other.open = function (conversation){
+      self.desktop.addAndFocus(conversation);
+    };
+
+    other.list = ko.computed(function(){
       return self.conversations().filter(function(el){
         return self.desktop.conversations().indexOf(el) < 0;
       });
-    })
-  }
+    });
+
+    other.unreadCounter = ko.computed(function(){
+      var count = 0;
+      ko.utils.arrayForEach(self.conversations(), function(conversation){
+        count += conversation.unreadCounter();
+      });
+
+      return count;
+    });
+
+    other.showUnreadCounter = ko.computed(function(){
+      return other.unreadCounter() > 0;
+    });
+
+    return other;
+  }();
 
   return self;
 }

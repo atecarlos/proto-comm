@@ -8,6 +8,7 @@ div.navbar
 				a(href="#", data-bind="event: { click: showAll.toggle }") Show All
 			li.dropdown
 				a.dropdown-toggle(href="#", data-toggle="dropdown") Other conversations
+					span.badge(data-bind="text: otherConversations.unreadCounter, visible: otherConversations.showUnreadCounter")
 					b.caret
 				ul.dropdown-menu(data-bind="foreach: otherConversations.list")
 					li
