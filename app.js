@@ -48,6 +48,8 @@ app.get('/conversations/', routes.desktop);
 
 app.get('/conversations/all', routes.all);
 
+app.post('/conversations/:id/remove', routes.remove)
+
 // needed for heroku
 io.configure(function () { 
   io.set("transports", ["xhr-polling"]); 

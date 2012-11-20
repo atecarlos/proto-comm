@@ -32,3 +32,9 @@ exports.all = function(req, res){
 		res.render('conversations/all', { title: 'manage conversations', conversations: conversations });
 	});
 }
+
+exports.remove = function(req, res){
+	Conversation.remove( { _id: req.params.id }, function(err){
+		res.redirect('/conversations/all');
+	});
+}
