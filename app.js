@@ -40,15 +40,7 @@ var databaseUri = process.env.MONGOLAB_URI || 'mongodb://localhost/proto';
 mongo.connect(databaseUri);
 
 // Routes
-app.get('/', routes.home);
-
-app.post('/log-in', routes.log_in);
-
-app.get('/conversations/', routes.desktop);
-
-app.get('/conversations/all', routes.all);
-
-app.post('/conversations/:id/remove', routes.remove)
+routes.config(app);
 
 // needed for heroku
 io.configure(function () { 
