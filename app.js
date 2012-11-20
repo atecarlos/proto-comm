@@ -44,11 +44,9 @@ app.get('/', routes.home);
 
 app.post('/log-in', routes.log_in);
 
-app.get('/conversations', routes.readConversations);
+app.get('/conversations/', routes.desktop);
 
-app.post('/conversations', routes.createConversation);
-
-app.get('/conversations/:id/remove', routes.removeConversation);
+app.get('/conversations/all', routes.all);
 
 // needed for heroku
 io.configure(function () { 

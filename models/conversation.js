@@ -8,6 +8,14 @@ var schema = new mongo.Schema({
 	messages: [message.schema]
 });
 
+schema.virtual('lastMessages').get(function(){
+	var sortedMessages = this.messages.sort(function(a,b){
+		return b.timestamp > a.timestamp;
+	});
+
+	return sortedMessages.slice(0, 2);
+});
+
 module.exports = mongo.model('Conversation', schema);
 
 exports.schema = schema;

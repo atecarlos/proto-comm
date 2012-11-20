@@ -14,7 +14,6 @@ function createDesktop(data, conversations){
 
   self.leftConversation = ko.computed(function(){
     var conversation = self.conversations()[self.leftConversationIndex()];
-    conversation.focused(true);
     conversation.unreadCounter(0);
     return conversation;
   });
@@ -22,7 +21,6 @@ function createDesktop(data, conversations){
   self.rightConversation = ko.computed(function(){
     var conversation = self.conversations()[self.leftConversationIndex() + 1];
     if(conversation){
-      conversation.focused(true);
       conversation.unreadCounter(0);  
     }
     return conversation;
@@ -68,14 +66,24 @@ function createDesktop(data, conversations){
 
   self.focus = function(leftConversation){
     clearFocus();
-    self.leftConversationIndex(self.conversations.indexOf(leftConversation));
+
+    if(leftConversation){
+      self.leftConversationIndex(self.conversations.indexOf(leftConversation));
+    }
+
+    self.leftConversation().focused(true);
+    if(self.rightConversation()){
+      self.rightConversation().focused(true);
+    }
   };
 
   function clearFocus(){
     ko.utils.arrayForEach(self.conversations(), function(conversation){
       conversation.focused(false);
     });
-  }
+  };
+
+  self.focus();
 
   self.setupSorting = function(){
     var currentSort = { startIndex: -1, stopIndex: -1 };
@@ -89,6 +97,7 @@ function createDesktop(data, conversations){
         socket.emit('change_index', currentSort);
         clearFocus();
         reorder();
+        self.focus();
       }
     });
 
@@ -99,7 +108,7 @@ function createDesktop(data, conversations){
     }
 
     $('.film-strip').disableSelection();
-  }
+  };
 
   return self;
 }

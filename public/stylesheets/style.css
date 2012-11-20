@@ -11,6 +11,8 @@ body{
 	text-align:center;
 }
 
+/* Desktop */
+
 .conversation-blocks{
   padding:20px;
 }
@@ -106,4 +108,18 @@ body{
 .item + .item
 {
   margin-left: 10px;
+}
+
+/* end of desktop */
+
+/* Show All */
+
+.block{
+  border: solid 1px #ccc;
+  width: 300px;
+  height: 300px;
+}
+
+.block .messages .name{
+  color: #aaa;
 }

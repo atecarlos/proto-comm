@@ -6,6 +6,8 @@ div.navbar
 				a(href="#", data-bind="event: { click: toggleNewConversation }") Add
 			li
 				a(href="#", data-bind="event: { click: showAll.toggle }") Show All
+			li
+				a(href="/conversations/all") Show All - page
 			li.dropdown
 				a.dropdown-toggle(href="#", data-toggle="dropdown") Other conversations
 					span.badge(data-bind="text: otherConversations.unreadCounter, visible: otherConversations.showUnreadCounter")

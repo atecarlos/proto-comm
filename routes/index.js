@@ -8,10 +8,10 @@ exports.home = function(req, res){
 
 exports.log_in = function(req, res){
   	req.session.user = users.find(req.body.userId);
-  	res.redirect('/conversations');
+  	res.redirect('/conversations/');
 };
 
-exports.readConversations = function(req, res){
+exports.desktop = function(req, res){
 	Conversation.find({}, function(err, conversations){
 		Desktop.findOne({ userId: req.session.user.id },
 				function(err, desktop){
@@ -24,5 +24,11 @@ exports.readConversations = function(req, res){
 		    				conversations: JSON.stringify(conversations),
 		    				desktop: JSON.stringify(desktop) });
 				});
+	});
+}
+
+exports.all = function(req, res){
+	Conversation.find({}, function(err, conversations){
+		res.render('conversations/all', { title: 'manage conversations', conversations: conversations });
 	});
 }
