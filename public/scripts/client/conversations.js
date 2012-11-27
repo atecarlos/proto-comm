@@ -10,4 +10,11 @@ $(document).ready(function(){
 
   viewModel.adjustScrolling();
   viewModel.desktop.setupSorting();
+
+  window.onbeforeunload = function() { socket.emit('remove_active_user'); }; // for chrome
+});
+
+// non chrome browsers
+$(window).unload(function(){
+  	socket.emit('remove_active_user');
 });

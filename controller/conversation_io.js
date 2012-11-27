@@ -20,7 +20,7 @@ exports.sendMessage = function(socket, data){
             socket.broadcast.emit('receive_message', dataToEmit);
         });
     });
-}
+};
 
 exports.createConversation = function(socket, data){
     var conversation = new Conversation();
@@ -31,4 +31,4 @@ exports.createConversation = function(socket, data){
         socket.emit('conversation_added', dataToEmit);
         socket.broadcast.emit('conversation_added', dataToEmit);
     });
-}
+};

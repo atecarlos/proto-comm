@@ -14,4 +14,30 @@ exports.authorize = function(data, accept, sessionStore){
     } else {
        return accept('No cookie transmitted.', false);
     }
+};
+
+var activeUsers = [];
+
+exports.addToActiveUsers = function(socket){
+    if(activeUsers.indexOf(socket.handshake.session.user.id) < 0){
+        activeUsers.push(socket.handshake.session.user.id);
+    }
+    printActiveUsers();
+};
+
+exports.removeFromActiveUsers = function(socket){
+    var indexToRemove = activeUsers.indexOf(socket.handshake.session.user.id);
+    activeUsers.splice(indexToRemove, 1);
+    printActiveUsers();
+};
+
+function printActiveUsers(){
+    console.log('****active users:*****');
+    for(var i = 0; i < activeUsers.length; i++){
+        console.log('*' + activeUsers[i]);
+    }
 }
+
+exports.getActiveUsers = function(){
+    return activeUsers;
+};

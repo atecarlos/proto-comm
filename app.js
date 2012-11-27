@@ -55,6 +55,8 @@ io.set('authorization', function (data, accept) {
 
 io.sockets.on('connection', function (socket) {
   
+  ioController.addToActiveUsers(socket);
+
   socket.on('send_message', function(data) {
     conversationIo.sendMessage(socket, data);
   });
@@ -73,5 +75,9 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('change_index', function(data){
     desktopIo.changeIndex(socket, data);
+  });
+
+  socket.on('remove_active_user', function(){
+    ioController.removeFromActiveUsers(socket);
   });
 });
