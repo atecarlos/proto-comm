@@ -15,13 +15,13 @@ exports.config = function(app){
 }
 
 function home(req, res){
-  res.render('index', { title: 'my chat app', users: users });
-};
+  res.render('index', { title: 'my chat app', users: users.list });
+}
 
 function log_in(req, res){
   	req.session.user = users.find(req.body.userId);
   	res.redirect('/conversations/');
-};
+}
 
 function desktop(req, res){
 	Conversation.find({}, function(err, conversations){

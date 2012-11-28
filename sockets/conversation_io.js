@@ -1,7 +1,9 @@
 var Conversation = require('../models/conversation'),
-    Message = require('../models/message');
+    Message = require('../models/message'),
+    users = require('../models/users'),
+    Unread = require('../models/unread');
 
-exports.sendMessage = function(socket, data){
+exports.sendMessage = function(socket, data, activeUsers){
 	Conversation.findById(data.conversationId, function(err, conversation){
         var msg = new Message();
         msg.content = data.content;
@@ -18,9 +20,20 @@ exports.sendMessage = function(socket, data){
 
             socket.emit('receive_message', dataToEmit);
             socket.broadcast.emit('receive_message', dataToEmit);
+
+            saveUnreadMarkers(activeUsers, msg);
         });
     });
 };
+
+function saveUnreadMarkers(activeUsers, msg){
+    var inactiveUsers = users.allExcept(activeUsers);
+    console.log(inactiveUsers);
+    var unreadMessage = new Unread();
+    unreadMessage.unreadBy = inactiveUsers;
+    unreadMessage.elementId = msg._id;
+    unreadMessage.save();    
+}
 
 exports.createConversation = function(socket, data){
     var conversation = new Conversation();

@@ -5,10 +5,8 @@
 
 var express = require('express')
   , routes = require('./routes')
+  , sockets = require('./sockets')
   , sessionStore = new express.session.MemoryStore()
-  , ioController = require('./controller/io')
-  , desktopIo = require('./controller/desktop_io')
-  , conversationIo = require('./controller/conversation_io')
   , app = express.createServer()
   , io = require('socket.io').listen(app)
   , mongo = require('mongoose');
@@ -42,42 +40,5 @@ mongo.connect(databaseUri);
 // Routes
 routes.config(app);
 
-// needed for heroku
-io.configure(function () { 
-  io.set("transports", ["xhr-polling"]); 
-  io.set("polling duration", 10); 
-});
-
-// Socket connections
-io.set('authorization', function (data, accept) {
-    ioController.authorize(data, accept, sessionStore);
-});
-
-io.sockets.on('connection', function (socket) {
-  
-  ioController.addToActiveUsers(socket);
-
-  socket.on('send_message', function(data) {
-    conversationIo.sendMessage(socket, data);
-  });
-
-  socket.on('create_conversation', function(data){
-    conversationIo.createConversation(socket, data);
-  });
-
-  socket.on('add_to_desktop', function(data){
-    desktopIo.add(socket, data);
-  });
-
-  socket.on('remove_from_desktop', function(data){
-    desktopIo.remove(socket, data);
-  });
-
-  socket.on('change_index', function(data){
-    desktopIo.changeIndex(socket, data);
-  });
-
-  socket.on('remove_active_user', function(){
-    ioController.removeFromActiveUsers(socket);
-  });
-});
+// Socket IO
+sockets.config(io, sessionStore);
