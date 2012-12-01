@@ -14,32 +14,19 @@ exports.config = function(io, sessionStore){
     });
 
     io.sockets.on('connection', function (socket) {
-      
-      addToActiveUsers(socket);
 
-      socket.on('send_message', function(data) {
-        printActiveUsers();
-        conversationIo.sendMessage(socket, data, activeUsers);
-      });
-
-      socket.on('create_conversation', function(data){
-        conversationIo.createConversation(socket, data);
-      });
+      conversationIo.config(socket);
 
       socket.on('add_to_desktop', function(data){
-        desktopIo.add(socket, data);
+        desktopIo.add(data);
       });
 
       socket.on('remove_from_desktop', function(data){
-        desktopIo.remove(socket, data);
+        desktopIo.remove(data);
       });
 
-      socket.on('change_index', function(data){
-        desktopIo.changeIndex(socket, data);
-      });
-
-      socket.on('remove_active_user', function(){
-        removeFromActiveUsers(socket);
+      socket.on('update_strip_order', function(data){
+        desktopIo.updateStripOrder(data);
       });
     });
 };
@@ -60,28 +47,4 @@ function authorize(data, accept, sessionStore){
     } else {
        return accept('No cookie transmitted.', false);
     }
-};
-
-var activeUsers = [];
-
-function addToActiveUsers(socket){
-    if(activeUsers.indexOf(socket.handshake.session.user.id) < 0){
-        activeUsers.push(socket.handshake.session.user.id);
-    }
-};
-
-function removeFromActiveUsers(socket){
-    var indexToRemove = activeUsers.indexOf(socket.handshake.session.user.id);
-    activeUsers.splice(indexToRemove, 1);
-};
-
-function printActiveUsers(){
-    console.log('****active users:*****');
-    for(var i = 0; i < activeUsers.length; i++){
-        console.log('*' + activeUsers[i]);
-    }
-}
-
-function getActiveUsers(){
-    return activeUsers;
 };

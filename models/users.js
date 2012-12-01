@@ -9,14 +9,3 @@ exports.find = function(id){
 		}
 	}
 };
-
-exports.allExcept = function(exceptions){
-	var userIds = [];
-	for (var i = 0; i < usersDb.length; i++){
-		if(exceptions.indexOf(usersDb[i].id) == -1){
-			userIds.push(usersDb[i].id);
-		}
-	}
-
-	return userIds;
-};

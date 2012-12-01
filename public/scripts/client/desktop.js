@@ -1,30 +1,43 @@
 function createDesktop(data, conversations){
   var self = {};
 
+  self.id = data._id;
+
   self.conversations = ko.observableArray([]);
 
   for(var i = 0; i < data.conversations.length; i++){
-    var conversation = getConversation(data.conversations[i]);
+    var conversation = getConversationBy(data.conversations[i]);
     if(conversation){
       self.conversations.push(conversation);
+    }
+  }
+
+  function getConversationBy(id){
+    for(var c = 0; c < conversations.length; c++){
+      if(conversations[c].id == id){
+        return conversations[c];
+      }
     }
   }
 
   self.leftConversationIndex = ko.observable(0);
 
   self.leftConversation = ko.computed(function(){
-    var conversation = self.conversations()[self.leftConversationIndex()];
-    conversation.unreadCounter(0);
-    return conversation;
+    return getConversationAt(self.leftConversationIndex());
   });
 
   self.rightConversation = ko.computed(function(){
-    var conversation = self.conversations()[self.leftConversationIndex() + 1];
+    return getConversationAt(self.leftConversationIndex() + 1);
+  });
+
+  function getConversationAt(index){
+    var conversation = self.conversations()[index];
     if(conversation){
-      conversation.unreadCounter(0);  
+      conversation.unreadCounter(0);
+      socket.emit('mark_as_read', conversation.id);
     }
     return conversation;
-  });
+  }
 
   self.hasLeftConversation = ko.computed(function(){
     return self.leftConversation() !== undefined;
@@ -34,21 +47,13 @@ function createDesktop(data, conversations){
     return self.rightConversation() !== undefined;
   });
 
-  function getConversation(conversationId){
-    for(var c = 0; c < conversations.length; c++){
-      if(conversations[c].id == conversationId){
-        return conversations[c];
-      }
-    }
-  }
-
   function hasConversation(conversation){
     return self.conversations.indexOf(conversation) >= 0;
   }
 
   self.add = function(conversation){
     if(!hasConversation(conversation)){
-      socket.emit('add_to_desktop', { conversationId: conversation.id });
+      socket.emit('add_to_desktop', { id: self.id, conversationId: conversation.id });
       self.conversations.push(conversation);
     }
   };
@@ -59,9 +64,10 @@ function createDesktop(data, conversations){
   }
 
   self.remove = function(conversation){
-    socket.emit('remove_from_desktop', { conversationId: conversation.id });
+    socket.emit('remove_from_desktop', { id: self.id, conversationId: conversation.id });
     var index = self.conversations.indexOf(conversation);
     self.conversations.splice(index, 1);
+    self.focus();
   };
 
   self.focus = function(leftConversation){
@@ -71,10 +77,19 @@ function createDesktop(data, conversations){
       self.leftConversationIndex(self.conversations.indexOf(leftConversation));
     }
 
-    self.leftConversation().focused(true);
-    if(self.rightConversation()){
+    if(self.hasLeftConversation()){
+      self.leftConversation().focused(true);
+    }
+
+    if(self.hasRightConversation()){
       self.rightConversation().focused(true);
     }
+
+    // update active conversations for current user
+    var conversations = [];
+    if(self.hasLeftConversation()) conversations.push(self.leftConversation().id);
+    if(self.hasRightConversation()) conversations.push(self.rightConversation().id);
+    socket.emit('new_active_conversation', conversations);
   };
 
   function clearFocus(){
@@ -86,15 +101,15 @@ function createDesktop(data, conversations){
   self.focus();
 
   self.setupSorting = function(){
-    var currentSort = { startIndex: -1, stopIndex: -1 };
+    var currentSort;
 
     $('.film-strip').sortable({
       start: function(event, ui){
-        currentSort.startIndex = ui.item.index();
+        currentSort = { startIndex: ui.item.index(), stopIndex: -1 };
       },
       stop: function(event, ui){
         currentSort.stopIndex = ui.item.index();
-        socket.emit('change_index', currentSort);
+        socket.emit('update_strip_order', { id: self.id, currentSort: currentSort });
         clearFocus();
         reorder();
         self.focus();
