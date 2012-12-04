@@ -4,14 +4,12 @@ function createConversation(data) {
   self.id = data._id;
   self.topic = data.topic;
   self.createdBy = data.createdBy;
-
+  self.unreadCounter = ko.observable(data.unread);
   self.newMessage = ko.observable('');
   
   self.messages = ko.observableArray([]);
 
   self.focused = ko.observable(false);
-
-  self.unreadCounter = ko.observable(0);
 
   if(data.messages){
     for(var i = 0; i < data.messages.length; i++){

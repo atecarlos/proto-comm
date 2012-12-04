@@ -1,11 +1,11 @@
-function createViewModel(data, desktopData) {
+function createViewModel(conversationsData, desktopData) {
   var self = {};
 
   self.newConversationTopic = ko.observable('');
   
   self.conversations = ko.observableArray([]);
-  for(var i = 0; i < data.length; i++){
-    self.conversations.push(createConversation(data[i]));
+  for(var i = 0; i < conversationsData.length; i++){
+    self.conversations.push(createConversation(conversationsData[i]));
   }
 
   self.desktop = createDesktop(desktopData, self.conversations());

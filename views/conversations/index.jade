@@ -79,8 +79,8 @@ div.desktop(data-bind="with: desktop")
 			div(data-bind="visible: showUnreadCounter")
 				span.badge(data-bind="text: unreadCounter")
 
-input#data(type="hidden")(value=conversations)
-input#desktop(type="hidden")(value=desktop);
+input#data(type="hidden", value=conversations)
+input#desktop(type="hidden", value=desktop);
 
 script(type="text/javascript", src="/scripts/lib/jquery.js")
 script(type="text/javascript", src="http://code.jquery.com/ui/1.9.1/jquery-ui.js")
