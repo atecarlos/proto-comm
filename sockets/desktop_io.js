@@ -10,8 +10,7 @@ exports.add = function(data){
 
 exports.remove = function(data){
     updateDesktop(data.id, function(desktop) {
-        var index = desktop.conversations.indexOf(data.conversationId);
-        desktop.conversations.splice(index, 1);
+        desktop.removeConversation(data.conversationId);
     });
 }
 

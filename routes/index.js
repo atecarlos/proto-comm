@@ -1,7 +1,8 @@
 var Conversation = require('../models/conversation'),
     users = require('../models/users'),
     Desktop = require('../models/desktop'),
-    UnreadMarker = require('../models/unread_marker');
+    UnreadMarker = require('../models/unread_marker'),
+    mongo = require('mongoose');
 
 exports.config = function(app){
 	app.get('/', home);
@@ -26,30 +27,24 @@ function log_in(req, res){
 
 function desktop(req, res){
 	Conversation.find({}, function(err, conversations){
-		Desktop.findOne({ userId: req.session.user.id },
-				function(err, desktop){
-					if(desktop == null){
-						desktop = new Desktop();
-						desktop.userId = req.session.user.id;
-						desktop.save();
-					}
-
-					UnreadMarker.find({ userId: req.session.user.id }, function(err, markers){
-						conversations.forEach(function(conversation){
-							conversation._doc.unread = 0;
-							
-							markers.forEach(function(marker){
-								if(marker.conversationId.equals(conversation._id)){
-									conversation._doc.unread = marker.count;
-								}
-							});
-						});
-
-						res.render('conversations', { title: 'desktop',
-		    				conversations: JSON.stringify(conversations),
-		    				desktop: JSON.stringify(desktop) });
+		Desktop.findOrCreateByUserId(req.session.user.id, function(err, desktop){
+				
+			UnreadMarker.find({ userId: req.session.user.id }, function(err, markers){
+				conversations.forEach(function(conversation){
+					conversation._doc.unread = 0;
+					
+					markers.forEach(function(marker){
+						if(marker.conversationId.equals(conversation._id)){
+							conversation._doc.unread = marker.count;
+						}
 					});
 				});
+					
+				res.render('conversations', { title: 'desktop',
+		    	conversations: JSON.stringify(conversations),
+		    	desktop: JSON.stringify(desktop) });
+			});
+		});
 	});
 }
 
@@ -60,6 +55,11 @@ function all(req, res){
 }
 
 function remove(req, res){
+	var id = new mongo.Types.ObjectId(req.params.id);
+
+	// Remove conversation reference from strips
+	Desktop.update({ conversations: { $in: [id] } }, { $pull: { conversations: id } }).exec();
+
 	Conversation.remove( { _id: req.params.id }, function(err){
 		res.redirect('/conversations/all');
 	});

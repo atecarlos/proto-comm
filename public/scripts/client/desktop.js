@@ -33,8 +33,10 @@ function createDesktop(data, conversations){
   function getConversationAt(index){
     var conversation = self.conversations()[index];
     if(conversation){
-      conversation.unreadCounter(0);
-      socket.emit('mark_as_read', conversation.id);
+      if(conversation.unreadCounter() > 0){
+        conversation.unreadCounter(0);
+        socket.emit('mark_as_read', conversation.id);
+      }
     }
     return conversation;
   }
@@ -85,12 +87,15 @@ function createDesktop(data, conversations){
       self.rightConversation().focused(true);
     }
 
-    // update active conversations for current user
+    updateActiveConversations();
+  };
+
+  function updateActiveConversations(){
     var conversations = [];
     if(self.hasLeftConversation()) conversations.push(self.leftConversation().id);
     if(self.hasRightConversation()) conversations.push(self.rightConversation().id);
     socket.emit('new_active_conversation', conversations);
-  };
+  }
 
   function clearFocus(){
     ko.utils.arrayForEach(self.conversations(), function(conversation){
