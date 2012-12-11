@@ -12,6 +12,7 @@ function createViewModel(conversationsData, desktopData) {
     var conversation = createConversation(data);
     self.conversations.push(conversation);
     self.desktop.add(conversation);
+    self.desktop.focus();
   });
 
   socket.on('receive_message', function(data) {
@@ -53,7 +54,7 @@ function createViewModel(conversationsData, desktopData) {
     return nav;
   }();
 
-  self.showAll = function(desktop, navigation){
+  self.allConversations = function(desktop, navigation, conversationsObservable){
     var all = this;
 
     all.open = function(conversation){
@@ -61,9 +62,28 @@ function createViewModel(conversationsData, desktopData) {
       desktop.addAndFocus(conversation);
     };
 
+    all.sortedConversations = ko.computed(function(){
+        return conversationsObservable.sort(function(left, right){
+          return left.unreadCounter() < right.unreadCounter();
+        });
+    });
+
+    all.unreadCounter = ko.computed(function(){
+      var count = 0;
+      ko.utils.arrayForEach(conversationsObservable(), function(conversation){
+        count += conversation.unreadCounter();
+      });
+
+      return count;
+    });
+
+    all.showUnreadCounter = ko.computed(function(){
+      return all.unreadCounter() > 0;
+    });
+
     return all;
 
-  }(self.desktop, self.navigation);
+  }(self.desktop, self.navigation, self.conversations);
 
   self.newConversation = function(desktop, navigation){
     var newConversation = this;
@@ -83,36 +103,8 @@ function createViewModel(conversationsData, desktopData) {
     };
 
     return newConversation;
+    
   }(self.desktop, self.navigation);
-
-  self.otherConversations = function(desktop, conversations){
-    var other = this;
-
-    other.open = function (conversation){
-      desktop.addAndFocus(conversation);
-    };
-
-    other.list = ko.computed(function(){
-      return conversations.filter(function(el){
-        return desktop.conversations().indexOf(el) < 0;
-      });
-    });
-
-    other.unreadCounter = ko.computed(function(){
-      var count = 0;
-      ko.utils.arrayForEach(conversations, function(conversation){
-        count += conversation.unreadCounter();
-      });
-
-      return count;
-    });
-
-    other.showUnreadCounter = ko.computed(function(){
-      return other.unreadCounter() > 0;
-    });
-
-    return other;
-  }(self.desktop, self.conversations());
 
   return self;
 }

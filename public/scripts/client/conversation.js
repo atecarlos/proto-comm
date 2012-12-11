@@ -4,7 +4,7 @@ function createConversation(data) {
   self.id = data._id;
   self.topic = data.topic;
   self.createdBy = data.createdBy;
-  self.unreadCounter = ko.observable(data.unread);
+  self.unreadCounter = ko.observable(data.unread ? data.unread : 0);
   self.newMessage = ko.observable('');
   
   self.messages = ko.observableArray([]);
