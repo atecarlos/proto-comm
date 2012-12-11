@@ -1,7 +1,5 @@
 function createViewModel(conversationsData, desktopData) {
   var self = {};
-
-  self.newConversationTopic = ko.observable('');
   
   self.conversations = ko.observableArray([]);
   for(var i = 0; i < conversationsData.length; i++){
@@ -9,27 +7,6 @@ function createViewModel(conversationsData, desktopData) {
   }
 
   self.desktop = createDesktop(desktopData, self.conversations());
-
-  self.addNewConversation = function(data, event) {
-    var keyCode = (event.which ? event.which : event.keyCode);
-    if (keyCode === 13) {
-      addConversation();
-      self.toggleNewConversation();
-      self.newConversationTopic('');
-      return false;
-    } else {
-      return true;
-    }
-  };
-  
-  self.toggleNewConversation = function (){
-    $('#newConversation').modal('toggle');
-    setTimeout(function () { $('#newConversation input').focus(); }, 400);
-  }
-
-  function addConversation() {
-    socket.emit('create_conversation', { topic: self.newConversationTopic(), conversationId: self.id });
-  };
 
   socket.on('conversation_added', function(data){
     var conversation = createConversation(data);
@@ -46,37 +23,84 @@ function createViewModel(conversationsData, desktopData) {
     });
   });
 
-  self.adjustScrolling = function (){
+  self.adjustScrolling = function (desktop){
     $(".nano").nanoScroller({ scroll: 'bottom' });
   }
 
-  self.showAll = {
-    toggle: function(){
-      $('#allConversations').modal('toggle');
-    },
+  self.navigation = function(){
+    var nav = this;
 
-    open: function(conversation){
-      self.showAll.toggle();
-      self.desktop.addAndFocus(conversation);
+    nav.showingDesktop = ko.observable(true);
+
+    nav.all = function(){
+      nav.showingDesktop(false);
+    };
+
+    nav.desktop = function(){
+      nav.showingDesktop(true);
     }
-  }
 
-  self.otherConversations = function(){
+    function toggle(){
+      $('#all-conversations').toggle();
+      $('.desktop').toggle();
+    }
+
+    nav.newConversation = function(){
+      $('#new-conversation').modal('toggle');
+      setTimeout(function () { $('#new-conversation input').focus(); }, 400);
+    }
+
+    return nav;
+  }();
+
+  self.showAll = function(desktop, navigation){
+    var all = this;
+
+    all.open = function(conversation){
+      navigation.desktop();
+      desktop.addAndFocus(conversation);
+    };
+
+    return all;
+
+  }(self.desktop, self.navigation);
+
+  self.newConversation = function(desktop, navigation){
+    var newConversation = this;
+
+    newConversation.topic = ko.observable('');
+
+    newConversation.add = function(data, event) {
+      var keyCode = (event.which ? event.which : event.keyCode);
+      if (keyCode === 13) {
+        socket.emit('create_conversation', { topic: newConversation.topic() });
+        navigation.newConversation();
+        newConversation.topic('');
+        return false;
+      } else {
+        return true;
+      }
+    };
+
+    return newConversation;
+  }(self.desktop, self.navigation);
+
+  self.otherConversations = function(desktop, conversations){
     var other = this;
 
     other.open = function (conversation){
-      self.desktop.addAndFocus(conversation);
+      desktop.addAndFocus(conversation);
     };
 
     other.list = ko.computed(function(){
-      return self.conversations().filter(function(el){
-        return self.desktop.conversations().indexOf(el) < 0;
+      return conversations.filter(function(el){
+        return desktop.conversations().indexOf(el) < 0;
       });
     });
 
     other.unreadCounter = ko.computed(function(){
       var count = 0;
-      ko.utils.arrayForEach(self.conversations(), function(conversation){
+      ko.utils.arrayForEach(conversations, function(conversation){
         count += conversation.unreadCounter();
       });
 
@@ -88,7 +112,7 @@ function createViewModel(conversationsData, desktopData) {
     });
 
     return other;
-  }();
+  }(self.desktop, self.conversations());
 
   return self;
 }

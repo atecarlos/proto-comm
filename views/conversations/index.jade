@@ -2,13 +2,16 @@ div.navbar
 	div.navbar-inner
 		span.brand Fluid Talk
 		ul.nav
-			li
-				a(href="#", data-bind="event: { click: toggleNewConversation }") Add
-			li
-				a(href="#", data-bind="event: { click: showAll.toggle }") Show All
-			li
-				a(href="/conversations/all") Show All - page
-			li.dropdown
+			li(data-bind="visible: navigation.showingDesktop")
+				a(href="#", data-bind="event: { click: navigation.newConversation }") Add
+
+			li(data-bind="visible: !navigation.showingDesktop()")
+				a(href="#", data-bind="event: { click: navigation.desktop }") Desktop
+
+			li(data-bind="visible: navigation.showingDesktop")
+				a(href="#", data-bind="event: { click: navigation.all }") Show All
+
+			li.dropdown(data-bind="visible: navigation.showingDesktop")
 				a.dropdown-toggle(href="#", data-toggle="dropdown") Other conversations
 					span.badge(data-bind="text: otherConversations.unreadCounter, visible: otherConversations.showUnreadCounter")
 					b.caret
@@ -18,10 +21,17 @@ div.navbar
 							span(data-bind="text: topic")
 							span.badge(data-bind="text: unreadCounter, visible: showUnreadCounter")
 
-div#allConversations.modal.hide.fade.in
-	div.modal-header
+div#new-conversation.modal.hide.fade.in
+			div.modal-header
 				a.close(data-dismiss="modal") x
-				h4 All conversations
+				h4 What else would you like to talk about?
+			div.modal-body
+					div.input-append
+						input.span4(type="text", data-bind="value: newConversation.topic, valueUpdate: 'afterkeydown', event: { keypress: newConversation.add }")
+			div.modal-footer
+				button.btn(data-dismiss="modal") Cancel
+
+div#all-conversations(data-bind="visible: !navigation.showingDesktop()")
 	div.conversation-blocks.row-fluid(data-bind="foreach: conversations")
 		div.pull-left.block
 			div
@@ -30,17 +40,7 @@ div#allConversations.modal.hide.fade.in
 				div.muted(data-bind="text: username")
 				div(data-bind="text:content")
 
-div#newConversation.modal.hide.fade.in
-			div.modal-header
-				a.close(data-dismiss="modal") x
-				h4 What else would you like to talk about?
-			div.modal-body
-					div.input-append
-						input.span4(type="text", data-bind="value: newConversationTopic, valueUpdate: 'afterkeydown', event: { keypress: addNewConversation }")
-			div.modal-footer
-				button.btn(data-dismiss="modal") Cancel
-
-div.desktop(data-bind="with: desktop")
+div.desktop(data-bind="with: desktop, visible: navigation.showingDesktop")
 	div.conversations.row-fluid
 		div.conversation.span6(data-bind="with: leftConversation, visible: hasLeftConversation")
 			h5(data-bind="text: topic")

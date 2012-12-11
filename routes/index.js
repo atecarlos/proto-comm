@@ -1,8 +1,7 @@
 var Conversation = require('../models/conversation'),
     users = require('../models/users'),
     Desktop = require('../models/desktop'),
-    UnreadMarker = require('../models/unread_marker'),
-    mongo = require('mongoose');
+    UnreadMarker = require('../models/unread_marker');
 
 exports.config = function(app){
 	app.get('/', home);
@@ -10,10 +9,6 @@ exports.config = function(app){
 	app.post('/log-in', log_in);
 
 	app.get('/conversations/', desktop);
-
-	app.get('/conversations/all', all);
-
-	app.post('/conversations/:id/remove', remove);
 }
 
 function home(req, res){
@@ -27,6 +22,7 @@ function log_in(req, res){
 
 function desktop(req, res){
 	Conversation.find({}, function(err, conversations){
+		
 		Desktop.findOrCreateByUserId(req.session.user.id, function(err, desktop){
 				
 			UnreadMarker.find({ userId: req.session.user.id }, function(err, markers){
@@ -45,22 +41,5 @@ function desktop(req, res){
 		    	desktop: JSON.stringify(desktop) });
 			});
 		});
-	});
-}
-
-function all(req, res){
-	Conversation.find({}, function(err, conversations){
-		res.render('conversations/all', { title: 'manage conversations', conversations: conversations });
-	});
-}
-
-function remove(req, res){
-	var id = new mongo.Types.ObjectId(req.params.id);
-
-	// Remove conversation reference from strips
-	Desktop.update({ conversations: { $in: [id] } }, { $pull: { conversations: id } }).exec();
-
-	Conversation.remove( { _id: req.params.id }, function(err){
-		res.redirect('/conversations/all');
 	});
 }

@@ -27,15 +27,18 @@ exports.config = function(socket){
 }
 
 function createConversation(socket, data){
-    var conversation = new Conversation();
-    conversation.topic = data.topic;
-    conversation.createdBy = socket.handshake.session.user.name;
-    conversation.save(function(err){
-        var dataToEmit = { _id: conversation.id, topic: conversation.topic, createdBy: conversation.createdBy };
-        socket.emit('conversation_added', dataToEmit);
-        socket.broadcast.emit('conversation_added', dataToEmit);
-    });
+    Conversation.create({ topic: data.topic, createdBy: socket.handshake.session.user.name }, 
+        function(err, conversation){
+            var dataToEmit = { _id: conversation.id, topic: conversation.topic, createdBy: conversation.createdBy };
+            emit('conversation_added', dataToEmit);
+        }
+    );
 };
+
+function emit(event, dataToEmit){
+    socket.emit('conversation_added', dataToEmit);
+    socket.broadcast.emit('conversation_added', dataToEmit);
+}
 
 function addNewActiveConversations(socket, data){
     var userId = socket.handshake.session.user.id;
@@ -61,34 +64,20 @@ function sendMessage(socket, data){
                 timestamp: data.timestamp,
             };
 
-            socket.emit('receive_message', dataToEmit);
-            socket.broadcast.emit('receive_message', dataToEmit);
-
+            emit('receive_message', dataToEmit);
             saveUnreadMarkers(data.conversationId);
         });
     });
 };
 
 function saveUnreadMarkers(conversationId){
-    var usersNotInConversation = getUsersNotIn(conversationId);
-
-    for(var i = 0; i < usersNotInConversation.length; i++){
-        UnreadMarker.update({ userId: usersNotInConversation[i], conversationId: conversationId },
-                            { $inc: { count: 1 } }, 
-                            { upsert: true, multi: true }).exec();
-    }
-}
-
-function getUsersNotIn(conversationId){
-    var usersNotInConversation = [];
-
     for(var i = 0; i < users.list.length; i++){
         if(!userIsActive(users.list[i]) || !userInConversation(users.list[i], conversationId)){
-            usersNotInConversation.push(users.list[i].id);
+            UnreadMarker.update({ userId: users.list[i].id, conversationId: conversationId },
+                                { $inc: { count: 1 } }, 
+                                { upsert: true, multi: true }).exec();
         }
     }
-
-    return usersNotInConversation;
 }
 
 function userIsActive(user){

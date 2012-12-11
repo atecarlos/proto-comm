@@ -7,7 +7,7 @@ var schema = new mongo.Schema({
 
 schema.methods.removeConversation = function(conversationId){
 	var index = this.conversations.indexOf(conversationId);
-    this.conversations.splice(index, 1);
+	this.conversations.splice(index, 1);
 }
 
 schema.statics.findOrCreateByUserId = function(userId, callback){
