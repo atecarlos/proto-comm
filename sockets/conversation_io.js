@@ -30,14 +30,14 @@ function createConversation(socket, data){
     Conversation.create({ topic: data.topic, createdBy: socket.handshake.session.user.name }, 
         function(err, conversation){
             var dataToEmit = { _id: conversation.id, topic: conversation.topic, createdBy: conversation.createdBy };
-            emit('conversation_added', dataToEmit);
+            emit(socket, 'conversation_added', dataToEmit);
         }
     );
 };
 
-function emit(event, dataToEmit){
-    socket.emit('conversation_added', dataToEmit);
-    socket.broadcast.emit('conversation_added', dataToEmit);
+function emit(socket, event, dataToEmit){
+    socket.emit(event, dataToEmit);
+    socket.broadcast.emit(event, dataToEmit);
 }
 
 function addNewActiveConversations(socket, data){
@@ -64,7 +64,7 @@ function sendMessage(socket, data){
                 timestamp: data.timestamp,
             };
 
-            emit('receive_message', dataToEmit);
+            emit(socket, 'receive_message', dataToEmit);
             saveUnreadMarkers(data.conversationId);
         });
     });
