@@ -9,7 +9,7 @@
   "dependencies": {
     "express": "2.5.8",
     "jade": ">= 0.0.1",
-    "mongoose": "2.6.6",
+    "mongoose": "5.7.7",
     "requirejs": "2.0.2",
     "socket.io": "0.9.6",
     "cookie": "0.0.3"
